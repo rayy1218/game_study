@@ -25,6 +25,7 @@ public:
     Entity* getSelectedItem(Container *inventory);
     void doRenderInventory(Container *inventory);
     int getInventoryIndex();
+    int getInventoryIndex(int index);
 };
 
 #endif /* GUI_HPP */

@@ -36,7 +36,7 @@ EffectConfusion::EffectConfusion(Entity *self, int duration): Effect(self, durat
 bool EffectConfusion::doUpdate() {
     if (duration - 1 <= 0) {
         TCODColor message_color = (self == game.player) ? TCODColor::green : TCODColor::red;
-        game.gui->addMessage(message_color, "%s is confused", self->getName().c_str());
+        game.gui->addMessage(message_color, "%s is not longer confused", self->getName().c_str());
         Control *temp = self->control;
         self->control = orig;
         delete temp;

@@ -4,9 +4,10 @@ GameManager::GameManager(int width, int height): console_width(width),
                                                  console_height(height),
                                                  floor_num(1) {
 
-    TCODConsole::initRoot(console_width, console_height, "Game", true);
+    TCODConsole::initRoot(console_width, console_height, "Game", false);
     TCODConsole::setCustomFont("terminal.png", TCOD_FONT_LAYOUT_ASCII_INROW);
     TCODConsole::root->setDefaultBackground(TCODColor::black);
+    
     doSpawnPlayer();
     map = new Map(100, 50);
     gui = new Gui;
@@ -26,19 +27,20 @@ GameManager::~GameManager() {
 
 void GameManager::doUpdate() {
     if (status == status::STARTUP) {
+        for (int i = 0; i < 10; i++) {
+            Entity *equip = game.player->equipment->getEquipment(i);
+            equip = nullptr;
+        }
         game.map->getFov(player->getX(), player->getY());
         doRender();
     }
-    
     if (status == status::DEFEAT) {
-        Sleep(1000);
         exit(0);
     }
     
     status = status::IDLE;
     
     TCODSystem::checkForEvent(TCOD_EVENT_KEY_PRESS, &keyboard, NULL);
-    
     if (keyboard.vk == TCODK_ESCAPE) {
         exit(0);
     }
@@ -51,6 +53,7 @@ void GameManager::doUpdate() {
             character->doUpdate();   
         }
     }
+
 }
 
 void GameManager::doRender() {
@@ -89,9 +92,11 @@ void GameManager::doRender() {
 void GameManager::doSpawnPlayer() {
     player = new Entity(0, 0, "player", '@', TCODColor::green);
     player->control = new PlayerControl(player);
+    player->inventory = new Container(player, 20);
+    player->equipment = new Equipment(player);
     player->move_behavior = new MoveBehavior(player);
     player->combat_behavior = new PlayerCombatBehavior(player, 100, 10, 1);
-    player->inventory = new Container(player, 20);
+    
     all_character.push(player);
 }
 

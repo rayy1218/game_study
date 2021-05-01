@@ -3,7 +3,7 @@
 static int MIN_ROOM_SIZE = 8;
 static int MAX_ROOM_SIZE = 12;
 static int MAX_MONSTER_IN_MAP = 6;
-static int MAX_ITEM_IN_MAP = 24;
+static int MAX_ITEM_IN_MAP = 50;
 static int generate_status;
 
 Tile::Tile(): is_explored(false) {} 
@@ -237,7 +237,7 @@ void Map::addItem(int x, int y) {
     Entity *item;
     TCODRandom *rng = TCODRandom::getInstance();
     
-    item = getItem(x, y, rng->getInt(0, 3));
+    item = getItem(x, y, rng->getInt(0, 4));
     
     game.all_item.push(item);
 }

@@ -4,6 +4,14 @@
 
 GameManager game(130, 60);
 
+void* operator new(size_t size) {
+    return malloc(size);
+}
+
+void operator delete(void* memory, size_t size) {
+    free(memory);
+}
+
 int main(void) {
     while (!TCODConsole::isWindowClosed()) {
         game.doUpdate();

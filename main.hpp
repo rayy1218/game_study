@@ -3,9 +3,8 @@
 
 //Include Library
 #include <libtcod.hpp>
-
+#include <iostream>
 #include <string>
-#include <windows.h>
 
 //Include class header
 #include "GameManager.hpp" //Manager game loop
@@ -20,6 +19,7 @@
 #include "TargetPicking.hpp" //For item to select target
 #include "ItemPurpose.hpp" //For item to do something to selected target
 #include "Effect.hpp" //If a purpose have effect more than one round
+#include "Equipment.hpp"
 
 //Include header
 #include "Monster.hpp" //Monster List

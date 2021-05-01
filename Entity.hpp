@@ -7,6 +7,7 @@ class CombatBehavior;
 class Container;
 class ItemBehavior;
 class Effect;
+class Equipment;
 
 class Entity {
 private:
@@ -25,6 +26,7 @@ public:
     CombatBehavior *combat_behavior;
     Container *inventory;
     ItemBehavior *item_behavior;
+    Equipment *equipment;
    
     //Constructer and destructor
     Entity(int x, int y, std::string name, int ascii_char, TCODColor ascii_color);

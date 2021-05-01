@@ -64,6 +64,11 @@ void PlayerControl::doUpdate() {
             break;
         }
         
+        case TCODK_F11: {
+            TCODConsole::root->setFullscreen(!TCODConsole::root->isFullscreen());
+            break;
+        }
+        
         default:
             break;
     }
@@ -125,9 +130,16 @@ bool PlayerControl::handleCharInput(int ascii) {
     switch (ascii) {
         case 'i': {
             Entity *to_use = game.gui->getSelectedItem(self->inventory);
-            
             if (to_use != NULL) {
-                return to_use->item_behavior->use(self);
+                if (game.keyboard.vk == TCODK_ENTER || game.keyboard.vk == TCODK_CHAR) {
+                    return to_use->item_behavior->use(self);
+                }
+                if (game.keyboard.vk == TCODK_TAB) {
+                    self->inventory->dropItem(to_use);
+                    game.gui->addMessage(TCODColor::green, "You dropped %s", to_use->getName().c_str());
+                    
+                    return true;
+                }
             }
             return false;
             break;

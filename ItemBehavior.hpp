@@ -3,26 +3,42 @@
 
 class ItemPurpose;
 class TargetPicking;
+class ItemEquipment;
 
 class ItemBehavior {
 protected:
     Entity *self;
-    int qty, max_stack;
+    int qty;
+    bool stackable;
     float weight;
+    int equipment_index;
+    bool is_equiped;
+    std::string description;
 public:
     TCODList<ItemPurpose*> all_purpose;
     TargetPicking *targeting;
-    ItemBehavior(Entity *self, float weight, int qty, int max_stack = 1);
+    ItemBehavior(Entity *self, float weight, int qty, bool stackable, int equipment_index = 0);
     virtual ~ItemBehavior();
     
-    void setMaxStack( int input );
     void setQty( int input );
     void setWeight( float input );
-    int getMaxStack();
+    bool isStackable();
     int getQty();
     float getWeight();
+    void setIsEquip(bool input);
+    bool getIsEquip();
+    int getEquipmentIndex();
+    std::string getDesc();
+    void setDesc(std::string desc);
     
     bool pick(Entity *pick_by);
+    virtual bool use(Entity *use_by);
+};
+
+class ItemEquipmentBehavior : public ItemBehavior{
+public:
+    ItemEquipmentBehavior(Entity *self, float weight, int qty, bool stackable, int equipment_index = 0);
+    
     bool use(Entity *use_by);
 };
 

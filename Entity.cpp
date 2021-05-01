@@ -1,3 +1,4 @@
+
 #include "main.hpp"
 
 Entity::Entity(int x, int y, std::string name, int ascii_char, TCODColor ascii_color)
@@ -15,7 +16,9 @@ Entity::~Entity() {
 
 void Entity::doUpdate() {
     control->doUpdate();
-    
+    if (game.getStatus() == status::NEW_TURN && equipment != nullptr) {
+        combat_behavior->updateEquipmentAttribute();
+    }
     for (Effect *effect : all_effect) {
         if (game.getStatus() != status::NEW_TURN) {break;}
         effect->doUpdate();

@@ -1,6 +1,8 @@
 #ifndef CONTAINER_HPP
 #define CONTAINER_HPP
 
+class Equipment;
+
 class Container {
 private:
     Entity *self;

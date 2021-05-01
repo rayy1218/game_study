@@ -6,6 +6,12 @@ CombatBehavior::CombatBehavior( Entity *self, int max_hp, int attack_point, int 
                                attack_boost(1), equipment_attack(0), 
                                defense_boost(1), equipment_defense(0) {}
 
+void CombatBehavior::updateEquipmentAttribute() {
+    equipment_attack = 0;
+    equipment_defense = 0;
+    self->equipment->getAllEquipmentAttribute();
+}
+
 int CombatBehavior::doEntityAttack() {
     return ( attack_point + equipment_attack ) * attack_boost;
 }
