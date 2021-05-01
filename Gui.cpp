@@ -228,6 +228,11 @@ void Gui::doRenderInventory(Container *inventory) {
 
         inventory_console.printFrame(61, 33, 36, 16, false, TCOD_BKGND_SET, "Usage");
         
+        inventory_console.printf(63, 35, "[UP/DOWN] Select item");
+        inventory_console.printf(63, 36, "[ENTER] Use / Equip / Unequip");
+        inventory_console.printf(63, 37, "[A ~ L] Quick Use");
+        inventory_console.printf(63, 38, "[TAB] Drop");
+        
         
         TCODConsole::blit(&inventory_console, 0, 0, INVENTORY_WIDTH, INVENTORY_HEIGHT, TCODConsole::root, 0, 0);
         TCODConsole::root->flush();
