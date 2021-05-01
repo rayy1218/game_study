@@ -28,27 +28,25 @@ public:
     ItemBehavior *item_behavior;
     Equipment *equipment;
    
-    //Constructer and destructor
+    //Constructer & destructor
     Entity(int x, int y, std::string name, int ascii_char, TCODColor ascii_color);
     ~Entity();
-    
-    //Accessor
-    int getX();
-    int getY();
-    int getType();
-    int getAsciiChar();
-    std::string getName();
-    TCODColor getAsciiColor();
-    void setX(int input);
-    void setY(int input);
-    void setName(std::string input);
-    void setType(int input);
-    void setAsciiChar(int input);
-    void setAsciiColor(TCODColor input);
     
     //Method
     void doUpdate();
     void doRender();
+    
+    //Accessor
+    int getX();
+    int getY();
+    std::string getName();
+    int getAsciiChar();
+    TCODColor getAsciiColor();
+    void setX(int input);
+    void setY(int input);
+    void setName(std::string input);
+    void setAsciiChar(int input);
+    void setAsciiColor(TCODColor input);
 };
 
 #endif /* ENTITY_HPP */

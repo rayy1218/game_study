@@ -53,7 +53,6 @@ ItemEquipment::ItemEquipment(int attack_point, int defense_point,
                              attack_point(attack_point), defense_point(defense_point),
                              attack_boost(attack_boost), defense_boost(defense_boost) {}
 
-
 bool ItemEquipment::doUse(Entity *self) {
     CombatBehavior *cbt = self->combat_behavior;
     cbt->setEquipmentAtkPoint(cbt->getEquipmentAtkPoint() + attack_point);

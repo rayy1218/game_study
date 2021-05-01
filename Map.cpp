@@ -165,20 +165,12 @@ bool Map::checkNeighborWall(int x, int y, int high_bound, int low_bound) {
     return (wall_count >= high_bound || wall_count <= low_bound); 
 }
 
-bool Map::isExplored(int x, int y) {
-    return tiles[x + y * width].is_explored;
-}
-
 bool Map::canWalk(int x, int y) {
     for (Entity *entity : game.all_character) {
         if (entity->getX() == x && entity->getY() == y) {return false;}
     }
     
     return map->isWalkable(x, y);
-}
-
-bool Map::isWall(int x, int y) {
-    return !map->isWalkable(x, y);
 }
 
 void Map::getFov(int x, int y) {
@@ -195,10 +187,6 @@ bool Map::isInFov(int x, int y) {
     }
     return false;
 }
-
-int Map::getWidth() {return width;}
-
-int Map::getHeight() {return height;}
 
 void Map::doRender() {
     int debug = 0;
@@ -241,3 +229,8 @@ void Map::addItem(int x, int y) {
     
     game.all_item.push(item);
 }
+
+int Map::getWidth() {return width;}
+int Map::getHeight() {return height;}
+bool Map::isExplored(int x, int y) {return tiles[x + y * width].is_explored;}
+bool Map::isWall(int x, int y) {return !map->isWalkable(x, y);}

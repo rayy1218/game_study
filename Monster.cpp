@@ -20,7 +20,8 @@ Entity* getMonster(int x, int y, int index) {
         }
 
         case monster_dict::goblin_armored: {
-            monster = new Entity(x, y, "Armored Goblin", 'o', TCODColor::darkerGreen + TCODColor::grey);
+            monster = new Entity(x, y, "Armored Goblin", 'o', 
+                                 TCODColor::darkerGreen + TCODColor::grey);
             monster->control = new EnemyControl(monster);
             monster->move_behavior = new MoveBehavior(monster);
             monster->combat_behavior = new EnemyCombatBehavior(monster, 25, 4, 4);

@@ -61,7 +61,6 @@ void GameManager::doRender() {
     TCODConsole::root->clear();
     
     map->doRender();
-    
     gui->doRender();
     
     for ( Entity *entity : all_corpse ) {

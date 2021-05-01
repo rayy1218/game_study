@@ -4,14 +4,14 @@
 
 class Pathfinding : public ITCODPathCallback {
     public:
-        float getWalkCost( int xFrom, int yFrom, int xTo, int yTo, void *userData ) const {
-            if ( !game.map->canWalk( xTo, yTo ) ) {return 32767;}
-            return sqrtf( powf( xFrom - xTo, 2 ) + powf( yFrom - yTo, 2 ) );
+        float getWalkCost(int xFrom, int yFrom, int xTo, int yTo, void *userData) const {
+            if (!game.map->canWalk(xTo, yTo) ) {return 32767;}
+            return sqrtf(powf(xFrom - xTo, 2) + powf(yFrom - yTo, 2));
         }
         
 };
 
-Control::Control( Entity *self ): self( self ){}
+Control::Control(Entity *self): self(self) {}
 
 Control::~Control() {
     self = nullptr;
@@ -20,15 +20,15 @@ Control::~Control() {
 void Control::doUpdate() {}
 
 float Control::getDistanceTo(float x, float y) {
-    return sqrtf( powf( self->getX() - x, 2 ) + powf( self->getY() - y, 2 ) );
+    return sqrtf(powf(self->getX() - x, 2) + powf(self->getY() - y, 2 ));
 }
 
-PlayerControl::PlayerControl( Entity* self ): Control( self ) {}
+PlayerControl::PlayerControl(Entity* self): Control(self) {}
 
 void PlayerControl::doUpdate() {
     int dx = 0, dy = 0;
     
-    switch (game.keyboard.c) {
+    switch (game.keyboard.c) { //Vi key Movement
         case 'k': dy--; break;
         case 'l': dx++; break;
         case 'j': dy++; break;
@@ -38,12 +38,12 @@ void PlayerControl::doUpdate() {
         case 'b': dx--; dy++; break;
         case 'y': dx--; dy--; break;
             
-        case '=': //IDLE
-            game.setStatus( status::NEW_TURN );
+        case ',': //IDLE
+            game.setStatus(status::NEW_TURN);
             break;
     }
     
-    switch(game.keyboard.vk) {
+    switch (game.keyboard.vk) { //Numpad Movement
         case TCODK_KP8: dy--; break;
         case TCODK_KP6: dx++; break;
         case TCODK_KP2: dy++; break;
@@ -54,9 +54,11 @@ void PlayerControl::doUpdate() {
         case TCODK_KP7: dx--; dy--; break;
             
         case TCODK_KP5: //IDLE
-            game.setStatus( status::NEW_TURN );
+            game.setStatus(status::NEW_TURN);
             break;
-            
+    }
+    
+    switch (game.keyboard.vk) { //Non Movement key
         case TCODK_CHAR: {
             int status = (handleCharInput(game.keyboard.c)) ? status::NEW_TURN
                                                             : status::IDLE;
@@ -68,20 +70,14 @@ void PlayerControl::doUpdate() {
             TCODConsole::root->setFullscreen(!TCODConsole::root->isFullscreen());
             break;
         }
-        
-        default:
-            break;
     }
-    if ( dy == 0 && dx == 0 ) {
-        return;
-    }
-    else {
-        int status = handleMoveOrAttack( dx, dy ) ? status::NEW_TURN 
-                                                  : status::IDLE;
-        game.setStatus( status );
-        if ( status == status::NEW_TURN)  {
-            game.map->getFov( self->getX(), self->getY() );
-        }
+    
+    if ( dy == 0 && dx == 0 ) {return;}
+    
+    int status = handleMoveOrAttack(dx, dy) ? status::NEW_TURN : status::IDLE;
+    game.setStatus(status);
+    if (status == status::NEW_TURN)  {
+        game.map->getFov(self->getX(), self->getY());
     }
 }
 
@@ -90,22 +86,21 @@ bool PlayerControl::handleMoveOrAttack(int dx, int dy) {
     int to_y = self->getY() + dy;
     
     if (game.map->down_hole->getX() == to_x && game.map->down_hole->getY() == to_y) {
+        game.setFloorNum(game.getFloorNum() + 1);
         game.all_character.remove(game.player);
         game.all_character.clearAndDelete();
-        game.all_character.push(game.player);
         game.all_corpse.clearAndDelete();
         game.all_item.clearAndDelete();
         game.all_prop.clearAndDelete();
         game.map->doGenerateMapCA();
-        game.setFloorNum(game.getFloorNum() + 1);
+        game.all_character.push(game.player);
         return true;
     }
     
-    for ( Entity *character : game.all_character ) {
-        if ( character->getX() == to_x && character->getY() == to_y ) {
+    for (Entity *character : game.all_character) {
+        if (character->getX() == to_x && character->getY() == to_y) {
             int attack_damage = self->combat_behavior->doEntityAttack();
             int damage_taken = character->combat_behavior->doEntityAttacked(attack_damage);
-            
             
             game.gui->addMessage( (damage_taken == 0)? TCODColor::red : TCODColor::green,
                                   "You attack %s and dealt %i - %i damage"
@@ -136,7 +131,7 @@ bool PlayerControl::handleCharInput(int ascii) {
                 }
                 if (game.keyboard.vk == TCODK_TAB) {
                     self->inventory->dropItem(to_use);
-                    game.gui->addMessage(TCODColor::green, "You dropped %s", to_use->getName().c_str());
+                    game.gui->addMessage(TCODColor::white, "You dropped %s", to_use->getName().c_str());
                     
                     return true;
                 }
@@ -145,28 +140,32 @@ bool PlayerControl::handleCharInput(int ascii) {
             break;
         }
             
-        case 'p': {
+        case 'g': {
             bool is_item_here = false;
+            Entity *toppest_item;
             for (Entity *item : game.all_item) {
                 if (self->getX() == item->getX() && self->getY() == item->getY()) {
                     is_item_here = true;
-                    if (item->item_behavior->pick(self)) {
-                        game.gui->addMessage(TCODColor::green, "You pick up %s", item->getName().c_str());
-                        new_turn = true;
-                    }
-                    else {
-                        game.gui->addMessage(TCODColor::red, "It is too heavy to pick up %s", item->getName().c_str());
-                        new_turn = false;
-                    }
-                    break;
+                    toppest_item = item;
                 }
             }
             
             if (!is_item_here) {
                 game.gui->addMessage(TCODColor::white, "It is nothing here");
                 new_turn = false;
+                break;
             }
             
+            if (toppest_item->item_behavior->pick(self)) {
+                game.gui->addMessage(TCODColor::green, "You pick up %s", 
+                                     toppest_item->getName().c_str());
+                new_turn = true;
+            }
+            else {
+                game.gui->addMessage(TCODColor::red, "%s is too heavy to pick", 
+                                     toppest_item->getName().c_str());
+                new_turn = false;
+            }
             break;
         }
             
@@ -178,8 +177,9 @@ bool PlayerControl::handleCharInput(int ascii) {
     return new_turn;
 }
 
-EnemyControl::EnemyControl( Entity *self ): Control( self ), move_count(0) {
-    path_to_player = new TCODPath( game.map->getWidth(), game.map->getHeight(), new Pathfinding, NULL );
+EnemyControl::EnemyControl(Entity *self): Control(self), move_count(0) {
+    path_to_player = new TCODPath(game.map->getWidth(), game.map->getHeight(), 
+                                  new Pathfinding, NULL);
 }
 
 EnemyControl::~EnemyControl() {
@@ -187,29 +187,29 @@ EnemyControl::~EnemyControl() {
 }
 
 void EnemyControl::doUpdate() {
-    path_to_player->compute( self->getX(), self->getY(), 
-                            game.player->getX(), game.player->getY() );
+    path_to_player->compute(self->getX(), self->getY(), 
+                            game.player->getX(), game.player->getY());
     
     if (game.map->isInFov(self->getX(), self->getY())) {move_count = 3;}
     else {move_count--;}
     
-    if (move_count > 0) { handleMoveOrAttack(); }
+    if (move_count > 0) {handleMoveOrAttack();}
 }
 
 void EnemyControl::handleMoveOrAttack() {
     int x, y;
-    path_to_player->walk( &x, &y, false );
+    path_to_player->walk(&x, &y, false);
     
-    if ( getDistanceTo( game.player->getX(), game.player->getY() ) < 2 ) {
+    if (getDistanceTo(game.player->getX(), game.player->getY()) < 2 ) {
         int attack_damage = self->combat_behavior->doEntityAttack();
-        int damage_taken = game.player->combat_behavior->doEntityAttacked( attack_damage );
+        int damage_taken = game.player->combat_behavior->doEntityAttacked(attack_damage);
         
-        game.gui->addMessage( (damage_taken == 0)? TCODColor::green : TCODColor::red,
-                              "%s attack you and dealt %i - %i damage"
-                              , self->getName().c_str(), attack_damage, attack_damage - damage_taken);
+        game.gui->addMessage((damage_taken == 0)? TCODColor::green : TCODColor::red,
+                             "%s attack you and dealt %i - %i damage"
+                             , self->getName().c_str(), attack_damage, attack_damage - damage_taken);
         
-        if ( game.player->combat_behavior->checkEntityDead() ) {
-            game.gui->addMessage( TCODColor::red, "You are dead");
+        if (game.player->combat_behavior->checkEntityDead()) {
+            game.gui->addMessage(TCODColor::red, "You are dead");
             game.player->combat_behavior->getEntityDead();
         }
         

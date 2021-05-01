@@ -1,8 +1,8 @@
 #include "main.hpp"
 
-CombatBehavior::CombatBehavior( Entity *self, int max_hp, int attack_point, int defense_point ):
-                               self( self ), max_hp( max_hp ), current_hp( max_hp ), 
-                               attack_point( attack_point ), defense_point( defense_point ), 
+CombatBehavior::CombatBehavior(Entity *self, int max_hp, int attack_point, int defense_point):
+                               self(self), max_hp(max_hp), current_hp(max_hp), 
+                               attack_point(attack_point), defense_point(defense_point), 
                                attack_boost(1), equipment_attack(0), 
                                defense_boost(1), equipment_defense(0) {}
 
@@ -13,7 +13,7 @@ void CombatBehavior::updateEquipmentAttribute() {
 }
 
 int CombatBehavior::doEntityAttack() {
-    return ( attack_point + equipment_attack ) * attack_boost;
+    return (attack_point + equipment_attack) * attack_boost;
 }
 
 int CombatBehavior::doEntityAttacked( int damage ) {
@@ -24,9 +24,9 @@ int CombatBehavior::doEntityAttacked( int damage ) {
     return damage;
 }
 
-int CombatBehavior::doEntityHealed( int heal_amount ) {
+int CombatBehavior::doEntityHealed(int heal_amount) {
     current_hp += heal_amount;
-    if ( current_hp > max_hp ) {
+    if (current_hp > max_hp) {
         heal_amount = max_hp - (current_hp - heal_amount);
         current_hp = max_hp;
     }
@@ -34,38 +34,35 @@ int CombatBehavior::doEntityHealed( int heal_amount ) {
 }
 
 void CombatBehavior::getEntityDead() {
-    self->setAsciiChar( '%' );
-    self->setAsciiColor( TCODColor::darkRed );
-    self->setName( self->getName() + "'s Corpse" );
+    self->setAsciiChar('%');
+    self->setAsciiColor(TCODColor::darkRed);
+    self->setName(self->getName() + "'s Corpse");
     
-    game.all_character.remove( self );
-    game.all_corpse.push( self );
+    game.all_character.remove(self);
+    game.all_corpse.push(self);
     
     delete self->control;
     self->control = new CorpseControl;
 }
 
 bool CombatBehavior::checkEntityDead() {
-    if ( current_hp <= 0 ) { 
-        return true;
-    }
-    return false;
+    return (current_hp <= 0);
 }
 
-PlayerCombatBehavior::PlayerCombatBehavior( Entity *self, int max_hp, int attack_point, int defense_point ): 
-                      CombatBehavior( self, max_hp, attack_point, defense_point ) {}
+PlayerCombatBehavior::PlayerCombatBehavior(Entity *self, int max_hp, 
+                                           int attack_point, int defense_point): 
+                      CombatBehavior(self, max_hp, attack_point, defense_point) {}
 
 void PlayerCombatBehavior::getEntityDead() {
-    //YOU ARE DEAD
     game.setStatus(status::DEFEAT);
     CombatBehavior::getEntityDead();
 }
 
-EnemyCombatBehavior::EnemyCombatBehavior( Entity *self, int max_hp, int attack_point, int defense_point ):
-                     CombatBehavior( self, max_hp, attack_point, defense_point ) {}
+EnemyCombatBehavior::EnemyCombatBehavior(Entity *self, int max_hp, 
+                                         int attack_point, int defense_point):
+                     CombatBehavior(self, max_hp, attack_point, defense_point) {}
 
 void EnemyCombatBehavior::getEntityDead() {
-    //ENEMY IS DEAD
     CombatBehavior::getEntityDead();
 }
 

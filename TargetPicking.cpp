@@ -52,32 +52,50 @@ SelectAreaAllTarget::SelectAreaAllTarget(Entity *self, int radius,
                                          radius(radius), include_self(include_self) {}
 
 bool SelectAreaAllTarget::doTargeting() {
-    TCOD_mouse_t mouse;
-    int x, y;
+    int x, y, target_x = game.player->getX(), target_y = game.player->getY();
+    TCOD_key_t keyboard;
     
-    game.gui->addMessage(TCODColor::yellow, "[LMC] to use [RMC] to cancel");
-    while (game.keyboard.vk != TCODK_ESCAPE) {
+    game.doRender();
+    TCODConsole::root->flush();
+    
+    game.gui->addMessage(TCODColor::yellow, "[NUMPAD] to move cursor, [NUMPAD5] to use, [ESC] to cancel");
+    while (keyboard.vk != TCODK_ESCAPE) {
         game.doRender();
         
-        TCODSystem::checkForEvent(TCOD_EVENT_ANY, &game.keyboard, &mouse);
-        
-        if (!game.map->isInFov(mouse.cx, mouse.cy)) {continue;}
-        
-        for (int cx = mouse.cx - radius; cx <= mouse.cx + radius; cx++) {
-            for (int cy = mouse.cy - radius; cy <= mouse.cy + radius; cy++) {
-                if (!game.map->isInFov(mouse.cx, mouse.cy)) {}
+        for (int cx = target_x - radius; cx <= target_x + radius; cx++) {
+            for (int cy = target_y - radius; cy <= target_y + radius; cy++) {
                 TCODConsole::root->setCharBackground(cx, cy, TCODConsole::root->getCharBackground(cx, cy) + TCODColor::desaturatedGreen);
             }
         }
-        
         TCODConsole::root->flush();
         
-        if (mouse.lbutton_pressed && game.map->isInFov(mouse.cx, mouse.cy)) {
-            x = mouse.cx;
-            y = mouse.cy;
+        TCODSystem::waitForEvent(TCOD_EVENT_KEY_PRESS, &keyboard, NULL, false);
+        
+        int dx = 0, dy = 0;
+        switch (keyboard.vk) {
+            case TCODK_KP8: dy--; break;
+            case TCODK_KP6: dx++; break;
+            case TCODK_KP2: dy++; break;
+            case TCODK_KP4: dx--; break;
+            case TCODK_KP9: dx++; dy--; break;
+            case TCODK_KP3: dx++; dy++; break;
+            case TCODK_KP1: dx--; dy++; break;
+            case TCODK_KP7: dx--; dy--; break;
+        }
+        
+        if (game.map->isInFov(target_x + dx, target_y + dy)) {
+            target_x += dx;
+            target_y += dy;
+        }
+        
+        if (keyboard.vk == TCODK_KP5 && 
+            game.map->isInFov(target_x, target_y)) {
+            
+            x = target_x;
+            y = target_y;
             break;
         }
-        else if (mouse.rbutton_pressed) {
+        else if (keyboard.vk == TCODK_ESCAPE) {
             return false;
         }
     }

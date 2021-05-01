@@ -10,6 +10,7 @@ Working On:
 
 
 TODO:
+- Rework combat system - add attack speed and dice
 - Implement Tension and Hunger and add according item
 - trap
 - Add more monster and rework monster spawning

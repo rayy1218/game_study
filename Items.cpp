@@ -30,7 +30,9 @@ Entity* getItem(const int x, const int y, const int index) {
             item->item_behavior->targeting = new SelectAreaAllTarget(item, 3, true);
             ItemPurpose *purpose = new ItemEffectBurn(6, 4);
             item->item_behavior->all_purpose.push(purpose);
-            item->item_behavior->setDesc("Can be throw at any place in sight and deal 6 damage for 4 round to creature in radius of 3");
+            item->item_behavior->setDesc("Can be throw at any place in sight and"
+                                         " deal 6 damage for 4 round to creature"
+                                         " in radius of 3");
             break;
         }
         
@@ -40,7 +42,8 @@ Entity* getItem(const int x, const int y, const int index) {
             item->item_behavior->targeting = new SelectAreaAllTarget(item, 3, true);
             ItemPurpose *purpose = new ItemEffectConfusion(8);
             item->item_behavior->all_purpose.push(purpose);
-            item->item_behavior->setDesc("Can be throw at any place in sight and confuse a creature for 8 round");
+            item->item_behavior->setDesc("Can be throw at any place in sight and"
+                                         " confuse a creature for 8 round");
             break;
         }
         

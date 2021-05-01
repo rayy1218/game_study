@@ -24,7 +24,7 @@ void Gui::doRender() {
     log_console->setDefaultBackground( TCODColor::black );
     log_console->clear();
     
-    
+    doCreateInfomationConsole();
     
     int y = 1;
     for ( Message *message : message_log ) {
@@ -35,6 +35,26 @@ void Gui::doRender() {
     
     addPlayerNowStandOn(0, 0);
     
+    TCODConsole::root->blit(log_console, 0, 0, 100, 10, TCODConsole::root, 0, game.map->getHeight());
+    TCODConsole::root->blit(infomation_console, 0, 0, 30, 60, TCODConsole::root, 100, 0);
+}
+
+void Gui::addBar( int x, int y, int w, int h, TCODColor empty_color, TCODColor full_color, 
+                  float max_value, float current_value, std::string bar_title, TCODColor title_color ) {
+    
+    infomation_console->setDefaultBackground( empty_color );
+    infomation_console->rect( x, y, w, h, true, TCOD_BKGND_SET );
+    
+    int bar_len = ( current_value / max_value ) * w;
+    
+    infomation_console->setDefaultBackground( full_color );
+    infomation_console->rect( x ,y, bar_len, h, true, TCOD_BKGND_SET );
+    
+    infomation_console->setDefaultForeground( title_color );
+    infomation_console->printf( x, y, "%s: %.0f / %.0f", bar_title.c_str(), current_value, max_value );
+}
+
+void Gui::doCreateInfomationConsole() {
     infomation_console->setDefaultBackground(TCODColor::black);
     infomation_console->clear();
     
@@ -54,24 +74,6 @@ void Gui::doRender() {
     addBar( 1, 8, 28, 1, TCODColor::lighterBlue, TCODColor::han, 50, 25, "Mana", TCODColor::white );
     addBar( 1, 9, 28, 1, TCODColor::lighterViolet, TCODColor::violet, 50, 25, "Tension", TCODColor::white );
     addBar( 1, 10, 28, 1, TCODColor::lighterSepia, TCODColor::sepia, 50, 25, "Hunger", TCODColor::white );
-    
-    TCODConsole::root->blit(log_console, 0, 0, 100, 10, TCODConsole::root, 0, game.map->getHeight());
-    TCODConsole::root->blit(infomation_console, 0, 0, 30, 60, TCODConsole::root, 100, 0);
-}
-
-void Gui::addBar( int x, int y, int w, int h, TCODColor empty_color, TCODColor full_color, 
-                  float max_value, float current_value, std::string bar_title, TCODColor title_color ) {
-    
-    infomation_console->setDefaultBackground( empty_color );
-    infomation_console->rect( x, y, w, h, true, TCOD_BKGND_SET );
-    
-    int bar_len = ( current_value / max_value ) * w;
-    
-    infomation_console->setDefaultBackground( full_color );
-    infomation_console->rect( x ,y, bar_len, h, true, TCOD_BKGND_SET );
-    
-    infomation_console->setDefaultForeground( title_color );
-    infomation_console->printf( x, y, "%s: %.0f / %.0f", bar_title.c_str(), current_value, max_value );
 }
 
 void Gui::addMessage(TCODColor text_color, const char *fmt, ...) {
@@ -130,17 +132,21 @@ void Gui::doRenderInventory(Container *inventory) {
     backpack_pointing = 0;
     
     do {
+        //Print the inventory
         inventory_console.setDefaultBackground(TCODColor::darkGrey);
         inventory_console.clear();
         inventory_console.setDefaultForeground(TCODColor::darkestGrey);
-        inventory_console.printf(48, 50, "page");
         inventory_console.printFrame(0, 0 , INVENTORY_WIDTH, INVENTORY_HEIGHT, true, TCOD_BKGND_SET, "Inventory");
+        
+        //Equipment tab
+        inventory_console.setDefaultBackground(TCODColor::darkGrey);
+        inventory_console.setDefaultForeground(TCODColor::darkestGrey);
         inventory_console.printFrame(3, 2, 54, 20, false, TCOD_BKGND_SET, "Equipment");
         
+        //Print equiped item
         std::string equipment[10] = {"Head", "Torso", "Legging", "Shoe",
-                                            "Arm", "Ring", "Ring", "Accessory",
-                                            "Primary hand", "Secondary Hand"};
-        
+                                     "Arm", "Ring", "Ring", "Accessory",
+                                     "Primary hand", "Secondary Hand"};
         
         int y = 4;
         for (int i = 0; i < 10; i++) {
@@ -148,21 +154,22 @@ void Gui::doRenderInventory(Container *inventory) {
             inventory_console.printf(5, y, "%s", equipment_name.c_str());
             inventory_console.setChar(20, y, ':');
             Entity *equiping = game.player->equipment->getEquipment(y - 4);
-            if (equiping == 0) {
+            if (equiping == nullptr) {
                 inventory_console.printf(22, y, "Empty");
-                y++;
-                continue;
             }
-            inventory_console.printf(22, y, "%s", equiping->getName().c_str());
+            else {
+                inventory_console.printf(22, y, "%s", equiping->getName().c_str());
+            }
+            
             y++;
         }
         
+        //Backpack tab
+        inventory_console.setDefaultBackground(TCODColor::darkGrey);
+        inventory_console.setDefaultForeground(TCODColor::darkestGrey);
         inventory_console.printFrame(3, 23, 54, 26, false, TCOD_BKGND_SET, "Backpack");
         
-        inventory_console.hline(4, 46, 52);
-        inventory_console.printf(43, 47, "page : %i / %i", page, (int(inventory->getItemNum() / MAX_ITEM_SHOWN) + 1));
-        inventory_console.printf(5, 47, "weight : %.1f / %.1f", inventory->getCurrentWeight(), inventory->getMaxWeight());
-        
+        //Print item in backpack
         char alphabet = 'a';
         int item_in_page = 0;
         for (int y = 25; y <= MAX_ITEM_SHOWN + 25; y++) {
@@ -187,15 +194,27 @@ void Gui::doRenderInventory(Container *inventory) {
             }
         }
         
+        //Highlight select item
         inventory_console.setDefaultBackground(TCODColor::darkerGrey);
         if (backpack_pointing < item_in_page) {
             inventory_console.rect(5, 25 + backpack_pointing, 50, 1, false, TCOD_BKGND_SET);
         }
         
+        //Print info of backpack tab
         inventory_console.setDefaultBackground(TCODColor::darkGrey);
+        inventory_console.hline(4, 46, 52);
+        int max_page = (int(inventory->getItemNum() / MAX_ITEM_SHOWN) + 1);
+        inventory_console.printf(43, 47, "page : %i / %i", page, max_page);
+        inventory_console.printf(5, 47, "weight : %.1f / %.1f", 
+                                 inventory->getCurrentWeight(), 
+                                 inventory->getMaxWeight());
         
+        //Description tab
+        inventory_console.setDefaultBackground(TCODColor::darkGrey);
+        inventory_console.setDefaultForeground(TCODColor::darkestGrey);
         inventory_console.printFrame(61, 2, 36, 30, false, TCOD_BKGND_SET, "Description");
         
+        //Print description that fit into description tab size
         Entity* backpack_pointing_item;
         int index = getInventoryIndex(backpack_pointing);
         if (index == -1) {backpack_pointing_item = nullptr;}
@@ -207,38 +226,40 @@ void Gui::doRenderInventory(Container *inventory) {
             for (auto iterator = desc.begin(); iterator != desc.end(); iterator++) {
                 word += *iterator;
                 if (*iterator == ' ' || (iterator + 1) == desc.end()) {
-                    if (line.size() + word.size() < 32) {
-                        line += word;
-                        word.clear();
-                    }
-                    else {
+                    if (line.size() + word.size() >= 32) {
                         inventory_console.printf(63, y, "%s", line.c_str());
                         line.clear();
-                        line += word;
-                        word.clear();
                         y++;
                     }
+                    line += word;
+                    word.clear();
                 }
                 if ((iterator + 1) == desc.end()) {
                     inventory_console.printf(63, y, "%s", line.c_str());
-                    line.clear();
                 }
             }
         }
-
+        
+        //Usage tab
+        inventory_console.setDefaultBackground(TCODColor::darkGrey);
+        inventory_console.setDefaultForeground(TCODColor::darkestGrey);
         inventory_console.printFrame(61, 33, 36, 16, false, TCOD_BKGND_SET, "Usage");
         
+        //Print usage
         inventory_console.printf(63, 35, "[UP/DOWN] Select item");
         inventory_console.printf(63, 36, "[ENTER] Use / Equip / Unequip");
         inventory_console.printf(63, 37, "[A ~ L] Quick Use");
         inventory_console.printf(63, 38, "[TAB] Drop");
         
-        
-        TCODConsole::blit(&inventory_console, 0, 0, INVENTORY_WIDTH, INVENTORY_HEIGHT, TCODConsole::root, 0, 0);
+        //Blit the inventory tab to root
+        TCODConsole::blit(&inventory_console, 0, 0, INVENTORY_WIDTH, INVENTORY_HEIGHT, 
+                          TCODConsole::root, 0, 0);
         TCODConsole::root->flush();
+        
+        //Wait and respond for change
         TCODSystem::waitForEvent(TCOD_EVENT_KEY_PRESS, &game.keyboard, NULL, false);
         
-        if (game.keyboard.vk == TCODK_RIGHT && page + 1 <= (int(inventory->getItemNum() / MAX_ITEM_SHOWN) + 1)) {page++;}
+        if (game.keyboard.vk == TCODK_RIGHT && page + 1 <= max_page) {page++;}
         
         if (game.keyboard.vk == TCODK_LEFT && page != 1) {page--;}
         
@@ -246,7 +267,11 @@ void Gui::doRenderInventory(Container *inventory) {
             backpack_pointing -= 1;
         }
         
-        if (game.keyboard.vk == TCODK_DOWN && backpack_pointing < MAX_ITEM_SHOWN && backpack_pointing + 1 < item_in_page) {
+        
+        if (game.keyboard.vk == TCODK_DOWN && 
+            backpack_pointing < MAX_ITEM_SHOWN && 
+            backpack_pointing + 1 < item_in_page) {
+            
             backpack_pointing += 1;
         }
         

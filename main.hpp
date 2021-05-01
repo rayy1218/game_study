@@ -18,15 +18,11 @@
 #include "Container.hpp" //Entity to store item
 #include "TargetPicking.hpp" //For item to select target
 #include "ItemPurpose.hpp" //For item to do something to selected target
-#include "Effect.hpp" //If a purpose have effect more than one round
 #include "Equipment.hpp"
 
 //Include header
 #include "Monster.hpp" //Monster List
 #include "Items.hpp" //Item List
-
-enum status{
-    STARTUP, IDLE, NEW_TURN, DEFEAT, VICTORY
-};
+#include "Effect.hpp" //Effect List
 
 #endif /* MAIN_HPP */

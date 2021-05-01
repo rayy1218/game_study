@@ -7,6 +7,7 @@ class ItemEquipment;
 
 class ItemBehavior {
 protected:
+    //Attribute
     Entity *self;
     int qty;
     bool stackable;
@@ -15,11 +16,19 @@ protected:
     bool is_equiped;
     std::string description;
 public:
+    //Attribute
     TCODList<ItemPurpose*> all_purpose;
     TargetPicking *targeting;
+    
+    //Constructor & Destructor
     ItemBehavior(Entity *self, float weight, int qty, bool stackable, int equipment_index = 0);
     virtual ~ItemBehavior();
     
+    //Method
+    bool pick(Entity *pick_by);
+    virtual bool use(Entity *use_by);
+    
+    //Accessor
     void setQty( int input );
     void setWeight( float input );
     bool isStackable();
@@ -30,9 +39,6 @@ public:
     int getEquipmentIndex();
     std::string getDesc();
     void setDesc(std::string desc);
-    
-    bool pick(Entity *pick_by);
-    virtual bool use(Entity *use_by);
 };
 
 class ItemEquipmentBehavior : public ItemBehavior{
