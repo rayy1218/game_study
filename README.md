@@ -14,3 +14,5 @@ TODO:
 - Implement Tension and Hunger and add according item
 - trap
 - Add more monster and rework monster spawning
+- Monster loot
+- shop
