@@ -7,10 +7,10 @@ http://www.roguebasin.com/index.php?title=Complete_roguelike_tutorial_using_C%2B
 
 Working On:
 - Adding basic equipment and rework item spawning
+- Rework combat system - add attack speed and dice
 
 
 TODO:
-- Rework combat system - add attack speed and dice
 - Implement Tension and Hunger and add according item
 - trap
 - Add more monster and rework monster spawning
