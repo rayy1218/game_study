@@ -31,6 +31,7 @@ public:
     void doRenderInventory(Container *inventory);
     int getInventoryIndex();
     int getInventoryIndex(int index);
+    void doRenderTutorial();
 };
 
 #endif /* GUI_HPP */

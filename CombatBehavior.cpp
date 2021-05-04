@@ -19,6 +19,7 @@ int CombatBehavior::doEntityAttack() {
 int CombatBehavior::doEntityAttacked( int damage ) {
     int defense = ( defense_point + equipment_defense ) * defense_boost;
     damage -= defense;
+    if (damage <= 0) {damage = 0;}
     current_hp -= damage;
     
     return damage;
@@ -46,6 +47,9 @@ void CombatBehavior::getEntityDead() {
 }
 
 bool CombatBehavior::checkEntityDead() {
+    if (current_hp <= 0) {
+        getEntityDead();
+    }
     return (current_hp <= 0);
 }
 
@@ -55,6 +59,8 @@ PlayerCombatBehavior::PlayerCombatBehavior(Entity *self, int max_hp,
 
 void PlayerCombatBehavior::getEntityDead() {
     game.setStatus(status::DEFEAT);
+    game.gui->addMessage(TCODColor::red, "You are dead");
+    game.gui->addMessage(TCODColor::white, "[SPACE] Restart [ESC] Exit");
     CombatBehavior::getEntityDead();
 }
 
@@ -63,6 +69,7 @@ EnemyCombatBehavior::EnemyCombatBehavior(Entity *self, int max_hp,
                      CombatBehavior(self, max_hp, attack_point, defense_point) {}
 
 void EnemyCombatBehavior::getEntityDead() {
+    game.gui->addMessage(TCODColor::green, "%s is dead", self->getName().c_str());
     CombatBehavior::getEntityDead();
 }
 

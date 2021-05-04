@@ -1,10 +1,8 @@
 #include "main.hpp"
 
-static int MIN_ROOM_SIZE = 8;
-static int MAX_ROOM_SIZE = 12;
-static int MAX_MONSTER_IN_MAP = 6;
-static int MAX_ITEM_IN_MAP = 50;
-static int generate_status;
+static int MAX_MONSTER_IN_MAP = 6
+;
+static int MAX_ITEM_IN_MAP = 12;
 
 Tile::Tile(): is_explored(false) {} 
 
@@ -88,8 +86,8 @@ void Map::doGenerateMapCA() {
     else {
     //If enough open space put player inside
         do {
-            x = rng->getInt(1, width - 1);
-            y = rng->getInt(1, height - 1);
+            x = game.global_rng->getInt(1, width - 1);
+            y = game.global_rng->getInt(1, height - 1);
         }
         while (isWall(x, y));
 
@@ -98,8 +96,8 @@ void Map::doGenerateMapCA() {
         getFov(x, y);
         
         do {
-            x = rng->getInt(1, width - 1);
-            y = rng->getInt(1, height - 1);
+            x = game.global_rng->getInt(1, width - 1);
+            y = game.global_rng->getInt(1, height - 1);
         }
         while (isWall(x, y) || game.player->control->getDistanceTo(x, y) < 20);
         
@@ -108,8 +106,8 @@ void Map::doGenerateMapCA() {
         
         int monster_in_map = 0;
         while (monster_in_map < MAX_MONSTER_IN_MAP) {
-            x = rng->getInt(1, width - 1);
-            y = rng->getInt(1, height - 1);
+            x = game.global_rng->getInt(1, width - 1);
+            y = game.global_rng->getInt(1, height - 1);
             if (!canWalk(x, y) || isInFov(x, y)) {continue;}
             
             addMonster(x, y);
@@ -118,8 +116,8 @@ void Map::doGenerateMapCA() {
         
         int item_in_map = 0;
         while( item_in_map < MAX_ITEM_IN_MAP) {
-            x = rng->getInt( 1, width - 1 );
-            y = rng->getInt( 1, height - 1 );
+            x = game.global_rng->getInt( 1, width - 1 );
+            y = game.global_rng->getInt( 1, height - 1 );
             if ( !canWalk( x, y ) || isInFov( x, y ) ) { continue; }
             
             addItem( x, y );
@@ -214,18 +212,38 @@ void Map::doRender() {
 
 void Map::addMonster(int x, int y) {
     Entity *monster;
-    TCODRandom *rng = TCODRandom::getInstance();
     
-    monster = getMonster(x, y, rng->getInt(0, 4));
+    monster = getMonster(x, y, game.global_rng->getInt(1, 5));
     
     game.all_character.push(monster);
 }
 
 void Map::addItem(int x, int y) {
     Entity *item;
-    TCODRandom *rng = TCODRandom::getInstance();
     
-    item = getItem(x, y, rng->getInt(0, 4));
+    static int item_weight_list[] = {   10,  //molotov
+                                        10,  //throwing_Axe
+                                        10,  //incense
+                                        10,  //potion_healing
+                                        1,  //headwear_heavy_metal
+                                        3,  //headwear_light_metal
+                                        5,  //headwear_leather
+                                        1,  //bodywear_heavy_metal
+                                        3,  //bodywear_light_metal
+                                        5,  //bodywear_reinforced_leather
+                                        9,  //bodywear_cloth
+                                        1,  //legging_armored
+                                        3,  //legging_reinforced_metal
+                                        5,  //legging_reinforced_leather
+                                        1,  //footwear_metal
+                                        3,  //footwear_leather
+                                        1,  //armwear_metal_fuul
+                                        3,  //armwear_reinforced_metal
+                                        5}; //armwear_reinforced_leather
+    
+    int index = getIndexWeightedRandom(item_weight_list);
+    std::cout << index << std::endl;
+    item = getItem(x, y, index);
     
     game.all_item.push(item);
 }

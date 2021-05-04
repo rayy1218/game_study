@@ -27,8 +27,9 @@ ItemDamage::ItemDamage(int damage): damage(damage) {}
 
 bool ItemDamage::doUse(Entity* target) {
     int damage_dealt = target->combat_behavior->doEntityAttacked(damage);
-    game.gui->addMessage(TCODColor::green, "%s take %i damage", 
-                         target->getName().c_str(), damage_dealt);
+    game.gui->addMessage(TCODColor::green, "%s take %i - idamage", 
+                         target->getName().c_str(), damage, damage - damage_dealt);
+    target->combat_behavior->checkEntityDead();
     return true;
 }
 

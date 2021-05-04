@@ -29,9 +29,9 @@ void PlayerControl::doUpdate() {
     int dx = 0, dy = 0;
     
     switch (game.keyboard.c) { //Vi key Movement
-        case 'k': dy--; break;
+        case 'j': dy--; break;
         case 'l': dx++; break;
-        case 'j': dy++; break;
+        case 'k': dy++; break;
         case 'h': dx--; break;
         case 'u': dx++; dy--; break;
         case 'n': dx++; dy++; break;
@@ -70,6 +70,11 @@ void PlayerControl::doUpdate() {
             TCODConsole::root->setFullscreen(!TCODConsole::root->isFullscreen());
             break;
         }
+        
+        case TCODK_F1: {
+            game.gui->doRenderTutorial();
+            break;
+        }
     }
     
     if ( dy == 0 && dx == 0 ) {return;}
@@ -106,11 +111,7 @@ bool PlayerControl::handleMoveOrAttack(int dx, int dy) {
                                   "You attack %s and dealt %i - %i damage"
                                   , character->getName().c_str(), attack_damage, attack_damage - damage_taken);
             
-            if ( character->combat_behavior->checkEntityDead() ) {
-                game.gui->addMessage( TCODColor::green, "%s is dead", 
-                                      character->getName().c_str() );
-                character->combat_behavior->getEntityDead();
-            }
+            character->combat_behavior->checkEntityDead();
             
             return true;
         }
@@ -208,11 +209,8 @@ void EnemyControl::handleMoveOrAttack() {
                              "%s attack you and dealt %i - %i damage"
                              , self->getName().c_str(), attack_damage, attack_damage - damage_taken);
         
-        if (game.player->combat_behavior->checkEntityDead()) {
-            game.gui->addMessage(TCODColor::red, "You are dead");
-            game.player->combat_behavior->getEntityDead();
-        }
-        
+        game.player->combat_behavior->checkEntityDead();
+
         return;
     }
     
@@ -252,6 +250,8 @@ void ConfusedControl::handleMoveOrAttack(int to_x, int to_y) {
             int damage_dealt = character->combat_behavior->doEntityAttacked(damage);
             game.gui->addMessage(TCODColor::purple, "%s attack %s and dealt %i - %i damage", 
                                  self->getName().c_str(), character->getName().c_str(), damage, damage - damage_dealt);
+            
+            character->combat_behavior->checkEntityDead();
         }
     }
     

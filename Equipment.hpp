@@ -3,11 +3,11 @@
 
 enum equipment_index {
     unequipable     = -1,
-    head            = 0,
-    torso           = 1,
-    legging         = 2,
-    shoe            = 3,
-    arm             = 4,
+    headwear        = 0,
+    bodywear        = 1,
+    legwear         = 2,
+    footwear        = 3,
+    armwear         = 4,
     ring1           = 5,
     ring2           = 6,
     accessory       = 7,
@@ -23,7 +23,6 @@ private:
 public:
     //Constructor & destructor
     Equipment(Entity *self);
-    ~Equipment();
     
     //Method
     void doEquip(Entity *to_equip, int index);

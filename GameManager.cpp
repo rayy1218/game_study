@@ -7,22 +7,21 @@ GameManager::GameManager(int width, int height): console_width(width),
     TCODConsole::initRoot(console_width, console_height, "Game", false);
     TCODConsole::setCustomFont("terminal.png", TCOD_FONT_LAYOUT_ASCII_INROW);
     TCODConsole::root->setDefaultBackground(TCODColor::black);
+    global_rng = TCODRandom::getInstance();
     
-    doSpawnPlayer();
-    map = new Map(100, 50);
-    gui = new Gui;
-    map->doGenerateMapCA();
-    status = status::STARTUP;
+    doStartup();
+    
+    gui->addMessage(TCODColor::yellow, "First time playing this game ? [F1] for tutorial");
 }
 
 GameManager::~GameManager() {
     delete player;
+    delete map;
+    delete gui;
     all_character.clearAndDelete();
     all_corpse.clearAndDelete();
     all_item.clearAndDelete();
     all_prop.clearAndDelete();
-    delete map;
-    delete gui;
 }
 
 void GameManager::doUpdate() {
@@ -33,14 +32,22 @@ void GameManager::doUpdate() {
         }
         game.map->getFov(player->getX(), player->getY());
         doRender();
+        TCODConsole::root->flush();
     }
+    
     if (status == status::DEFEAT) {
-        exit(0);
+        do {
+            TCODSystem::waitForEvent(TCOD_EVENT_ANY, &keyboard, NULL, true);
+            
+            if (keyboard.vk == TCODK_ESCAPE) {exit(0);}
+        }
+        while (keyboard.vk != TCODK_SPACE);
+        doStartup();
     }
     
     status = status::IDLE;
     
-    TCODSystem::checkForEvent(TCOD_EVENT_KEY_PRESS, &keyboard, NULL);
+    TCODSystem::waitForEvent(TCOD_EVENT_KEY_PRESS, &keyboard, NULL, false);
     if (keyboard.vk == TCODK_ESCAPE) {
         exit(0);
     }
@@ -53,7 +60,6 @@ void GameManager::doUpdate() {
             character->doUpdate();   
         }
     }
-
 }
 
 void GameManager::doRender() {
@@ -97,6 +103,22 @@ void GameManager::doSpawnPlayer() {
     player->combat_behavior = new PlayerCombatBehavior(player, 100, 10, 1);
     
     all_character.push(player);
+}
+
+void GameManager::doStartup() {
+    if (player) {delete player;}
+    if (map) {delete map;}
+    if (gui) {delete gui;}
+    all_character.clearAndDelete();
+    all_corpse.clearAndDelete();
+    all_item.clearAndDelete();
+    all_prop.clearAndDelete();
+    
+    doSpawnPlayer();
+    map = new Map(100, 50);
+    gui = new Gui;
+    map->doGenerateMapCA();
+    status = status::STARTUP;
 }
 
 int GameManager::getConsoleWidth() {return console_width;}

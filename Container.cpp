@@ -20,6 +20,9 @@ bool Container::addItem( Entity *to_add ) {
         return false;
     } 
     
+    current_weight += to_add->item_behavior->getWeight() * 
+                      to_add->item_behavior->getQty();
+    
     if (to_add->item_behavior->isStackable()) {
         bool item_existed = false;
         for (Entity *item : containing) {
@@ -28,7 +31,6 @@ bool Container::addItem( Entity *to_add ) {
                                             to_add->item_behavior->getQty());
                 
                 item_existed = true;
-                delete to_add;
             }
         }
         if (!item_existed) {
@@ -39,9 +41,7 @@ bool Container::addItem( Entity *to_add ) {
     else {
         containing.push(to_add);
     }
-    
-    current_weight += to_add->item_behavior->getWeight() * 
-                      to_add->item_behavior->getQty();
+
     return true;
 }
 
@@ -50,7 +50,6 @@ void Container::removeItem(Entity* to_remove) {
     
     if (!to_remove->item_behavior->isStackable() || to_remove->item_behavior->getQty() == 1) {
         containing.remove(to_remove);
-        delete to_remove;
     }
     else {
         to_remove->item_behavior->setQty(to_remove->item_behavior->getQty() - 1);
