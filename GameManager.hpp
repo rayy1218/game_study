@@ -40,6 +40,7 @@ public:
     void doRender();
     void doSpawnPlayer();
     void doStartup();
+    void doFloorTravel();
     
     //Accessor
     int getConsoleWidth();

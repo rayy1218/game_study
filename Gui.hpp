@@ -32,6 +32,7 @@ public:
     int getInventoryIndex();
     int getInventoryIndex(int index);
     void doRenderTutorial();
+    int doSelectWeaponSlot();
 };
 
 #endif /* GUI_HPP */

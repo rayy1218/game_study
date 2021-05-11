@@ -68,12 +68,15 @@ void Gui::doCreateInfomationConsole() {
                                                            game.player->combat_behavior->getEquipmentDefPoint(), 
                                                            game.player->combat_behavior->getDefBoost());
     
-    addBar( 1, 7, 28, 1, TCODColor::lighterRed, TCODColor::red, 
+    std::string hand_using = (game.player->equipment->isPrimaryHand())? "Primary Hand" : "Secondary Hand";
+    infomation_console->printf(1, 6, "Using: %s", hand_using.c_str());
+    
+    addBar( 1, 8, 28, 1, TCODColor::lighterRed, TCODColor::red, 
            game.player->combat_behavior->getMaxHp(), 
            game.player->combat_behavior->getCurrentHp(), "Health", TCODColor::white );
-    addBar( 1, 8, 28, 1, TCODColor::lighterBlue, TCODColor::han, 50, 25, "Mana", TCODColor::white );
-    addBar( 1, 9, 28, 1, TCODColor::lighterViolet, TCODColor::violet, 50, 25, "Tension", TCODColor::white );
-    addBar( 1, 10, 28, 1, TCODColor::lighterSepia, TCODColor::sepia, 50, 25, "Hunger", TCODColor::white );
+    addBar( 1, 9, 28, 1, TCODColor::lighterBlue, TCODColor::han, 50, 25, "Mana", TCODColor::white );
+    addBar( 1, 10, 28, 1, TCODColor::lighterViolet, TCODColor::violet, 50, 25, "Tension", TCODColor::white );
+    addBar( 1, 11, 28, 1, TCODColor::lighterSepia, TCODColor::sepia, 50, 25, "Hunger", TCODColor::white );
 }
 
 void Gui::addMessage(TCODColor text_color, const char *fmt, ...) {
@@ -346,4 +349,34 @@ void Gui::doRenderTutorial() {
     while (game.keyboard.vk != TCODK_ESCAPE) {
         TCODSystem::waitForEvent(TCOD_EVENT_KEY_RELEASE, &game.keyboard, NULL, false);
     }
+}
+
+int Gui::doSelectWeaponSlot() {
+    static TCODConsole select_weapon_slot_console(15, 7);
+    
+    int option = 0;
+    
+    while (game.keyboard.vk != TCODK_ESCAPE) {
+        select_weapon_slot_console.setDefaultBackground(TCODColor::darkGrey);
+        select_weapon_slot_console.setDefaultForeground(TCODColor::darkestGrey);
+        select_weapon_slot_console.clear();
+        select_weapon_slot_console.printFrame(0, 0, 15, 7, false, TCOD_BKGND_SET, "Select Weapon Slot [ARROW KEY]");
+        select_weapon_slot_console.printf(2, 2, "Primary Hand");
+        select_weapon_slot_console.printf(2, 3, "Secondary Hand");
+        
+        select_weapon_slot_console.setDefaultBackground(TCODColor::darkerGrey);
+        select_weapon_slot_console.rect(2, 2 + option, 11, 1, false, TCOD_BKGND_SET);
+        
+        TCODSystem::waitForEvent(TCOD_EVENT_KEY_RELEASE, &game.keyboard, NULL, false);
+        
+        if (game.keyboard.vk == TCODK_UP && option == 1) {option = 0;}
+        if (game.keyboard.vk == TCODK_DOWN && option == 0) {option = 1;}
+        
+        if (game.keyboard.vk == TCODK_ENTER) {return option;}
+        
+        TCODConsole::blit(&select_weapon_slot_console, 0, 0, 15, 7, TCODConsole::root, 40, 20);
+        TCODConsole::root->flush();
+    }
+        
+    return -1;
 }

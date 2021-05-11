@@ -56,6 +56,14 @@ ItemEquipment::ItemEquipment(int attack_point, int defense_point,
 
 bool ItemEquipment::doUse(Entity *self) {
     CombatBehavior *cbt = self->combat_behavior;
-    cbt->setEquipmentAtkPoint(cbt->getEquipmentAtkPoint() + attack_point);
     cbt->setEquipmentDefPoint(cbt->getEquipmentDefPoint() + defense_point);
+}
+
+ItemWeapon::ItemWeapon(int attack_point, float speed):
+                          attack_point(attack_point), speed(speed) {}
+
+bool ItemWeapon::doUse(Entity* self) {
+    CombatBehavior *cbt = self->combat_behavior;
+    cbt->setEquipmentAtkPoint(cbt->getEquipmentAtkPoint() + attack_point);
+    cbt->setSpeed(speed);
 }

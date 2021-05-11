@@ -16,7 +16,6 @@ private:
     Tile *tiles;
 public:
     //Attribute
-    Entity *down_hole;
     TCODMap *map;
     
     //Constructor & Destructor

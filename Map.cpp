@@ -1,8 +1,8 @@
 #include "main.hpp"
 
-static int MAX_MONSTER_IN_MAP = 6
-;
+static int MAX_MONSTER_IN_MAP = 6;
 static int MAX_ITEM_IN_MAP = 12;
+static int MAX_HOLE_IN_MAP = 4;
 
 Tile::Tile(): is_explored(false) {} 
 
@@ -13,7 +13,6 @@ Map::Map(int width, int height): width(width), height(height) {
 
 Map::~Map() {
     delete tiles;
-    delete down_hole;
     delete map;
 }
 
@@ -95,14 +94,44 @@ void Map::doGenerateMapCA() {
         game.player->setY(y);
         getFov(x, y);
         
+        Entity *prop; 
+        Control *control;
+        
         do {
             x = game.global_rng->getInt(1, width - 1);
             y = game.global_rng->getInt(1, height - 1);
         }
         while (isWall(x, y) || game.player->control->getDistanceTo(x, y) < 20);
         
-        down_hole = new Entity(x, y, "Hole", 'O', TCODColor::white);
-        game.all_prop.push(down_hole);
+        prop = new Entity(x, y, "Down Stair", '>', TCODColor::white);
+        control = new DownStairControl(prop);
+        prop->control = control;
+        game.all_prop.push(prop);
+        
+        do {
+            x = game.global_rng->getInt(1, width - 1);
+            y = game.global_rng->getInt(1, height - 1);
+        }
+        while (isWall(x, y) || game.player->control->getDistanceTo(x, y) >= 2 || 
+               (game.player->getX() == x && game.player->getY() == y));
+        
+        prop = new Entity(x, y, "Up Stair", '<', TCODColor::white);
+        control = new UpStairControl(prop);
+        prop->control = control;
+        game.all_prop.push(prop);
+        
+        for (int i = 1; i <= MAX_HOLE_IN_MAP; i++) {
+            do {
+                x = game.global_rng->getInt(1, width - 1);
+                y = game.global_rng->getInt(1, height - 1);
+            }
+            while (isWall(x, y) || game.player->control->getDistanceTo(x, y) < 20);
+            
+            prop = new Entity(x, y, "Hole", 'O', TCODColor::white);
+            control = new HoleControl(prop);
+            prop->control = control;
+            game.all_prop.push(prop);
+        }
         
         int monster_in_map = 0;
         while (monster_in_map < MAX_MONSTER_IN_MAP) {
@@ -113,7 +142,7 @@ void Map::doGenerateMapCA() {
             addMonster(x, y);
             monster_in_map++;
         }
-        
+
         int item_in_map = 0;
         while( item_in_map < MAX_ITEM_IN_MAP) {
             x = game.global_rng->getInt( 1, width - 1 );
@@ -199,7 +228,9 @@ void Map::doRender() {
                 TCODConsole::root->setCharBackground(x, y, isWall(x, y) ? wall : floor);
                 TCODConsole::root->putChar(x, y, (isWall(x, y)) ? '#' : '.');
             }
+            
             if (isInFov(x, y)) {
+                TCODConsole::root->setCharBackground(x, y, isWall(x, y) ? wall : floor);
                 TCODConsole::root->setCharBackground(x, y, TCODConsole::root->getCharBackground(x, y) * TCODColor::lighterLime);
                 TCODConsole::root->putChar(x, y, (isWall(x, y)) ? '#' : '.');
             }
@@ -221,29 +252,62 @@ void Map::addMonster(int x, int y) {
 void Map::addItem(int x, int y) {
     Entity *item;
     
-    static int item_weight_list[] = {   10,  //molotov
-                                        10,  //throwing_Axe
-                                        10,  //incense
-                                        10,  //potion_healing
-                                        1,  //headwear_heavy_metal
-                                        3,  //headwear_light_metal
-                                        5,  //headwear_leather
-                                        1,  //bodywear_heavy_metal
-                                        3,  //bodywear_light_metal
-                                        5,  //bodywear_reinforced_leather
-                                        9,  //bodywear_cloth
-                                        1,  //legging_armored
-                                        3,  //legging_reinforced_metal
-                                        5,  //legging_reinforced_leather
-                                        1,  //footwear_metal
-                                        3,  //footwear_leather
-                                        1,  //armwear_metal_fuul
-                                        3,  //armwear_reinforced_metal
-                                        5}; //armwear_reinforced_leather
+    static int item_type_weight_list[] = {60,  //Item 
+                                          20,   //Equipment
+                                          20}; //Weapon
     
-    int index = getIndexWeightedRandom(item_weight_list);
-    std::cout << index << std::endl;
-    item = getItem(x, y, index);
+    static int equipment_weight_list[] = {1,  //headwear_heavy_metal
+                                          6,  //headwear_light_metal
+                                          10,  //headwear_leather
+                                          1,  //bodywear_heavy_metal
+                                          6,  //bodywear_light_metal
+                                          10,  //bodywear_reinforced_leather
+                                          16,  //bodywear_cloth
+                                          1,  //legging_armored
+                                          6,  //legging_reinforced_metal
+                                          10,  //legging_reinforced_leather
+                                          2,  //footwear_metal
+                                          14,  //footwear_leather
+                                          1,  //armwear_metal_fuul
+                                          6,  //armwear_reinforced_metal
+                                          10}; //armwear_reinforced_leather
+                                          
+    
+    static int item_weight_list[] = {10,  //molotov
+                                     12,  //throwing_Axe
+                                     8,  //incense
+                                     18};  //potion_healing
+                                        
+    static int weapon_weight_list[] = {1,
+                                       1,
+                                       1,
+                                       1,
+                                       1,
+                                       1,
+                                       1,
+                                       1};
+    
+    int index = getIndexWeightedRandom(item_type_weight_list, 3);
+
+    switch (index) {
+        case 1: {
+            int index = getIndexWeightedRandom(item_weight_list, 4);
+            item = getItem(x, y, index);
+            break;
+        }
+        
+        case 2: {
+            int index = getIndexWeightedRandom(equipment_weight_list, 15);
+            item = getItem(x, y, index + 4);
+            break;
+        }
+        
+        case 3: {
+            int index = getIndexWeightedRandom(weapon_weight_list, 8);
+            item = getItem(x, y, index + 25);
+            break;
+        }
+    }
     
     game.all_item.push(item);
 }

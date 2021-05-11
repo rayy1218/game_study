@@ -4,10 +4,10 @@ Entity* getMonster(int x, int y, int index) {
     Entity *monster;
     switch (index) {
         case monster_dict::goblin_archer: {
-            monster = new Entity(x, y, "Goblin Archer", 'o', TCODColor::darkLime);
+            monster = new Entity(x, y, "Goblin", 'o', TCODColor::darkLime);
             monster->control = new EnemyControl(monster);
             monster->move_behavior = new MoveBehavior(monster);
-            monster->combat_behavior = new EnemyCombatBehavior(monster, 20, 4, 0);
+            monster->combat_behavior = new EnemyCombatBehavior(monster, 20, 4, 0, 50);
             break;
         }
 
@@ -15,7 +15,7 @@ Entity* getMonster(int x, int y, int index) {
             monster = new Entity(x, y, "Goblin Skirmisher", 'o', TCODColor::darkerGreen);
             monster->control = new EnemyControl(monster);
             monster->move_behavior = new MoveBehavior(monster);
-            monster->combat_behavior = new EnemyCombatBehavior(monster, 25, 6, 1);
+            monster->combat_behavior = new EnemyCombatBehavior(monster, 25, 6, 1, 50);
             break;
         }
 
@@ -24,7 +24,7 @@ Entity* getMonster(int x, int y, int index) {
                                  TCODColor::darkerGreen + TCODColor::grey);
             monster->control = new EnemyControl(monster);
             monster->move_behavior = new MoveBehavior(monster);
-            monster->combat_behavior = new EnemyCombatBehavior(monster, 25, 4, 4);
+            monster->combat_behavior = new EnemyCombatBehavior(monster, 25, 4, 4,30);
             break;
         }
 
@@ -32,7 +32,7 @@ Entity* getMonster(int x, int y, int index) {
             monster = new Entity(x, y, "Wolf", 'G', TCODColor::lightestGrey);
             monster->control = new EnemyControl(monster);
             monster->move_behavior = new MoveBehavior(monster);
-            monster->combat_behavior = new EnemyCombatBehavior(monster, 20, 5, 1);
+            monster->combat_behavior = new EnemyCombatBehavior(monster, 20, 5, 0, 80);
             break;
         }
 
@@ -40,7 +40,7 @@ Entity* getMonster(int x, int y, int index) {
             monster = new Entity(x, y, "Gaint Wolf", 'G', TCODColor::lighterGrey);
             monster->control = new EnemyControl(monster);
             monster->move_behavior = new MoveBehavior(monster);
-            monster->combat_behavior = new EnemyCombatBehavior(monster, 30, 8, 3);
+            monster->combat_behavior = new EnemyCombatBehavior(monster, 30, 8, 1, 70);
             break;
         }
     }
