@@ -27,8 +27,9 @@ ItemDamage::ItemDamage(int damage): damage(damage) {}
 
 bool ItemDamage::doUse(Entity* target) {
     int damage_dealt = target->combat_behavior->doEntityAttacked(damage);
-    game.gui->addMessage(TCODColor::green, "%s take %i damage", 
-                         target->getName().c_str(), damage_dealt);
+    game.gui->addMessage(TCODColor::green, "%s take %i - idamage", 
+                         target->getName().c_str(), damage, damage - damage_dealt);
+    target->combat_behavior->checkEntityDead();
     return true;
 }
 
@@ -55,6 +56,14 @@ ItemEquipment::ItemEquipment(int attack_point, int defense_point,
 
 bool ItemEquipment::doUse(Entity *self) {
     CombatBehavior *cbt = self->combat_behavior;
-    cbt->setEquipmentAtkPoint(cbt->getEquipmentAtkPoint() + attack_point);
     cbt->setEquipmentDefPoint(cbt->getEquipmentDefPoint() + defense_point);
+}
+
+ItemWeapon::ItemWeapon(int attack_point, float speed):
+                          attack_point(attack_point), speed(speed) {}
+
+bool ItemWeapon::doUse(Entity* self) {
+    CombatBehavior *cbt = self->combat_behavior;
+    cbt->setEquipmentAtkPoint(cbt->getEquipmentAtkPoint() + attack_point);
+    cbt->setSpeed(speed);
 }

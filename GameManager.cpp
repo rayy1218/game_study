@@ -4,19 +4,17 @@ GameManager::GameManager(int width, int height): console_width(width),
                                                  console_height(height),
                                                  floor_num(1) {
 
-    TCODConsole::initRoot(console_width, console_height, "Game", false);
+    TCODConsole::initRoot(console_width, console_height, "Game", true);
     TCODConsole::setCustomFont("terminal.png", TCOD_FONT_LAYOUT_ASCII_INROW);
     TCODConsole::root->setDefaultBackground(TCODColor::black);
+    global_rng = TCODRandom::getInstance();
     
-    doSpawnPlayer();
-    map = new Map(100, 50);
-    gui = new Gui;
-    map->doGenerateMapCA();
-    status = status::STARTUP;
+    doStartup();
+    
+    gui->addMessage(TCODColor::yellow, "First time playing this game ? [F1] for tutorial");
 }
 
 GameManager::~GameManager() {
-    delete player;
     all_character.clearAndDelete();
     all_corpse.clearAndDelete();
     all_item.clearAndDelete();
@@ -31,16 +29,28 @@ void GameManager::doUpdate() {
             Entity *equip = game.player->equipment->getEquipment(i);
             equip = nullptr;
         }
+        
         game.map->getFov(player->getX(), player->getY());
         doRender();
+        TCODConsole::root->flush();
     }
+    
     if (status == status::DEFEAT) {
-        exit(0);
+        do {
+            TCODSystem::waitForEvent(TCOD_EVENT_KEY_RELEASE, &keyboard, NULL, false);
+            
+            if (keyboard.vk == TCODK_ESCAPE) {exit(0);}
+        }
+        while (keyboard.vk != TCODK_SPACE);
+        
+        doStartup();
+        doRender();
+        TCODConsole::root->flush();
     }
     
     status = status::IDLE;
     
-    TCODSystem::checkForEvent(TCOD_EVENT_KEY_PRESS, &keyboard, NULL);
+    TCODSystem::waitForEvent(TCOD_EVENT_KEY_PRESS, &keyboard, NULL, false);
     if (keyboard.vk == TCODK_ESCAPE) {
         exit(0);
     }
@@ -53,7 +63,10 @@ void GameManager::doUpdate() {
             character->doUpdate();   
         }
     }
-
+    
+    for ( Entity *prop : all_prop ) {
+        prop->doUpdate();
+    }
 }
 
 void GameManager::doRender() {
@@ -74,17 +87,17 @@ void GameManager::doRender() {
         TCODConsole::root->setCharBackground(entity->getX(), entity->getY(), TCODColor::desaturatedYellow);
     }
     
+    for ( Entity *entity : all_prop ) {
+        if (!map->isExplored(entity->getX(), entity->getY())) {continue;}
+        entity->doRender();
+        TCODConsole::root->setCharBackground(entity->getX(), entity->getY(), TCODColor::desaturatedBlue);
+    }
+    
     for ( Entity *entity : all_character ) {
         if (!map->isInFov(entity->getX(), entity->getY())) {continue;}
         entity->doRender();
         if (entity == player) {continue;}
         TCODConsole::root->setCharBackground(entity->getX(), entity->getY(), TCODColor::desaturatedRed);
-    }
-    
-    for ( Entity *entity : all_prop ) {
-        if (!map->isExplored(entity->getX(), entity->getY())) {continue;}
-        entity->doRender();
-        TCODConsole::root->setCharBackground(entity->getX(), entity->getY(), TCODColor::desaturatedBlue);
     }
 }
 
@@ -94,9 +107,43 @@ void GameManager::doSpawnPlayer() {
     player->inventory = new Container(player, 20);
     player->equipment = new Equipment(player);
     player->move_behavior = new MoveBehavior(player);
-    player->combat_behavior = new PlayerCombatBehavior(player, 100, 10, 1);
+    player->combat_behavior = new PlayerCombatBehavior(player, 100, 2, 1, 50);
     
     all_character.push(player);
+}
+
+void GameManager::doStartup() {
+    floor_num = 1;
+    
+    if (map) {delete map;}
+    if (gui) {delete gui;}
+    all_character.clearAndDelete();
+    all_corpse.clearAndDelete();
+    all_item.clearAndDelete();
+    all_prop.clearAndDelete();
+    
+    doSpawnPlayer();
+    
+    map = new Map(100, 50);
+    gui = new Gui;
+    map->doGenerateMapCA();
+    
+    Entity *starter_kit;
+    starter_kit = getItem(player->getX(), player->getY(), item_dict::weapon_dagger);
+    all_item.push(starter_kit);
+    
+    status = status::STARTUP;
+}
+
+void GameManager::doFloorTravel() {
+    game.all_character.remove(game.player);
+    game.all_character.clearAndDelete();
+    game.all_corpse.clearAndDelete();
+    game.all_item.clearAndDelete();
+    game.all_prop.clearAndDelete();
+    game.map->doGenerateMapCA();
+    game.all_character.push(game.player);
+    game.gui->addMessage(TCODColor::yellow, "You are now at floor %i", game.getFloorNum());
 }
 
 int GameManager::getConsoleWidth() {return console_width;}

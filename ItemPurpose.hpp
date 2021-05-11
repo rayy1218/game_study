@@ -57,5 +57,15 @@ public:
     bool doUse(Entity *self);
 };
 
+class ItemWeapon : public ItemPurpose {
+private:
+    int attack_point;
+    float speed;
+public:
+    ItemWeapon(int attack_point, float speed);
+    
+    bool doUse(Entity *self);
+};
+
 #endif /* ITEMPURPOSE_HPP */
 

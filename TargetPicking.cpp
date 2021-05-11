@@ -58,7 +58,7 @@ bool SelectAreaAllTarget::doTargeting() {
     game.doRender();
     TCODConsole::root->flush();
     
-    game.gui->addMessage(TCODColor::yellow, "[NUMPAD] to move cursor, [NUMPAD5] to use, [ESC] to cancel");
+    game.gui->addMessage(TCODColor::yellow, "[NUMPAD / Vi key] to move cursor, [NUMPAD5 / ,] to use, [ESC] to cancel");
     while (keyboard.vk != TCODK_ESCAPE) {
         game.doRender();
         
@@ -83,12 +83,23 @@ bool SelectAreaAllTarget::doTargeting() {
             case TCODK_KP7: dx--; dy--; break;
         }
         
+        switch (keyboard.c) {
+            case 'j': dy--; break;
+            case 'l': dx++; break;
+            case 'k': dy++; break;
+            case 'h': dx--; break;
+            case 'u': dx++; dy--; break;
+            case 'n': dx++; dy++; break;
+            case 'b': dx--; dy++; break;
+            case 'y': dx--; dy--; break;
+        }
+        
         if (game.map->isInFov(target_x + dx, target_y + dy)) {
             target_x += dx;
             target_y += dy;
         }
         
-        if (keyboard.vk == TCODK_KP5 && 
+        if ((keyboard.vk == TCODK_KP5 || keyboard.c == ',')&& 
             game.map->isInFov(target_x, target_y)) {
             
             x = target_x;

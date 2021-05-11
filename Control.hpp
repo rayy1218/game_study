@@ -49,5 +49,23 @@ public:
     void handleMoveOrAttack(int to_x, int to_y);
 }; 
 
+class UpStairControl : public Control {
+public:
+    UpStairControl(Entity *self);
+    void doUpdate();
+};
+
+class DownStairControl : public Control {
+public:
+    DownStairControl(Entity *self);
+    void doUpdate();
+};
+
+class HoleControl : public Control {
+public:
+    HoleControl(Entity* self);
+    void doUpdate();
+};
+
 #endif /* CONTROL_HPP */
 

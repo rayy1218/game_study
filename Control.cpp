@@ -29,9 +29,9 @@ void PlayerControl::doUpdate() {
     int dx = 0, dy = 0;
     
     switch (game.keyboard.c) { //Vi key Movement
-        case 'k': dy--; break;
+        case 'j': dy--; break;
         case 'l': dx++; break;
-        case 'j': dy++; break;
+        case 'k': dy++; break;
         case 'h': dx--; break;
         case 'u': dx++; dy--; break;
         case 'n': dx++; dy++; break;
@@ -70,6 +70,11 @@ void PlayerControl::doUpdate() {
             TCODConsole::root->setFullscreen(!TCODConsole::root->isFullscreen());
             break;
         }
+        
+        case TCODK_F1: {
+            game.gui->doRenderTutorial();
+            break;
+        }
     }
     
     if ( dy == 0 && dx == 0 ) {return;}
@@ -85,33 +90,33 @@ bool PlayerControl::handleMoveOrAttack(int dx, int dy) {
     int to_x = self->getX() + dx;
     int to_y = self->getY() + dy;
     
-    if (game.map->down_hole->getX() == to_x && game.map->down_hole->getY() == to_y) {
-        game.setFloorNum(game.getFloorNum() + 1);
-        game.all_character.remove(game.player);
-        game.all_character.clearAndDelete();
-        game.all_corpse.clearAndDelete();
-        game.all_item.clearAndDelete();
-        game.all_prop.clearAndDelete();
-        game.map->doGenerateMapCA();
-        game.all_character.push(game.player);
-        return true;
-    }
-    
     for (Entity *character : game.all_character) {
         if (character->getX() == to_x && character->getY() == to_y) {
-            int attack_damage = self->combat_behavior->doEntityAttack();
-            int damage_taken = character->combat_behavior->doEntityAttacked(attack_damage);
+            int hitting_count = (self->combat_behavior->getSpeed() / 
+                                 character->combat_behavior->getSpeed());
+            if (hitting_count == 0) {hitting_count = 1;}
             
-            game.gui->addMessage( (damage_taken == 0)? TCODColor::red : TCODColor::green,
-                                  "You attack %s and dealt %i - %i damage"
-                                  , character->getName().c_str(), attack_damage, attack_damage - damage_taken);
-            
-            if ( character->combat_behavior->checkEntityDead() ) {
-                game.gui->addMessage( TCODColor::green, "%s is dead", 
-                                      character->getName().c_str() );
-                character->combat_behavior->getEntityDead();
+            for (int i = 1; i <= hitting_count; i++) {
+                int attack_damage = self->combat_behavior->doEntityAttack();
+                int dice = game.global_rng->getInt(1, 10);
+                
+                if (dice <= 3) {
+                    game.gui->addMessage(TCODColor::red, "%s missed its attack",
+                                         self->getName().c_str());
+                    return true;
+                }
+                if (dice == 10) {
+                    attack_damage *= 1.5;
+                }
+                
+                int damage_taken = character->combat_behavior->doEntityAttacked(attack_damage);
+                
+                game.gui->addMessage( (damage_taken == 0)? TCODColor::red : TCODColor::green,
+                                      "You attack %s and dealt %i - %i damage"
+                                      , character->getName().c_str(), attack_damage, attack_damage - damage_taken);
+
+                if (character->combat_behavior->checkEntityDead()) {break;}
             }
-            
             return true;
         }
     }
@@ -168,6 +173,12 @@ bool PlayerControl::handleCharInput(int ascii) {
             }
             break;
         }
+        
+        case 't': {
+            self->equipment->setHandUsing(!(self->equipment->isPrimaryHand()));
+            new_turn = true;
+            break;
+        }
             
         default:
             new_turn = false;
@@ -201,16 +212,30 @@ void EnemyControl::handleMoveOrAttack() {
     path_to_player->walk(&x, &y, false);
     
     if (getDistanceTo(game.player->getX(), game.player->getY()) < 2 ) {
-        int attack_damage = self->combat_behavior->doEntityAttack();
-        int damage_taken = game.player->combat_behavior->doEntityAttacked(attack_damage);
+        int hitting_count = (self->combat_behavior->getSpeed() / 
+                             game.player->combat_behavior->getSpeed());
+        if (hitting_count == 0) {hitting_count = 1;}
         
-        game.gui->addMessage((damage_taken == 0)? TCODColor::green : TCODColor::red,
-                             "%s attack you and dealt %i - %i damage"
-                             , self->getName().c_str(), attack_damage, attack_damage - damage_taken);
-        
-        if (game.player->combat_behavior->checkEntityDead()) {
-            game.gui->addMessage(TCODColor::red, "You are dead");
-            game.player->combat_behavior->getEntityDead();
+        for (int i = 1; i <= hitting_count; i++) {
+            int attack_damage = self->combat_behavior->doEntityAttack();
+            int dice = game.global_rng->getInt(1, 10);
+            
+            if (dice <= 3) {
+                game.gui->addMessage(TCODColor::green, "%s missed its attack",
+                                     self->getName().c_str());
+                return;
+            }
+            if (dice == 10) {
+                attack_damage *= 1.5;
+            }
+                
+            int damage_taken = game.player->combat_behavior->doEntityAttacked(attack_damage);
+
+            game.gui->addMessage((damage_taken == 0)? TCODColor::green : TCODColor::red,
+                                 "%s attack you and dealt %i - %i damage",
+                                 self->getName().c_str(), attack_damage, attack_damage - damage_taken);
+
+            if (game.player->combat_behavior->checkEntityDead()) {break;} 
         }
         
         return;
@@ -252,6 +277,8 @@ void ConfusedControl::handleMoveOrAttack(int to_x, int to_y) {
             int damage_dealt = character->combat_behavior->doEntityAttacked(damage);
             game.gui->addMessage(TCODColor::purple, "%s attack %s and dealt %i - %i damage", 
                                  self->getName().c_str(), character->getName().c_str(), damage, damage - damage_dealt);
+            
+            character->combat_behavior->checkEntityDead();
         }
     }
     
@@ -259,4 +286,67 @@ void ConfusedControl::handleMoveOrAttack(int to_x, int to_y) {
     if (self == game.player) {
             game.setStatus(status::NEW_TURN);
     }
+}
+
+UpStairControl::UpStairControl(Entity *self): Control(self) {}
+
+void UpStairControl::doUpdate() {
+    if (self->getX() != game.player->getX() || 
+        self->getY() != game.player->getY()) {return;}
+    
+    if (game.getFloorNum() == 1) {
+        game.gui->addMessage(TCODColor::yellow, "You go back to the town and the Sun is a deadly laser");
+        game.player->combat_behavior->setCurrentHp(0);
+        game.player->combat_behavior->getEntityDead();
+        return;
+    }
+    
+    game.setFloorNum(game.getFloorNum() - 1);
+    game.doFloorTravel();
+    return;
+}
+
+DownStairControl::DownStairControl(Entity *self): Control(self) {}
+
+void DownStairControl::doUpdate() {
+    if (self->getX() != game.player->getX() || 
+        self->getY() != game.player->getY()) {return;}
+    
+    if (game.getFloorNum() == 10) {
+        game.gui->addMessage(TCODColor::yellow, "The stair collapsed, bury you under rock");
+        game.player->combat_behavior->setCurrentHp(0);
+        game.player->combat_behavior->getEntityDead();
+        return;
+    }
+    
+    game.setFloorNum(game.getFloorNum() + 1);
+    game.doFloorTravel();
+    return;
+}
+
+HoleControl::HoleControl(Entity *self): Control(self) {}
+
+void HoleControl::doUpdate() {
+    if (self->getX() != game.player->getX() || 
+        self->getY() != game.player->getY()) {return;}
+    
+    int fall_floor_num = game.global_rng->getInt(1, 3);
+    
+    if (game.getFloorNum() + fall_floor_num > 10) {
+        game.gui->addMessage(TCODColor::yellow, "You fall into the hole that you will never find the end");
+        game.player->combat_behavior->setCurrentHp(0);
+        game.player->combat_behavior->getEntityDead();
+        return;
+    }
+    
+    int damage = game.global_rng->getInt(5, 10) * fall_floor_num;
+    game.setFloorNum(game.getFloorNum() + fall_floor_num);
+    int damage_dealt = game.player->combat_behavior->doEntityAttacked(damage);
+    game.gui->addMessage(TCODColor::red, "You fall into hole and take %i - %i damage",
+                         damage, damage - damage_dealt);
+    
+    if (game.player->combat_behavior->checkEntityDead()) {return;}
+    
+    game.doFloorTravel();
+    return;
 }

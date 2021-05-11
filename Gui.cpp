@@ -68,12 +68,15 @@ void Gui::doCreateInfomationConsole() {
                                                            game.player->combat_behavior->getEquipmentDefPoint(), 
                                                            game.player->combat_behavior->getDefBoost());
     
-    addBar( 1, 7, 28, 1, TCODColor::lighterRed, TCODColor::red, 
+    std::string hand_using = (game.player->equipment->isPrimaryHand())? "Primary Hand" : "Secondary Hand";
+    infomation_console->printf(1, 6, "Using: %s", hand_using.c_str());
+    
+    addBar( 1, 8, 28, 1, TCODColor::lighterRed, TCODColor::red, 
            game.player->combat_behavior->getMaxHp(), 
            game.player->combat_behavior->getCurrentHp(), "Health", TCODColor::white );
-    addBar( 1, 8, 28, 1, TCODColor::lighterBlue, TCODColor::han, 50, 25, "Mana", TCODColor::white );
-    addBar( 1, 9, 28, 1, TCODColor::lighterViolet, TCODColor::violet, 50, 25, "Tension", TCODColor::white );
-    addBar( 1, 10, 28, 1, TCODColor::lighterSepia, TCODColor::sepia, 50, 25, "Hunger", TCODColor::white );
+    addBar( 1, 9, 28, 1, TCODColor::lighterBlue, TCODColor::han, 50, 25, "Mana", TCODColor::white );
+    addBar( 1, 10, 28, 1, TCODColor::lighterViolet, TCODColor::violet, 50, 25, "Tension", TCODColor::white );
+    addBar( 1, 11, 28, 1, TCODColor::lighterSepia, TCODColor::sepia, 50, 25, "Hunger", TCODColor::white );
 }
 
 void Gui::addMessage(TCODColor text_color, const char *fmt, ...) {
@@ -144,8 +147,8 @@ void Gui::doRenderInventory(Container *inventory) {
         inventory_console.printFrame(3, 2, 54, 20, false, TCOD_BKGND_SET, "Equipment");
         
         //Print equiped item
-        std::string equipment[10] = {"Head", "Torso", "Legging", "Shoe",
-                                     "Arm", "Ring", "Ring", "Accessory",
+        std::string equipment[10] = {"Headwear", "Bodywear", "Legwear", "Footwear",
+                                     "Armwear", "Ring", "Ring", "Accessory",
                                      "Primary hand", "Secondary Hand"};
         
         int y = 4;
@@ -225,7 +228,7 @@ void Gui::doRenderInventory(Container *inventory) {
             desc = backpack_pointing_item->item_behavior->getDesc();
             for (auto iterator = desc.begin(); iterator != desc.end(); iterator++) {
                 word += *iterator;
-                if (*iterator == ' ' || (iterator + 1) == desc.end()) {
+                if (*iterator == ' ' || *iterator == '\n' || (iterator + 1) == desc.end()) {
                     if (line.size() + word.size() >= 32) {
                         inventory_console.printf(63, y, "%s", line.c_str());
                         line.clear();
@@ -234,8 +237,10 @@ void Gui::doRenderInventory(Container *inventory) {
                     line += word;
                     word.clear();
                 }
-                if ((iterator + 1) == desc.end()) {
+                if ((iterator + 1) == desc.end() || *iterator == '\n') {
                     inventory_console.printf(63, y, "%s", line.c_str());
+                    line.clear();
+                    if (*iterator == '\n') {y++;}
                 }
             }
         }
@@ -312,4 +317,66 @@ void Gui::addPlayerNowStandOn(int x, int y) {
     }
     if (toppest_entity == NULL) {return;}
     log_console->printf(x, y, "Standing on : %s", toppest_entity->getName().c_str());
+}
+
+void Gui::doRenderTutorial() {
+    static TCODConsole tutorial_console(100, 50);
+    tutorial_console.setDefaultBackground(TCODColor::darkGrey);
+    tutorial_console.setDefaultForeground(TCODColor::darkestGrey);
+    tutorial_console.clear();
+    tutorial_console.printFrame(0, 0 , 100, 50, false, TCOD_BKGND_SET, "Tutorial");
+    
+    tutorial_console.printRect(2, 2, 96, 56,
+                               "MOVEMENT\n\n"
+                               "[NUMPAD8 / J] MOVE OR ATTACK UP\n"
+                               "[NUMPAD6 / L] MOVE OR ATTACK RIGHT\n"
+                               "[NUMPAD2 / K] MOVE OR ATTACK DOWN\n"
+                               "[NUMPAD4 / H] MOVE OR ATTACK LEFT\n"
+                               "[NUMPAD9 / U] MOVE OR ATTACK TOP RIGHT\n"
+                               "[NUMPAD3 / N] MOVE OR ATTACK BOTTOM RIGHT\n"
+                               "[NUMPAD1 / B] MOVE OR ATTACK BOTTOM LEFT\n"
+                               "[NUMPAD7 / Y] MOVE OR ATTACK TOP LEFT\n"
+                               "[NUMPAD5 / ,] IDLE\n\n"
+                               "UTILITY\n\n"
+                               "[G] GRAB ITEM\n"
+                               "[I] SHOW INVENTORY\n\n"
+                               "GAME\n\n"
+                               "[F11] TOGGLE FULL SCREEN\n");
+    
+    TCODConsole::blit(&tutorial_console, 0, 0, 100, 50, TCODConsole::root, 0, 0);
+    TCODConsole::root->flush();
+    
+    while (game.keyboard.vk != TCODK_ESCAPE) {
+        TCODSystem::waitForEvent(TCOD_EVENT_KEY_RELEASE, &game.keyboard, NULL, false);
+    }
+}
+
+int Gui::doSelectWeaponSlot() {
+    static TCODConsole select_weapon_slot_console(15, 7);
+    
+    int option = 0;
+    
+    while (game.keyboard.vk != TCODK_ESCAPE) {
+        select_weapon_slot_console.setDefaultBackground(TCODColor::darkGrey);
+        select_weapon_slot_console.setDefaultForeground(TCODColor::darkestGrey);
+        select_weapon_slot_console.clear();
+        select_weapon_slot_console.printFrame(0, 0, 15, 7, false, TCOD_BKGND_SET, "Select Weapon Slot [ARROW KEY]");
+        select_weapon_slot_console.printf(2, 2, "Primary Hand");
+        select_weapon_slot_console.printf(2, 3, "Secondary Hand");
+        
+        select_weapon_slot_console.setDefaultBackground(TCODColor::darkerGrey);
+        select_weapon_slot_console.rect(2, 2 + option, 11, 1, false, TCOD_BKGND_SET);
+        
+        TCODSystem::waitForEvent(TCOD_EVENT_KEY_RELEASE, &game.keyboard, NULL, false);
+        
+        if (game.keyboard.vk == TCODK_UP && option == 1) {option = 0;}
+        if (game.keyboard.vk == TCODK_DOWN && option == 0) {option = 1;}
+        
+        if (game.keyboard.vk == TCODK_ENTER) {return option;}
+        
+        TCODConsole::blit(&select_weapon_slot_console, 0, 0, 15, 7, TCODConsole::root, 40, 20);
+        TCODConsole::root->flush();
+    }
+        
+    return -1;
 }

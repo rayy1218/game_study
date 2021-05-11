@@ -10,18 +10,19 @@ protected:
     int max_hp, current_hp, attack_point, defense_point, equipment_attack,  
         equipment_defense;
     Equipment *self_equipment;
-    float attack_boost, defense_boost;
+    float attack_boost, defense_boost, speed, default_speed;
 public:
     //Constructor
-    CombatBehavior( Entity *self, int max_hp, int attack_point, int defense_point );
+    CombatBehavior( Entity *self, int max_hp, int attack_point, int defense_point, float default_speed );
     
     //Method
     virtual void getEntityDead();
     bool checkEntityDead();
     int doEntityAttack();
-    int doEntityAttacked( int damage );
+    int doEntityAttacked(int damage);
     int doEntityHealed( int heal_amount );
     void updateEquipmentAttribute();
+    void updateWeaponAttribute(bool is_primary);
     
     //Accessor
     int getMaxHp();
@@ -32,6 +33,8 @@ public:
     int getEquipmentDefPoint();
     float getAtkBoost();
     float getDefBoost();
+    float getDefaultSpeed();
+    float getSpeed();
     void setMaxHp( int input );
     void setCurrentHp( int input );
     void setAtkPoint( int input );
@@ -40,17 +43,19 @@ public:
     void setEquipmentDefPoint( int input );
     void setAtkBoost( float input );
     void setDefBoost( float input );
+    void setSpeed(float input);
 };
 
 class PlayerCombatBehavior : public CombatBehavior {
 public:
-    PlayerCombatBehavior( Entity *self, int max_hp, int attack_point, int defense_point );
+    PlayerCombatBehavior( Entity *self, int max_hp, int attack_point, int defense_point, float default_speed);
+    int doEntityAttack(bool is_primary);
     void getEntityDead();
 };
 
 class EnemyCombatBehavior : public CombatBehavior {
 public:
-    EnemyCombatBehavior( Entity *self, int max_hp, int attack_point, int defense_point );
+    EnemyCombatBehavior( Entity *self, int max_hp, int attack_point, int defense_point, float default_speed);
     void getEntityDead();
 };
 

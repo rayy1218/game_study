@@ -33,9 +33,28 @@ bool ItemEquipmentBehavior::use(Entity *use_by) {
         is_equiped = false;
         return true;
     }
-
+    
+    if (equipment_index == equipment_type::single_hand) {
+        int option;
+        option = game.gui->doSelectWeaponSlot();
+        if (option == -1) {return false;}
+        use_by->equipment->doEquip(self, equipment_slot_type::primary_hand + option);
+        is_equiped = true;
+        return true;
+    }
+    
     use_by->equipment->doEquip(self, equipment_index);
     is_equiped = true;
+    
+    if (equipment_index == equipment_type::two_hand) {
+        Entity* secondary_weapon = use_by->equipment->getEquipment(equipment_slot_type::secondary_hand);
+        if (secondary_weapon != nullptr) {
+            use_by->equipment->doUnequip(equipment_slot_type::secondary_hand);
+            secondary_weapon->item_behavior->setIsEquip(false);
+        }
+    }
+    
+    
     return true;
 }
 

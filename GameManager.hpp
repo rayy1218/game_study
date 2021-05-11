@@ -23,6 +23,7 @@ public:
     Map *map;
     Entity *player;
     Gui *gui;
+    TCODRandom *global_rng;
     
     //Attribute - Entity type list
     TCODList<Entity*> all_character;
@@ -38,6 +39,8 @@ public:
     void doUpdate();
     void doRender();
     void doSpawnPlayer();
+    void doStartup();
+    void doFloorTravel();
     
     //Accessor
     int getConsoleWidth();

@@ -22,7 +22,9 @@ bool EffectBurn::doUpdate() {
     int burn_damage = self->combat_behavior->doEntityAttacked(damage);
     TCODColor message_color = (self == game.player) ? TCODColor::red : TCODColor::green;
     game.gui->addMessage(message_color, "%s is burned for %i - %i damage", 
-                         self->getName().c_str(), damage - burn_damage, burn_damage);
+                         self->getName().c_str(), burn_damage, damage - burn_damage);
+    
+    self->combat_behavior->checkEntityDead();
     return Effect::doUpdate();
 }
 

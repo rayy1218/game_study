@@ -2,15 +2,9 @@
 
 #include "main.hpp"
 
-GameManager game(130, 60);
+static const int CONSOLE_WIDTH = 130, CONSOLE_HEIGHT = 60;
 
-void* operator new(size_t size) {
-    return malloc(size);
-}
-
-void operator delete(void* memory, size_t size) {
-    free(memory);
-}
+GameManager game(CONSOLE_WIDTH, CONSOLE_HEIGHT);
 
 int main(void) {
     while (!TCODConsole::isWindowClosed()) {
