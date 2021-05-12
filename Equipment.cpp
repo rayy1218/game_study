@@ -30,7 +30,7 @@ Entity* Equipment::getEquipment(int index) {
 void Equipment::getAllEquipmentAttribute() {
     for (int i = 0; i < 8; i++) {
         if (equipment_slot[i] == nullptr) {continue;}
-        ItemPurpose *purpose = equipment_slot[i]->item_behavior->all_purpose.get(0);
+        Purpose *purpose = equipment_slot[i]->item_behavior->all_purpose.get(0);
         purpose->doUse(self);
     }
 }
@@ -38,7 +38,7 @@ void Equipment::getAllEquipmentAttribute() {
 void Equipment::getWeaponAttribute(bool is_primary) {
     int index = (is_primary) ? 8 : 9;
     if (equipment_slot[index] == nullptr) {return;}
-    ItemPurpose *purpose = equipment_slot[index]->item_behavior->all_purpose.get(0);
+    Purpose *purpose = equipment_slot[index]->item_behavior->all_purpose.get(0);
     purpose->doUse(self);
     return;   
 }

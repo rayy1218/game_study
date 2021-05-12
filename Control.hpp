@@ -2,6 +2,7 @@
 #define CONTROL_HPP
 
 class Pathfinding;
+class Purpose;
 
 class Control {
 protected:
@@ -49,21 +50,42 @@ public:
     void handleMoveOrAttack(int to_x, int to_y);
 }; 
 
-class UpStairControl : public Control {
+class StunnedControl : public Control {
+public:
+    StunnedControl(Entity *self);
+    void doUpdate();
+};
+
+class StepTriggerControl : public Control {
+public:
+    StepTriggerControl(Entity *self);
+    virtual void doUpdate();
+    Entity* getCharacterStepOn();
+};
+
+class UpStairControl : public StepTriggerControl {
 public:
     UpStairControl(Entity *self);
     void doUpdate();
 };
 
-class DownStairControl : public Control {
+class DownStairControl : public StepTriggerControl {
 public:
     DownStairControl(Entity *self);
     void doUpdate();
 };
 
-class HoleControl : public Control {
+class HoleControl : public StepTriggerControl {
 public:
-    HoleControl(Entity* self);
+    HoleControl(Entity *self);
+    void doUpdate();
+};
+
+class TrapControl : public StepTriggerControl {
+private:
+    Purpose *purpose;
+public:
+    TrapControl(Entity *self, Purpose *purpose);
     void doUpdate();
 };
 

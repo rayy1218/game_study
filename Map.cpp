@@ -3,6 +3,7 @@
 static int MAX_MONSTER_IN_MAP = 6;
 static int MAX_ITEM_IN_MAP = 12;
 static int MAX_HOLE_IN_MAP = 4;
+static int MAX_TRAP_IN_MAP = 20;
 
 Tile::Tile(): is_explored(false) {} 
 
@@ -137,20 +138,33 @@ void Map::doGenerateMapCA() {
         while (monster_in_map < MAX_MONSTER_IN_MAP) {
             x = game.global_rng->getInt(1, width - 1);
             y = game.global_rng->getInt(1, height - 1);
-            if (!canWalk(x, y) || isInFov(x, y)) {continue;}
+            if (!canWalk(x, y) || isInFov(x, y) || 
+                game.map->isInFov(x, y)) {continue;}
             
             addMonster(x, y);
             monster_in_map++;
         }
 
         int item_in_map = 0;
-        while( item_in_map < MAX_ITEM_IN_MAP) {
-            x = game.global_rng->getInt( 1, width - 1 );
-            y = game.global_rng->getInt( 1, height - 1 );
-            if ( !canWalk( x, y ) || isInFov( x, y ) ) { continue; }
+        while (item_in_map < MAX_ITEM_IN_MAP) {
+            x = game.global_rng->getInt(1, width - 1);
+            y = game.global_rng->getInt(1, height - 1);
+            if (!canWalk(x, y) || isInFov(x, y) || 
+                game.map->isInFov(x, y)) {continue;}
             
-            addItem( x, y );
+            addItem(x, y);
             item_in_map++;
+        }
+        
+        int trap_in_map = 0;
+        while (trap_in_map < MAX_TRAP_IN_MAP) {
+            x = game.global_rng->getInt(1, width - 1);
+            y = game.global_rng->getInt(1, height - 1);
+            if (!canWalk(x, y) || isInFov(x, y) || 
+                game.map->isInFov(x, y)) {continue;}
+            
+            addTrap(x, y);
+            trap_in_map++;
         }
     }
 }
@@ -310,6 +324,14 @@ void Map::addItem(int x, int y) {
     }
     
     game.all_item.push(item);
+}
+
+void Map::addTrap(int x, int y) {
+    Entity *trap;
+    
+    trap = getTrap(x, y, game.global_rng->getInt(1, 5));
+    
+    game.all_prop.push(trap);
 }
 
 int Map::getWidth() {return width;}

@@ -1,9 +1,9 @@
 #ifndef ITEM_HPP
 #define ITEM_HPP
 
-class ItemPurpose;
+class Purpose;
 class TargetPicking;
-class ItemEquipment;
+class PurposeItemEquipment;
 
 class ItemBehavior {
 protected:
@@ -17,7 +17,7 @@ protected:
     std::string description;
 public:
     //Attribute
-    TCODList<ItemPurpose*> all_purpose;
+    TCODList<Purpose*> all_purpose;
     TargetPicking *targeting;
     
     //Constructor & Destructor

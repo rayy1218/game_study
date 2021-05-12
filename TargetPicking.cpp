@@ -10,7 +10,7 @@ SelfTarget::SelfTarget(Entity *self): TargetPicking(self) {}
 
 bool SelfTarget::doTargeting() {
     bool used = false;
-    for (ItemPurpose *purpose : self->item_behavior->all_purpose) {
+    for (Purpose *purpose : self->item_behavior->all_purpose) {
         used = purpose->doUse(game.player);
     }
     return used;
@@ -41,7 +41,7 @@ bool NearestTarget::doTargeting() {
     } 
     
     bool used = false;
-    for (ItemPurpose *purpose : self->item_behavior->all_purpose) {
+    for (Purpose *purpose : self->item_behavior->all_purpose) {
         used = purpose->doUse(closest_enemy);
     }
     return used;
@@ -117,7 +117,7 @@ bool SelectAreaAllTarget::doTargeting() {
         if (target->getX() < x - radius || target->getX() > x + radius) {continue;}
         if (target->getY() < y - radius || target->getY() > y + radius) {continue;}
         
-        for (ItemPurpose *purpose : self->item_behavior->all_purpose) {
+        for (Purpose *purpose : self->item_behavior->all_purpose) {
             purpose->doUse(target);
         }
         any_target_existed = true;

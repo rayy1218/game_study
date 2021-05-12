@@ -1,7 +1,7 @@
 #ifndef TARGETPICKING_HPP
 #define TARGETPICKING_HPP
 
-class ItemPurpose;
+class Purpose;
 
 class TargetPicking {
 protected:

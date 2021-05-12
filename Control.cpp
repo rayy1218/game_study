@@ -20,7 +20,7 @@ Control::~Control() {
 void Control::doUpdate() {}
 
 float Control::getDistanceTo(float x, float y) {
-    return sqrtf(powf(self->getX() - x, 2) + powf(self->getY() - y, 2 ));
+    return sqrtf(powf(self->getX() - x, 2) + powf(self->getY() - y, 2));
 }
 
 PlayerControl::PlayerControl(Entity* self): Control(self) {}
@@ -284,18 +284,40 @@ void ConfusedControl::handleMoveOrAttack(int to_x, int to_y) {
     
     self->move_behavior->doMoveEntity(to_x, to_y);
     if (self == game.player) {
-            game.setStatus(status::NEW_TURN);
+        game.setStatus(status::NEW_TURN);
     }
 }
 
-UpStairControl::UpStairControl(Entity *self): Control(self) {}
+StunnedControl::StunnedControl(Entity* self): Control(self) {}
+
+void StunnedControl::doUpdate() {
+    if (self == game.player) {
+        game.setStatus(status::NEW_TURN);
+    }
+}
+
+StepTriggerControl::StepTriggerControl(Entity *self): Control(self) {}
+
+void StepTriggerControl::doUpdate() {}
+
+Entity* StepTriggerControl::getCharacterStepOn() {
+    Entity* step_by = nullptr;
+    for (Entity *character : game.all_character) {
+        if (character->getX() == self->getX() && character->getY() == self->getY()) {
+            step_by = character;
+        }
+    }
+    return step_by;
+}
+
+UpStairControl::UpStairControl(Entity *self): StepTriggerControl(self) {}
 
 void UpStairControl::doUpdate() {
-    if (self->getX() != game.player->getX() || 
-        self->getY() != game.player->getY()) {return;}
+    Entity *step_by = getCharacterStepOn();
+    if (step_by != game.player || step_by == nullptr) {return;}
     
     if (game.getFloorNum() == 1) {
-        game.gui->addMessage(TCODColor::yellow, "You go back to the town and the Sun is a deadly laser");
+        game.gui->addMessage(TCODColor::yellow, "The Sun is a deadly laser");
         game.player->combat_behavior->setCurrentHp(0);
         game.player->combat_behavior->getEntityDead();
         return;
@@ -303,14 +325,13 @@ void UpStairControl::doUpdate() {
     
     game.setFloorNum(game.getFloorNum() - 1);
     game.doFloorTravel();
-    return;
 }
 
-DownStairControl::DownStairControl(Entity *self): Control(self) {}
+DownStairControl::DownStairControl(Entity *self): StepTriggerControl(self) {}
 
 void DownStairControl::doUpdate() {
-    if (self->getX() != game.player->getX() || 
-        self->getY() != game.player->getY()) {return;}
+    Entity *step_by = getCharacterStepOn();
+    if (step_by != game.player || step_by == nullptr) {return;}
     
     if (game.getFloorNum() == 10) {
         game.gui->addMessage(TCODColor::yellow, "The stair collapsed, bury you under rock");
@@ -321,14 +342,13 @@ void DownStairControl::doUpdate() {
     
     game.setFloorNum(game.getFloorNum() + 1);
     game.doFloorTravel();
-    return;
 }
 
-HoleControl::HoleControl(Entity *self): Control(self) {}
+HoleControl::HoleControl(Entity *self): StepTriggerControl(self) {}
 
 void HoleControl::doUpdate() {
-    if (self->getX() != game.player->getX() || 
-        self->getY() != game.player->getY()) {return;}
+    Entity *step_by = getCharacterStepOn();
+    if (step_by != game.player || step_by == nullptr) {return;}
     
     int fall_floor_num = game.global_rng->getInt(1, 3);
     
@@ -348,5 +368,18 @@ void HoleControl::doUpdate() {
     if (game.player->combat_behavior->checkEntityDead()) {return;}
     
     game.doFloorTravel();
-    return;
+}
+
+TrapControl::TrapControl(Entity *self, Purpose *purpose): StepTriggerControl(self),
+                                                          purpose(purpose) {}
+
+void TrapControl::doUpdate() {
+    Entity *step_by = getCharacterStepOn();
+    if (step_by == nullptr) {return;}
+    
+    purpose->doUse(step_by);
+    
+    game.all_prop.remove(self);
+    
+    delete self;
 }

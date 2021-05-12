@@ -17,12 +17,13 @@
 #include "ItemBehavior.hpp" //Item entity
 #include "Container.hpp" //Entity to store item
 #include "TargetPicking.hpp" //For item to select target
-#include "ItemPurpose.hpp" //For item to do something to selected target
+#include "Purpose.hpp" //For item to do something to selected target
 #include "Equipment.hpp"
 
 //Include header
 #include "Monster.hpp" //Monster List
 #include "Items.hpp" //Item List
 #include "Effect.hpp" //Effect List
+#include "Trap.hpp" //Trap List
 
 #endif /* MAIN_HPP */

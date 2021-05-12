@@ -4,7 +4,7 @@ GameManager::GameManager(int width, int height): console_width(width),
                                                  console_height(height),
                                                  floor_num(1) {
 
-    TCODConsole::initRoot(console_width, console_height, "Game", true);
+    TCODConsole::initRoot(console_width, console_height, "Game", false);
     TCODConsole::setCustomFont("terminal.png", TCOD_FONT_LAYOUT_ASCII_INROW);
     TCODConsole::root->setDefaultBackground(TCODColor::black);
     global_rng = TCODRandom::getInstance();

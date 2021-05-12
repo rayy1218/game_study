@@ -29,6 +29,7 @@ public:
     void doRender();
     void addMonster(int x, int y);
     void addItem(int x, int y);
+    void addTrap(int x, int y);
     void doSaveMap();
     void doLoadMap(); 
     void doGenerateMapCA();
