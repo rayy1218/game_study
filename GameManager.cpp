@@ -84,20 +84,25 @@ void GameManager::doRender() {
     for ( Entity *entity : all_item ) {
         if (!map->isExplored(entity->getX(), entity->getY())) {continue;}
         entity->doRender();
-        TCODConsole::root->setCharBackground(entity->getX(), entity->getY(), TCODColor::desaturatedYellow);
+        TCODConsole::root->setCharBackground(entity->getX(), entity->getY(), 
+                                             TCODColor::desaturatedYellow);
     }
     
     for ( Entity *entity : all_prop ) {
         if (!map->isExplored(entity->getX(), entity->getY())) {continue;}
         entity->doRender();
-        TCODConsole::root->setCharBackground(entity->getX(), entity->getY(), TCODColor::desaturatedBlue);
+        if (entity->getAsciiChar() != '.') {
+            TCODConsole::root->setCharBackground(entity->getX(), entity->getY(), 
+                                                 TCODColor::desaturatedBlue);
+        }
     }
     
     for ( Entity *entity : all_character ) {
         if (!map->isInFov(entity->getX(), entity->getY())) {continue;}
         entity->doRender();
         if (entity == player) {continue;}
-        TCODConsole::root->setCharBackground(entity->getX(), entity->getY(), TCODColor::desaturatedRed);
+        TCODConsole::root->setCharBackground(entity->getX(), entity->getY(), 
+                                             TCODColor::desaturatedRed);
     }
 }
 

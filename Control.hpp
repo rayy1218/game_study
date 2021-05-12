@@ -84,6 +84,8 @@ public:
 class TrapControl : public StepTriggerControl {
 private:
     Purpose *purpose;
+    TCODColor orig_color;
+    int orig_char;
 public:
     TrapControl(Entity *self, Purpose *purpose);
     void doUpdate();

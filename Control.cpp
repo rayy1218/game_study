@@ -371,12 +371,32 @@ void HoleControl::doUpdate() {
 }
 
 TrapControl::TrapControl(Entity *self, Purpose *purpose): StepTriggerControl(self),
-                                                          purpose(purpose) {}
+                                                          purpose(purpose) {
+    
+    orig_char = self->getAsciiChar();
+    orig_color = self->getAsciiColor();
+    
+    if (game.global_rng->getInt(1, 10) > 2) {
+        self->setAsciiColor(TCODColor::white);
+        self->setAsciiChar('.');
+    } 
+}
 
 void TrapControl::doUpdate() {
+    if (game.player->control->getDistanceTo(self->getX(), self->getY()) < 2) {
+        if (game.global_rng->getInt(1, 10) == 1 && self->getAsciiChar() == '.') {
+            self->setAsciiColor(orig_color);
+            self->setAsciiChar(orig_char);
+            game.gui->addMessage(TCODColor::white, "%s is appeared", self->getName().c_str());
+        }
+    }
+    
     Entity *step_by = getCharacterStepOn();
     if (step_by == nullptr) {return;}
     
+    TCODColor message_color = (step_by == game.player) ? TCODColor::red : TCODColor::green;
+    game.gui->addMessage(message_color, "%s step on %s", step_by->getName().c_str(), 
+                                                         self->getName().c_str());
     purpose->doUse(step_by);
     
     game.all_prop.remove(self);
