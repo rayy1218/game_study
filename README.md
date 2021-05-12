@@ -14,3 +14,4 @@ TODO:
 - Monster loot
 - shop
 - add monster evasion and hitting chance, rework combat system
+- save
