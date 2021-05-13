@@ -8,10 +8,10 @@ http://www.roguebasin.com/index.php?title=Complete_roguelike_tutorial_using_C%2B
 Working On:
 - Check Entity Cursor and show nearest monster info in FOV at info tab 
 - Implement Tension and Hunger and add according item
+- save
 
 TODO:
 - Add more monster and rework monster spawning
 - Monster loot
 - shop
 - add monster evasion and hitting chance, rework combat system
-- save
