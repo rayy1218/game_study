@@ -71,43 +71,45 @@ void Gui::doCreateInfomationConsole() {
     std::string hand_using = (game.player->equipment->isPrimaryHand())? "Primary Hand" : "Secondary Hand";
     infomation_console->printf(1, 6, "Using: %s", hand_using.c_str());
     
-    addBar( 1, 8, 28, 1, TCODColor::lighterRed, TCODColor::red, 
+    addBar(1, 8, 28, 1, TCODColor::lighterRed, TCODColor::red, 
            game.player->combat_behavior->getMaxHp(), 
-           game.player->combat_behavior->getCurrentHp(), "Health", TCODColor::white );
-    addBar( 1, 9, 28, 1, TCODColor::lighterBlue, TCODColor::han, 50, 25, "Mana", TCODColor::white );
-    addBar( 1, 10, 28, 1, TCODColor::lighterViolet, TCODColor::violet, 50, 25, "Tension", TCODColor::white );
-    addBar( 1, 11, 28, 1, TCODColor::lighterSepia, TCODColor::sepia, 50, 25, "Hunger", TCODColor::white );
+           game.player->combat_behavior->getCurrentHp(), "Health", TCODColor::white);
+    addBar(1, 9, 28, 1, TCODColor::lighterBlue, TCODColor::han, 50, 25, "Mana", TCODColor::white);
+    addBar(1, 10, 28, 1, TCODColor::lighterViolet, TCODColor::violet, 50, 25, "Tension", TCODColor::white);
+    addBar(1, 11, 28, 1, TCODColor::lighterSepia, TCODColor::sepia, 
+           game.player_hunger->getMaxHungerPoint(), 
+           game.player_hunger->getCurrentHungerPoint(), "Hunger", TCODColor::white );
 }
 
 void Gui::addMessage(TCODColor text_color, const char *fmt, ...) {
     va_list ap;
     char buffer[128];
-    va_start( ap, fmt );
-    vsprintf( buffer, fmt, ap );
-    va_end( ap );
+    va_start(ap, fmt);
+    vsprintf(buffer, fmt, ap);
+    va_end(ap);
     
     char *line_begin = buffer;
     char *line_end;
     
     do {
-        if ( message_log.size() == LOG_HEIGHT ) {
+        if (message_log.size() == LOG_HEIGHT) {
             Message *to_remove = message_log.get(0);
             message_log.remove( to_remove );
             delete to_remove;
         }
 
-        line_end = strchr( line_begin, '\n' );
+        line_end = strchr(line_begin, '\n');
 
-        if ( line_end ) {
+        if (line_end) {
             *line_end = '\0';
         }
 
-        Message *msg = new Message( line_begin, text_color );
-        message_log.push( msg );
+        Message *msg = new Message(line_begin, text_color);
+        message_log.push(msg);
         
         line_begin = line_end + 1;
     }
-    while ( line_end );
+    while (line_end);
 }
 
 Entity* Gui::getSelectedItem(Container *inventory) {

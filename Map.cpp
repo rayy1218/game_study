@@ -287,10 +287,11 @@ void Map::addItem(int x, int y) {
                                           10}; //armwear_reinforced_leather
                                           
     
-    static int item_weight_list[] = {10,  //molotov
-                                     12,  //throwing_Axe
+    static int item_weight_list[] = {10, //molotov
+                                     12, //throwing_Axe
                                      8,  //incense
-                                     18};  //potion_healing
+                                     18, //potion_healing
+                                     20};  
                                         
     static int weapon_weight_list[] = {1,
                                        1,
@@ -305,20 +306,20 @@ void Map::addItem(int x, int y) {
 
     switch (index) {
         case 1: {
-            int index = getIndexWeightedRandom(item_weight_list, 4);
+            int index = getIndexWeightedRandom(item_weight_list, 5);
             item = getItem(x, y, index);
             break;
         }
         
         case 2: {
             int index = getIndexWeightedRandom(equipment_weight_list, 15);
-            item = getItem(x, y, index + 4);
+            item = getItem(x, y, index + 5);
             break;
         }
         
         case 3: {
             int index = getIndexWeightedRandom(weapon_weight_list, 8);
-            item = getItem(x, y, index + 25);
+            item = getItem(x, y, index + 26);
             break;
         }
     }

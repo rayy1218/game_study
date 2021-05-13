@@ -21,6 +21,7 @@ GameManager::~GameManager() {
     all_prop.clearAndDelete();
     delete map;
     delete gui;
+    delete player_hunger;
 }
 
 void GameManager::doUpdate() {
@@ -55,9 +56,12 @@ void GameManager::doUpdate() {
         exit(0);
     }
     
+    player_hunger->doUpdateHungerEffect();
     player->doUpdate();
     
+    
     if (status == status::IDLE) {return;}
+    player_hunger->doHungerDrop(1);
     for (Entity *character : all_character) {
         if (character != player) {
             character->doUpdate();   
@@ -67,6 +71,7 @@ void GameManager::doUpdate() {
     for ( Entity *prop : all_prop ) {
         prop->doUpdate();
     }
+    
 }
 
 void GameManager::doRender() {
@@ -115,6 +120,8 @@ void GameManager::doSpawnPlayer() {
     player->combat_behavior = new PlayerCombatBehavior(player, 100, 2, 1, 50);
     
     all_character.push(player);
+    
+    player_hunger = new Hunger(500);
 }
 
 void GameManager::doStartup() {
@@ -122,6 +129,7 @@ void GameManager::doStartup() {
     
     if (map) {delete map;}
     if (gui) {delete gui;}
+    if (player_hunger) {delete player_hunger;}
     all_character.clearAndDelete();
     all_corpse.clearAndDelete();
     all_item.clearAndDelete();

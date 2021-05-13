@@ -4,6 +4,7 @@
 class Map;
 class Entity;
 class Gui;
+class Hunger;
 
 enum status{
     STARTUP  = 0, 
@@ -22,6 +23,9 @@ public:
     TCOD_key_t keyboard;
     Map *map;
     Entity *player;
+    
+    Hunger *player_hunger;
+    
     Gui *gui;
     TCODRandom *global_rng;
     

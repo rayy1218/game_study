@@ -383,6 +383,7 @@ TrapControl::TrapControl(Entity *self, Purpose *purpose): StepTriggerControl(sel
 }
 
 void TrapControl::doUpdate() {
+    if (game.player->combat_behavior->getCurrentHp() <= 0) {return;}
     if (game.player->control->getDistanceTo(self->getX(), self->getY()) < 2) {
         if (game.global_rng->getInt(1, 10) == 1 && self->getAsciiChar() == '.') {
             self->setAsciiColor(orig_color);

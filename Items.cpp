@@ -68,6 +68,16 @@ Entity* getItem(const int x, const int y, const int index) {
             break;
         }
         
+        case item_dict::food: {
+            item = new Entity(x, y, "Food", 'Q', TCODColor::darkerCrimson);
+            item->item_behavior = new ItemBehavior(item, 0.2, 1, true, equipment_type::unequipable);
+            item->item_behavior->targeting = new SelfTarget(item);
+            Purpose *purpose = new PurposeItemFood(100);
+            item->item_behavior->all_purpose.push(purpose);
+            item->item_behavior->setDesc("Decrease stravation by 100");
+            break;
+        }
+        
         case item_dict::headwear_heavy_metal: {
             item = new Entity (x, y, "Heavy Plate Helmet", '[', TCODColor::silver);
             item->item_behavior = new ItemEquipmentBehavior(item, 2.5, 1, false, equipment_type::headwear);

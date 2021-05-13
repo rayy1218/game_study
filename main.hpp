@@ -19,6 +19,7 @@
 #include "TargetPicking.hpp" //For item to select target
 #include "Purpose.hpp" //For item to do something to selected target
 #include "Equipment.hpp"
+#include "Hunger.hpp"
 
 //Include header
 #include "Monster.hpp" //Monster List

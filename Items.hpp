@@ -8,49 +8,50 @@ static const int ITEM_TYPE = 19;
 enum item_dict{
     //UTILITY
     molotov = 1,
-    throwing_knife = 2,
-    incense = 3,
+    throwing_knife,
+    incense,
+    food,
     
     //POTION
-    potion_healing = 4,
+    potion_healing,
     
     //HEADWEAR
-    headwear_heavy_metal = 5,
-    headwear_light_metal = 6,
-    headwear_leather = 7,
+    headwear_heavy_metal,
+    headwear_light_metal,
+    headwear_leather,
     
     //BODYWEAR
-    bodywear_heavy_metal = 8,
-    bodywear_light_metal = 9,
-    bodywear_reinforced_leather =10,
-    bodywear_cloth = 11,
+    bodywear_heavy_metal,
+    bodywear_light_metal,
+    bodywear_reinforced_leather,
+    bodywear_cloth,
     
     //LEGGING
-    legging_armored = 12,
-    legging_reinforced_metal = 13,
-    legging_reinforced_leather = 14,
+    legging_armored,
+    legging_reinforced_metal,
+    legging_reinforced_leather,
     
     //FOOTWEAR
-    footwear_metal = 15,
-    footwear_leather = 16,
+    footwear_metal,
+    footwear_leather,
     
     //ARMWEAR
-    armwear_metal_full = 17,
-    armwear_reinforced_metal = 18,
-    armwear_reinforced_leather = 19,
+    armwear_metal_full,
+    armwear_reinforced_metal,
+    armwear_reinforced_leather,
     
     //RING
-    ring_focus = 20,
-    ring_fire = 21,
-    ring_rage = 22,
-    ring_purification = 23,
+    ring_focus,
+    ring_fire,
+    ring_rage,
+    ring_purification,
     
     //ACCESSORY
-    accessory_lantern = 24,
-    accessory_belt_bag = 25,
+    accessory_lantern,
+    accessory_belt_bag,
     
     //SINGLE HANDED WEAPON
-    weapon_gladius= 26,
+    weapon_gladius,
     weapon_axe,
     weapon_mace,
     
