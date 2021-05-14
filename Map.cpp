@@ -17,7 +17,7 @@ Map::~Map() {
     delete map;
 }
 
-void Map::doGenerateMapCA() {
+void Map::doGenerateMapCA(int seed) {
     //PARAMETER
     static const int WALL_CHANCE = 50;
     static const int WALL_NEEDED = 5;

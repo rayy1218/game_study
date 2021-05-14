@@ -24,8 +24,9 @@ void Entity::doUpdate() {
         combat_behavior->updateWeaponAttribute(equipment->isPrimaryHand());
     }
     
+    if (game.getStatus() != status::NEW_TURN) {return;}
+    
     for (Effect *effect : all_effect) {
-        if (game.getStatus() != status::NEW_TURN) {break;}
         effect->doUpdate();
     }
 }

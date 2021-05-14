@@ -174,9 +174,15 @@ bool PlayerControl::handleCharInput(int ascii) {
             break;
         }
         
+        case 'o': {
+            game.gui->doRenderObserving();
+            new_turn = false;
+            break;
+        }
+        
         case 't': {
             self->equipment->setHandUsing(!(self->equipment->isPrimaryHand()));
-            new_turn = true;
+            new_turn = false;
             break;
         }
             

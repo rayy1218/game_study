@@ -59,7 +59,6 @@ void GameManager::doUpdate() {
     player_hunger->doUpdateHungerEffect();
     player->doUpdate();
     
-    
     if (status == status::IDLE) {return;}
     player_hunger->doHungerDrop(1);
     for (Entity *character : all_character) {

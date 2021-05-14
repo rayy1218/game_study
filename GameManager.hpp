@@ -46,6 +46,9 @@ public:
     void doStartup();
     void doFloorTravel();
     
+    void doSave();
+    void doLoad();
+    
     //Accessor
     int getConsoleWidth();
     int getConsoleHeight();

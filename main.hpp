@@ -27,4 +27,6 @@
 #include "Effect.hpp" //Effect List
 #include "Trap.hpp" //Trap List
 
+void doCloseWindow();
+
 #endif /* MAIN_HPP */
