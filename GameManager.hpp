@@ -4,6 +4,8 @@
 class Map;
 class Entity;
 class Gui;
+class Hunger;
+class Tension;
 
 enum status{
     STARTUP  = 0, 
@@ -13,15 +15,26 @@ enum status{
     VICTORY  = 4
 };
 
+struct PlayerStats {
+    Hunger *hunger;
+    Tension *tension;
+    
+    PlayerStats();
+    ~PlayerStats();
+};
+
 class GameManager {
 private:
     //Attribute
-    int console_width, console_height, status, floor_num;
+    int console_width, console_height, status, floor_num, turn_used;
 public:
     //Attribute
     TCOD_key_t keyboard;
     Map *map;
+    
     Entity *player;
+    PlayerStats *player_stats;
+    
     Gui *gui;
     TCODRandom *global_rng;
     
@@ -41,6 +54,9 @@ public:
     void doSpawnPlayer();
     void doStartup();
     void doFloorTravel();
+    
+    void doSave();
+    void doLoad();
     
     //Accessor
     int getConsoleWidth();

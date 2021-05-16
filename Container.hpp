@@ -7,7 +7,7 @@ class Container {
 private:
     //Attribute
     Entity *self;
-    float current_weight, max_weight;
+    float current_weight, max_weight, burden_boost;
     TCODList<Entity*> containing;
 public:
     //Constructor & Destructor
@@ -24,7 +24,10 @@ public:
     //Accessor
     float getMaxWeight();
     float getCurrentWeight();
-    
+    float getBurdenBoost();
+    void setMaxWeight(float input);
+    void setCurrentWeight(float input);
+    void setBurdenBoost(float input);
 };
 
 #endif /* CONTAINER_HPP */

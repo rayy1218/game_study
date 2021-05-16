@@ -85,13 +85,23 @@ PurposeItemEquipment::PurposeItemEquipment(int attack_point, int defense_point,
 bool PurposeItemEquipment::doUse(Entity *self) {
     CombatBehavior *cbt = self->combat_behavior;
     cbt->setEquipmentDefPoint(cbt->getEquipmentDefPoint() + defense_point);
+    return true;
 }
 
 PurposeItemWeapon::PurposeItemWeapon(int attack_point, float speed):
                           attack_point(attack_point), speed(speed) {}
 
-bool PurposeItemWeapon::doUse(Entity* self) {
+bool PurposeItemWeapon::doUse(Entity *self) {
     CombatBehavior *cbt = self->combat_behavior;
     cbt->setEquipmentAtkPoint(cbt->getEquipmentAtkPoint() + attack_point);
     cbt->setSpeed(speed);
+    return true;
 }
+
+PurposeItemFood::PurposeItemFood(int hunger_point): hunger_point(hunger_point) {}
+
+bool PurposeItemFood::doUse(Entity *target) {
+    game.player_stats->hunger->doEat(hunger_point);
+    return true;
+}
+

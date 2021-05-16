@@ -19,11 +19,15 @@
 #include "TargetPicking.hpp" //For item to select target
 #include "Purpose.hpp" //For item to do something to selected target
 #include "Equipment.hpp"
+#include "Hunger.hpp"
+#include "Tension.hpp"
 
 //Include header
 #include "Monster.hpp" //Monster List
 #include "Items.hpp" //Item List
 #include "Effect.hpp" //Effect List
 #include "Trap.hpp" //Trap List
+
+void doCloseWindow();
 
 #endif /* MAIN_HPP */

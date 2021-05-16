@@ -71,43 +71,47 @@ void Gui::doCreateInfomationConsole() {
     std::string hand_using = (game.player->equipment->isPrimaryHand())? "Primary Hand" : "Secondary Hand";
     infomation_console->printf(1, 6, "Using: %s", hand_using.c_str());
     
-    addBar( 1, 8, 28, 1, TCODColor::lighterRed, TCODColor::red, 
+    addBar(1, 8, 28, 1, TCODColor::lighterRed, TCODColor::red, 
            game.player->combat_behavior->getMaxHp(), 
-           game.player->combat_behavior->getCurrentHp(), "Health", TCODColor::white );
-    addBar( 1, 9, 28, 1, TCODColor::lighterBlue, TCODColor::han, 50, 25, "Mana", TCODColor::white );
-    addBar( 1, 10, 28, 1, TCODColor::lighterViolet, TCODColor::violet, 50, 25, "Tension", TCODColor::white );
-    addBar( 1, 11, 28, 1, TCODColor::lighterSepia, TCODColor::sepia, 50, 25, "Hunger", TCODColor::white );
+           game.player->combat_behavior->getCurrentHp(), "Health", TCODColor::white);
+    addBar(1, 9, 28, 1, TCODColor::lighterBlue, TCODColor::han, 50, 25, "Mana", TCODColor::white);
+    addBar(1, 10, 28, 1, TCODColor::lighterViolet, TCODColor::violet, 
+           game.player_stats->tension->getMaxTension(), 
+           game.player_stats->tension->getCurrentTension(), "Tension", TCODColor::white);
+    addBar(1, 11, 28, 1, TCODColor::lighterSepia, TCODColor::sepia, 
+           game.player_stats->hunger->getMaxHungerPoint(), 
+           game.player_stats->hunger->getCurrentHungerPoint(), "Hunger", TCODColor::white );
 }
 
 void Gui::addMessage(TCODColor text_color, const char *fmt, ...) {
     va_list ap;
     char buffer[128];
-    va_start( ap, fmt );
-    vsprintf( buffer, fmt, ap );
-    va_end( ap );
+    va_start(ap, fmt);
+    vsprintf(buffer, fmt, ap);
+    va_end(ap);
     
     char *line_begin = buffer;
     char *line_end;
     
     do {
-        if ( message_log.size() == LOG_HEIGHT ) {
+        if (message_log.size() == LOG_HEIGHT) {
             Message *to_remove = message_log.get(0);
             message_log.remove( to_remove );
             delete to_remove;
         }
 
-        line_end = strchr( line_begin, '\n' );
+        line_end = strchr(line_begin, '\n');
 
-        if ( line_end ) {
+        if (line_end) {
             *line_end = '\0';
         }
 
-        Message *msg = new Message( line_begin, text_color );
-        message_log.push( msg );
+        Message *msg = new Message(line_begin, text_color);
+        message_log.push(msg);
         
         line_begin = line_end + 1;
     }
-    while ( line_end );
+    while (line_end);
 }
 
 Entity* Gui::getSelectedItem(Container *inventory) {
@@ -264,6 +268,10 @@ void Gui::doRenderInventory(Container *inventory) {
         //Wait and respond for change
         TCODSystem::waitForEvent(TCOD_EVENT_KEY_PRESS, &game.keyboard, NULL, false);
         
+        if (game.keyboard.vk == TCODK_NONE) {
+            doCloseWindow();
+        }
+        
         if (game.keyboard.vk == TCODK_RIGHT && page + 1 <= max_page) {page++;}
         
         if (game.keyboard.vk == TCODK_LEFT && page != 1) {page--;}
@@ -339,15 +347,23 @@ void Gui::doRenderTutorial() {
                                "[NUMPAD5 / ,] IDLE\n\n"
                                "UTILITY\n\n"
                                "[G] GRAB ITEM\n"
-                               "[I] SHOW INVENTORY\n\n"
+                               "[T] TOGGLE PRIMARY/SECONDARY HAND"
+                               "[I] SHOW INVENTORY\n"
+                               "[O] OBSERVING MODE\n\n"
                                "GAME\n\n"
                                "[F11] TOGGLE FULL SCREEN\n");
+    
+    addMessage(TCODColor::yellow, "[ESC] QUIT TUTORIAL");
+    game.doRender();
     
     TCODConsole::blit(&tutorial_console, 0, 0, 100, 50, TCODConsole::root, 0, 0);
     TCODConsole::root->flush();
     
     while (game.keyboard.vk != TCODK_ESCAPE) {
         TCODSystem::waitForEvent(TCOD_EVENT_KEY_RELEASE, &game.keyboard, NULL, false);
+        if (game.keyboard.vk == TCODK_NONE) {
+            doCloseWindow();
+        }
     }
 }
 
@@ -379,4 +395,91 @@ int Gui::doSelectWeaponSlot() {
     }
         
     return -1;
+}
+
+void Gui::doRenderObserving() {
+    int cx = game.player->getX(), cy = game.player->getY();
+    
+    addMessage(TCODColor::yellow, "[NUMPAD / VI KEY] move cursor [ESC] Stop observing");
+    
+    while (game.keyboard.vk != TCODK_ESCAPE) {
+        log_console->printf(0, 0, "Looking at :");
+        game.doRender();
+        
+        TCODConsole::root->setDefaultForeground(TCODColor::white);
+        TCODConsole::root->setChar(cx, cy, 'X');
+        
+        Entity *toppest_entity = nullptr;
+        for (Entity *corpse : game.all_corpse) {
+            if (corpse->getX() == cx && corpse->getY() == cy) {
+                toppest_entity = corpse;
+            }
+        }
+        
+        for (Entity *item : game.all_item) {
+            if (item->getX() == cx && item->getY() == cy) {
+                toppest_entity = item;
+            }
+        }
+        
+        for (Entity *prop : game.all_prop) {
+            if (prop->getX() == cx && prop->getY() == cy && prop->getAsciiChar() != '.') {
+                toppest_entity = prop;
+            }
+        }
+        
+        for (Entity *character : game.all_character) {
+            if (character->getX() == cx && character->getY() == cy && game.map->isInFov(cx, cy)) {
+                toppest_entity = character;
+            }
+        }
+        
+        log_console->setDefaultBackground(TCODColor::black);
+        log_console->rect(0, 0, 100, 1, TCOD_BKGND_SET);
+        log_console->setDefaultForeground(TCODColor::white);
+        if (toppest_entity == NULL) {
+            std::string tile_name = game.map->isWall(cx, cy) ? "Wall" : "Floor";
+            log_console->printf(0, 0, "Looking at : %s", tile_name.c_str());
+        }
+        else {
+            log_console->printf(0, 0, "Looking at : %s", toppest_entity->getName().c_str());
+        }
+        
+        TCODConsole::root->blit(log_console, 0, 0, 100, 10, TCODConsole::root, 0, game.map->getHeight());
+        
+        TCODConsole::root->flush();
+        
+        TCODSystem::waitForEvent(TCOD_EVENT_KEY_PRESS, &game.keyboard, NULL, false);
+        
+        if (game.keyboard.vk == TCODK_ESCAPE) {break;}
+        
+        int dx = 0, dy = 0;
+        switch (game.keyboard.c) {
+            case 'j': dy--; break;
+            case 'l': dx++; break;
+            case 'k': dy++; break;
+            case 'h': dx--; break;
+            case 'u': dx++; dy--; break;
+            case 'n': dx++; dy++; break;
+            case 'b': dx--; dy++; break;
+            case 'y': dx--; dy--; break;
+        }
+    
+        switch (game.keyboard.vk) {
+            case TCODK_KP8: dy--; break;
+            case TCODK_KP6: dx++; break;
+            case TCODK_KP2: dy++; break;
+            case TCODK_KP4: dx--; break;
+            case TCODK_KP9: dx++; dy--; break;
+            case TCODK_KP3: dx++; dy++; break;
+            case TCODK_KP1: dx--; dy++; break;
+            case TCODK_KP7: dx--; dy--; break;
+            case TCODK_NONE: doCloseWindow(); break;
+        }
+        
+        if (game.map->isExplored(cx + dx, cy + dy)) {
+            cx += dx;
+            cy += dy;
+        }
+    }
 }

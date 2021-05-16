@@ -2,7 +2,8 @@
 
 Container::Container(Entity *self, float max_weight): self(self), 
                                                       max_weight(max_weight), 
-                                                      current_weight(0) {}
+                                                      current_weight(0),
+                                                      burden_boost(1) {}
 
 Container::~Container() {
     containing.clearAndDelete();
@@ -13,15 +14,15 @@ int Container::getItemNum() {
 }
 
 bool Container::addItem( Entity *to_add ) {
-    if ((current_weight + 
+    if ((getCurrentWeight() + 
          to_add->item_behavior->getWeight() * 
-         to_add->item_behavior->getQty()) > max_weight) {
+         to_add->item_behavior->getQty()) > getMaxWeight()) {
         
         return false;
     } 
     
-    current_weight += to_add->item_behavior->getWeight() * 
-                      to_add->item_behavior->getQty();
+    setCurrentWeight(getCurrentWeight() + to_add->item_behavior->getWeight() * 
+                     to_add->item_behavior->getQty());
     
     if (to_add->item_behavior->isStackable()) {
         bool item_existed = false;
@@ -46,7 +47,7 @@ bool Container::addItem( Entity *to_add ) {
 }
 
 void Container::removeItem(Entity* to_remove) {
-    current_weight -= to_remove->item_behavior->getWeight();
+    
     
     if (!to_remove->item_behavior->isStackable() || to_remove->item_behavior->getQty() == 1) {
         containing.remove(to_remove);
@@ -63,7 +64,7 @@ void Container::dropItem(Entity* to_drop) {
     }
     game.all_item.push(to_drop);
     
-    current_weight -= to_drop->item_behavior->getWeight();
+    setCurrentWeight(getCurrentWeight() - to_drop->item_behavior->getWeight());
     
     to_drop->item_behavior->setQty(to_drop->item_behavior->getQty() - 1);
     if (to_drop->item_behavior->getQty() == 0) {
@@ -79,5 +80,9 @@ Entity* Container::getItem(int index) {
     return containing.get(index);
 }
 
-float Container::getMaxWeight() {return max_weight;}
+float Container::getMaxWeight() {return max_weight * burden_boost;}
 float Container::getCurrentWeight() {return current_weight;}
+float Container::getBurdenBoost() {return burden_boost;}
+void Container::setMaxWeight(float input) {max_weight = input;}
+void Container::setCurrentWeight(float input) {current_weight = input;}
+void Container::setBurdenBoost(float input) {burden_boost = input;}

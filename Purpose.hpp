@@ -93,5 +93,14 @@ public:
     bool doUse(Entity *self);
 };
 
+class PurposeItemFood : public Purpose {
+private:
+    int hunger_point;
+public:
+    PurposeItemFood(int hunger_point);
+    
+    bool doUse(Entity *target);
+};
+
 #endif /* ITEMPURPOSE_HPP */
 

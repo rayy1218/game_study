@@ -12,4 +12,9 @@ int main(void) {
         game.doRender();
         TCODConsole::root->flush();
     }
+    doCloseWindow();
+}
+
+void doCloseWindow() {
+    exit(0);
 }
