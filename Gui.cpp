@@ -75,10 +75,12 @@ void Gui::doCreateInfomationConsole() {
            game.player->combat_behavior->getMaxHp(), 
            game.player->combat_behavior->getCurrentHp(), "Health", TCODColor::white);
     addBar(1, 9, 28, 1, TCODColor::lighterBlue, TCODColor::han, 50, 25, "Mana", TCODColor::white);
-    addBar(1, 10, 28, 1, TCODColor::lighterViolet, TCODColor::violet, 50, 25, "Tension", TCODColor::white);
+    addBar(1, 10, 28, 1, TCODColor::lighterViolet, TCODColor::violet, 
+           game.player_stats->tension->getMaxTension(), 
+           game.player_stats->tension->getCurrentTension(), "Tension", TCODColor::white);
     addBar(1, 11, 28, 1, TCODColor::lighterSepia, TCODColor::sepia, 
-           game.player_hunger->getMaxHungerPoint(), 
-           game.player_hunger->getCurrentHungerPoint(), "Hunger", TCODColor::white );
+           game.player_stats->hunger->getMaxHungerPoint(), 
+           game.player_stats->hunger->getCurrentHungerPoint(), "Hunger", TCODColor::white );
 }
 
 void Gui::addMessage(TCODColor text_color, const char *fmt, ...) {

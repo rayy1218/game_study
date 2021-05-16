@@ -65,8 +65,6 @@ PlayerCombatBehavior::PlayerCombatBehavior(Entity *self, int max_hp,
 
 void PlayerCombatBehavior::getEntityDead() {
     game.setStatus(status::DEFEAT);
-    game.gui->addMessage(TCODColor::red, "You are dead");
-    game.gui->addMessage(TCODColor::white, "[SPACE] Restart [ESC] Exit");
     CombatBehavior::getEntityDead();
 }
 

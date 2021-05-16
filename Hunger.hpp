@@ -14,6 +14,7 @@ public:
     
     int doEat(int eat_hunger_point);
     void doHungerDrop(int drop_hunger_point);
+    void doUpdateHunger();
     void doUpdateHungerEffect();
 };
 

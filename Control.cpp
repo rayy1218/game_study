@@ -340,9 +340,8 @@ void DownStairControl::doUpdate() {
     if (step_by != game.player || step_by == nullptr) {return;}
     
     if (game.getFloorNum() == 10) {
-        game.gui->addMessage(TCODColor::yellow, "The stair collapsed, bury you under rock");
-        game.player->combat_behavior->setCurrentHp(0);
-        game.player->combat_behavior->getEntityDead();
+        game.gui->addMessage(TCODColor::yellow, "You reach the end of the Living Dungeon");
+        game.setStatus(status::VICTORY);
         return;
     }
     
@@ -374,6 +373,17 @@ void HoleControl::doUpdate() {
     if (game.player->combat_behavior->checkEntityDead()) {return;}
     
     game.doFloorTravel();
+    
+    int x = 0, y = 0;
+    
+    while (!game.map->canWalk(x, y)) {
+        x = game.global_rng->getInt(0, game.map->getWidth());
+        y = game.global_rng->getInt(0, game.map->getHeight());
+    }
+    
+    game.player->setX(x);
+    game.player->setY(y);
+    game.map->getFov(game.player->getX(), game.player->getY());
 }
 
 TrapControl::TrapControl(Entity *self, Purpose *purpose): StepTriggerControl(self),

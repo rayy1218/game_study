@@ -93,6 +93,7 @@ void Map::doGenerateMapCA(int seed) {
 
         game.player->setX(x);
         game.player->setY(y);
+        
         getFov(x, y);
         
         Entity *prop; 

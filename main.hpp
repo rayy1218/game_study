@@ -20,6 +20,7 @@
 #include "Purpose.hpp" //For item to do something to selected target
 #include "Equipment.hpp"
 #include "Hunger.hpp"
+#include "Tension.hpp"
 
 //Include header
 #include "Monster.hpp" //Monster List

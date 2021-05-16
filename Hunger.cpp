@@ -16,6 +16,10 @@ void Hunger::doHungerDrop(int drop_hunger_point) {
     if (getCurrentHungerPoint() <= 0) {setCurrentHungerPoint(0);}
 }
 
+void Hunger::doUpdateHunger() {
+    doHungerDrop(1);
+}
+
 void Hunger::doUpdateHungerEffect() {
     float hunger_percentage = ((float)getCurrentHungerPoint() / getMaxHungerPoint());
     game.player->combat_behavior->setAtkBoost(1);

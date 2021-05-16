@@ -101,7 +101,7 @@ bool PurposeItemWeapon::doUse(Entity *self) {
 PurposeItemFood::PurposeItemFood(int hunger_point): hunger_point(hunger_point) {}
 
 bool PurposeItemFood::doUse(Entity *target) {
-    game.player_hunger->doEat(hunger_point);
+    game.player_stats->hunger->doEat(hunger_point);
     return true;
 }
 
