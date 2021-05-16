@@ -18,7 +18,6 @@ GameManager::GameManager(int width, int height): console_width(width),
     global_rng = TCODRandom::getInstance();
     
     doStartup();
-    TCODSystem::setFps(24);
 
     gui->addMessage(TCODColor::yellow, "First time playing this game ? [F1] for tutorial");
 }
@@ -84,7 +83,7 @@ void GameManager::doUpdate() {
     
     status = status::IDLE;
     
-    TCODSystem::checkForEvent(TCOD_EVENT_KEY_RELEASE, &keyboard, NULL);
+    TCODSystem::waitForEvent(TCOD_EVENT_KEY_RELEASE, &keyboard, NULL, false);
     if (keyboard.vk == TCODK_ESCAPE) {
         exit(0);
     }
