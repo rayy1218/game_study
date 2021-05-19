@@ -27,7 +27,7 @@ void Hunger::doUpdateHungerEffect() {
     
     if (current_hunger_point == 0) {
         game.player->combat_behavior->setCurrentHp(game.player->combat_behavior->getCurrentHp() - 1);
-        game.gui->addMessage("%s take 1 damage due to stravation", game.player->getName());
+        game.gui->addMessage(TCODColor::red, "%s take 1 damage due to stravation", game.player->getName().c_str());
     }
     
     game.player->combat_behavior->setAtkBoost(game.player->combat_behavior->getAtkBoost() + (hunger_percentage - 0.5));
