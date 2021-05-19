@@ -12,14 +12,14 @@ GameManager::GameManager(int width, int height): console_width(width),
                                                  floor_num(1),
                                                  turn_used(0) {
 
-    TCODConsole::initRoot(console_width, console_height, "Game", false);
+    TCODConsole::initRoot(console_width, console_height, "the living cave", true);
     TCODConsole::setCustomFont("terminal.png", TCOD_FONT_LAYOUT_ASCII_INROW);
     TCODConsole::root->setDefaultBackground(TCODColor::black);
     global_rng = TCODRandom::getInstance();
     
     doStartup();
-
-    gui->addMessage(TCODColor::yellow, "First time playing this game ? [F1] for tutorial");
+    
+    gui->addMessage(TCODColor::yellow, "first time playing this game ? [F1] for tutorial");
 }
 
 GameManager::~GameManager() {
@@ -44,8 +44,8 @@ void GameManager::doUpdate() {
     }
     
     if (status == status::VICTORY) {
-        game.gui->addMessage(TCODColor::yellow, "You complete the game in %i turn", turn_used);
-        game.gui->addMessage(TCODColor::white, "[SPACE] Restart [ESC] Exit");
+        game.gui->addMessage(TCODColor::yellow, "you complete the game in %i turn", turn_used);
+        game.gui->addMessage(TCODColor::yellow, "[SPACE] restart [ESC] exit");
         
         doRender();
         TCODConsole::root->flush();
@@ -63,8 +63,8 @@ void GameManager::doUpdate() {
     }
     
     if (status == status::DEFEAT) {
-        game.gui->addMessage(TCODColor::red, "You are dead");
-        game.gui->addMessage(TCODColor::yellow, "[SPACE] Restart [ESC] Exit");
+        game.gui->addMessage(TCODColor::red, "you are dead");
+        game.gui->addMessage(TCODColor::yellow, "[SPACE] restart [ESC] exit");
         
         doRender();
         TCODConsole::root->flush();
@@ -84,9 +84,6 @@ void GameManager::doUpdate() {
     status = status::IDLE;
     
     TCODSystem::waitForEvent(TCOD_EVENT_KEY_RELEASE, &keyboard, NULL, false);
-    if (keyboard.vk == TCODK_ESCAPE) {
-        exit(0);
-    }
     
     player_stats->hunger->doUpdateHungerEffect();
     player_stats->tension->doUpdateTensionEffect();
@@ -184,7 +181,7 @@ void GameManager::doStartup() {
     
     Entity *starter_kit;
     starter_kit = getItem(player->getX(), player->getY(), item_dict::weapon_dagger);
-    all_item.push(starter_kit);
+    starter_kit->item_behavior->pick(player);
     
     status = status::STARTUP;
 }
@@ -197,7 +194,7 @@ void GameManager::doFloorTravel() {
     game.all_prop.clearAndDelete();
     game.map->doGenerateMapCA();
     game.all_character.push(game.player);
-    game.gui->addMessage(TCODColor::yellow, "You are now at floor %i", game.getFloorNum());
+    game.gui->addMessage(TCODColor::yellow, "you are now at floor %i", game.getFloorNum());
 }
 
 int GameManager::getConsoleWidth() {return console_width;}

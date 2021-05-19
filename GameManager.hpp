@@ -4,6 +4,7 @@
 class Map;
 class Entity;
 class Gui;
+class Town;
 class Hunger;
 class Tension;
 
@@ -36,6 +37,7 @@ public:
     PlayerStats *player_stats;
     
     Gui *gui;
+    Town *town;
     TCODRandom *global_rng;
     
     //Attribute - Entity type list

@@ -27,13 +27,20 @@ public:
     void doCreateInfomationConsole();
     void addMessage(TCODColor text_color, const char *fmt, ...);
     void addPlayerNowStandOn(int x, int y);
+    void doRenderTutorial();
+    void doRenderObserving();
+    
+    //Inventory
     Entity* getSelectedItem(Container *inventory);
-    void doRenderInventory(Container *inventory);
+    void doRenderPlayerInventory(Container *inventory);\
+    void doRenderEquipmentTab(TCODConsole *inventory_console);
+    void doRenderBackpackTab(TCODConsole *inventory_console, Container *inventory, 
+                             int *max_page, int *item_in_page);
+    void doRenderDescTab(TCODConsole *inventory_console, Container *inventory);
+    void doRenderUsageTab(TCODConsole *inventory_console);
     int getInventoryIndex();
     int getInventoryIndex(int index);
-    void doRenderTutorial();
     int doSelectWeaponSlot();
-    void doRenderObserving();
 };
 
 #endif /* GUI_HPP */

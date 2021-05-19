@@ -3,10 +3,10 @@
 
 //Include Library
 #include <libtcod.hpp>
-#include <iostream>
+
 #include <string>
 
-//Include class header
+//Include header
 #include "GameManager.hpp" //Manager game loop
 #include "Map.hpp" //Map cell related
 #include "Entity.hpp" //Any things in the game that is not a map cell
@@ -21,8 +21,8 @@
 #include "Equipment.hpp"
 #include "Hunger.hpp"
 #include "Tension.hpp"
+#include "Town.hpp"
 
-//Include header
 #include "Monster.hpp" //Monster List
 #include "Items.hpp" //Item List
 #include "Effect.hpp" //Effect List

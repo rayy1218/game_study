@@ -27,6 +27,7 @@ PlayerControl::PlayerControl(Entity* self): Control(self) {}
 
 void PlayerControl::doUpdate() {
     int dx = 0, dy = 0;
+    static bool escape_pressed = false;
     
     switch (game.keyboard.c) { //Vi key Movement
         case 'j': dy--; break;
@@ -75,7 +76,16 @@ void PlayerControl::doUpdate() {
             game.gui->doRenderTutorial();
             break;
         }
+        
+        case TCODK_ESCAPE: {
+            if (escape_pressed) {doCloseWindow();}
+            game.gui->addMessage(TCODColor::yellow, "press [ESC] again to quit");
+            escape_pressed = true;
+            break;
+        }
     }
+    
+    if (game.keyboard.vk != TCODK_ESCAPE) {escape_pressed = false;}
     
     if ( dy == 0 && dx == 0 ) {return;}
     
@@ -112,7 +122,7 @@ bool PlayerControl::handleMoveOrAttack(int dx, int dy) {
                 int damage_taken = character->combat_behavior->doEntityAttacked(attack_damage);
                 
                 game.gui->addMessage( (damage_taken == 0)? TCODColor::red : TCODColor::green,
-                                      "You attack %s and dealt %i - %i damage"
+                                      "you attack %s and dealt %i - %i damage"
                                       , character->getName().c_str(), attack_damage, attack_damage - damage_taken);
 
                 if (character->combat_behavior->checkEntityDead()) {break;}
@@ -136,7 +146,7 @@ bool PlayerControl::handleCharInput(int ascii) {
                 }
                 if (game.keyboard.vk == TCODK_TAB) {
                     self->inventory->dropItem(to_use);
-                    game.gui->addMessage(TCODColor::white, "You dropped %s", to_use->getName().c_str());
+                    game.gui->addMessage(TCODColor::white, "you dropped %s", to_use->getName().c_str());
                     
                     return true;
                 }
@@ -156,13 +166,13 @@ bool PlayerControl::handleCharInput(int ascii) {
             }
             
             if (!is_item_here) {
-                game.gui->addMessage(TCODColor::white, "It is nothing here");
+                game.gui->addMessage(TCODColor::white, "it is nothing here");
                 new_turn = false;
                 break;
             }
             
             if (toppest_item->item_behavior->pick(self)) {
-                game.gui->addMessage(TCODColor::green, "You pick up %s", 
+                game.gui->addMessage(TCODColor::green, "you pick up %s", 
                                      toppest_item->getName().c_str());
                 new_turn = true;
             }
@@ -322,15 +332,36 @@ void UpStairControl::doUpdate() {
     Entity *step_by = getCharacterStepOn();
     if (step_by != game.player || step_by == nullptr) {return;}
     
-    if (game.getFloorNum() == 1) {
-        game.gui->addMessage(TCODColor::yellow, "The Sun is a deadly laser");
-        game.player->combat_behavior->setCurrentHp(0);
-        game.player->combat_behavior->getEntityDead();
+    game.setFloorNum(game.getFloorNum() - 1);
+    
+    if (game.getFloorNum() == 0) {
+        game.town->doRenderTownConsole();
+        game.setFloorNum(1);
+        game.doFloorTravel();
         return;
     }
     
-    game.setFloorNum(game.getFloorNum() - 1);
     game.doFloorTravel();
+    
+    Entity *down_stair, *up_stair;
+    for (Entity *prop : game.all_prop) {
+        if (prop->getAsciiChar() == '>') {
+            down_stair = prop;
+            continue;
+        }
+        if (prop->getAsciiChar() == '<') {
+            up_stair = prop;
+            continue;
+        }
+    }
+    
+    int temp;
+    temp = down_stair->getX();
+    down_stair->setX(up_stair->getX());
+    up_stair->setX(temp);
+    temp = down_stair->getY();
+    down_stair->setY(up_stair->getY());
+    up_stair->setY(temp);
 }
 
 DownStairControl::DownStairControl(Entity *self): StepTriggerControl(self) {}
@@ -340,7 +371,7 @@ void DownStairControl::doUpdate() {
     if (step_by != game.player || step_by == nullptr) {return;}
     
     if (game.getFloorNum() == 10) {
-        game.gui->addMessage(TCODColor::yellow, "You reach the end of the Living Dungeon");
+        game.gui->addMessage(TCODColor::yellow, "you reach the end of the Living Cave");
         game.setStatus(status::VICTORY);
         return;
     }
@@ -358,7 +389,7 @@ void HoleControl::doUpdate() {
     int fall_floor_num = game.global_rng->getInt(1, 3);
     
     if (game.getFloorNum() + fall_floor_num > 10) {
-        game.gui->addMessage(TCODColor::yellow, "You fall into the hole that you will never find the end");
+        game.gui->addMessage(TCODColor::yellow, "you fall into the hole that you will never find the end");
         game.player->combat_behavior->setCurrentHp(0);
         game.player->combat_behavior->getEntityDead();
         return;
@@ -367,7 +398,7 @@ void HoleControl::doUpdate() {
     int damage = game.global_rng->getInt(5, 10) * fall_floor_num;
     game.setFloorNum(game.getFloorNum() + fall_floor_num);
     int damage_dealt = game.player->combat_behavior->doEntityAttacked(damage);
-    game.gui->addMessage(TCODColor::red, "You fall into hole and take %i - %i damage",
+    game.gui->addMessage(TCODColor::red, "you fall into hole and take %i - %i damage",
                          damage, damage - damage_dealt);
     
     if (game.player->combat_behavior->checkEntityDead()) {return;}

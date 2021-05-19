@@ -69,7 +69,7 @@ bool SelectAreaAllTarget::doTargeting() {
         }
         TCODConsole::root->flush();
         
-        TCODSystem::waitForEvent(TCOD_EVENT_KEY_PRESS, &keyboard, NULL, false);
+        TCODSystem::waitForEvent(TCOD_EVENT_KEY_RELEASE, &keyboard, NULL, false);
         
         int dx = 0, dy = 0;
         switch (keyboard.vk) {

@@ -129,7 +129,7 @@ void Map::doGenerateMapCA(int seed) {
             }
             while (isWall(x, y) || game.player->control->getDistanceTo(x, y) < 20);
             
-            prop = new Entity(x, y, "Hole", 'O', TCODColor::white);
+            prop = new Entity(x, y, "Shaft", 'O', TCODColor::white);
             control = new HoleControl(prop);
             prop->control = control;
             game.all_prop.push(prop);
@@ -331,7 +331,7 @@ void Map::addItem(int x, int y) {
 void Map::addTrap(int x, int y) {
     Entity *trap;
     
-    trap = getTrap(x, y, game.global_rng->getInt(1, 5));
+    trap = getTrap(x, y, game.global_rng->getInt(5, 5));
     
     game.all_prop.push(trap);
 }
