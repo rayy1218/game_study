@@ -33,6 +33,15 @@ GameManager::~GameManager() {
 }
 
 void GameManager::doUpdate() {
+    if (game.getFloorNum() == 0) {
+        game.town->doRenderTownConsole();
+        game.setFloorNum(1);
+        game.doFloorTravel();
+        
+        doRender();
+        TCODConsole::root->flush();
+    }
+    
     if (status == status::STARTUP) {
         for (int i = 0; i < 10; i++) {
             Entity *equip = game.player->equipment->getEquipment(i);
@@ -178,24 +187,84 @@ void GameManager::doStartup() {
     map = new Map(100, 50);
     gui = new Gui;
     town = new Town();
-    map->doGenerateMapCA();
+    map->doGenerateMap();
     
-    Entity *starter_kit;
-    starter_kit = getItem(player->getX(), player->getY(), item_dict::weapon_dagger);
-    starter_kit->item_behavior->pick(player);
+    if (!checkFileExist("save.txt")) {
+        Entity *starter_kit;
+        starter_kit = getItem(player->getX(), player->getY(), item_dict::weapon_dagger);
+        starter_kit->item_behavior->pick(player); 
+    }
+    
     
     status = status::STARTUP;
 }
 
 void GameManager::doFloorTravel() {
+    gui->doRenderMapGenWait();
+    
     game.all_character.remove(game.player);
     game.all_character.clearAndDelete();
     game.all_corpse.clearAndDelete();
     game.all_item.clearAndDelete();
     game.all_prop.clearAndDelete();
-    game.map->doGenerateMapCA();
+    game.map->doGenerateMap();
     game.all_character.push(game.player);
     game.gui->addMessage(TCODColor::yellow, "you are now at floor %i", game.getFloorNum());
+}
+
+void GameManager::doSave() {
+    std::ofstream save_file;
+    
+    std::remove("save.txt");
+    if (game.getStatus() == status::DEFEAT || game.getStatus() == status::VICTORY) {
+        return;
+    }
+    
+    if (game.getFloorNum() != 0) {
+        //Randomly drop item
+    }
+    
+    save_file.open("save.txt");
+    
+    save_file << turn_used << ' '
+              << player->combat_behavior->getCurrentHp() << ' '
+              << player_stats->hunger->getCurrentHungerPoint() << ' '
+              << player_stats->tension->getCurrentTension();
+    
+    for (int index = 0; index < player->inventory->getItemNum(); index++) {
+        Entity *item = player->inventory->getItem(index);
+        for (int i = 1; i <= item->item_behavior->getQty(); i++) {
+            save_file << ' ' << item->item_behavior->getItemId();
+        }
+    }
+    
+    save_file.close();
+}
+
+void GameManager::doLoad() {
+    std::ifstream save_file;
+    save_file.open("save.txt");
+    
+    int hp, hunger, tension;
+    save_file >> turn_used >> hp >> hunger >> tension;
+    
+    player->combat_behavior->setCurrentHp(hp);
+    player_stats->hunger->setCurrentHungerPoint(hunger);
+    player_stats->tension->setCurrentTension(tension);
+    
+    while (!save_file.eof()) {
+        int item_id;
+        save_file >> item_id;
+        
+        Entity *item = getItem(0, 0, item_id);
+        player->inventory->addItem(item);
+    }
+    
+    game.setFloorNum(0);
+    game.setStatus(status::IDLE);
+    game.gui->addMessage(TCODColor::yellow, "save file loaded");
+    
+    save_file.close();
 }
 
 int GameManager::getConsoleWidth() {return console_width;}

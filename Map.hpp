@@ -32,10 +32,11 @@ public:
     void addTrap(int x, int y);
     void doSaveMap();
     void doLoadMap(); 
-    void doGenerateMapCA(int seed = 0);
+    void doGenerateMap(int seed = 0);
     void doCellularAutomata(int process_count, int high_bound, int low_bound);
     bool checkNeighborWall(int x, int y, int high_bound, int low_bound);
     void doFloodFill(int x, int y);
+    void doResetExplored();
         
     //Accessor
     int getWidth();

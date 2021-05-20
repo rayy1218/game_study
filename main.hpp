@@ -3,7 +3,7 @@
 
 //Include Library
 #include <libtcod.hpp>
-#include <iostream>
+#include <fstream>
 #include <string>
 
 //Include header
@@ -29,5 +29,6 @@
 #include "Trap.hpp" //Trap List
 
 void doCloseWindow();
+bool checkFileExist(std::string file_name);
 
 #endif /* MAIN_HPP */

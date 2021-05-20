@@ -502,3 +502,14 @@ void Gui::doRenderObserving() {
         }
     }
 }
+
+void Gui::doRenderMapGenWait() {
+    static TCODConsole wait_console(100, 50);
+    wait_console.setDefaultBackground(TCODColor::black);
+    wait_console.setDefaultForeground(TCODColor::white);
+    
+    wait_console.printf(50, 20, "Map generating...");
+    
+    TCODConsole::blit(&wait_console, 0, 0, 100, 50, TCODConsole::root, 0, 0);
+    TCODConsole::root->flush();
+}

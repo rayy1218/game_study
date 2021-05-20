@@ -29,6 +29,7 @@ public:
     void addPlayerNowStandOn(int x, int y);
     void doRenderTutorial();
     void doRenderObserving();
+    void doRenderMapGenWait();
     
     //Inventory
     Entity* getSelectedItem(Container *inventory);

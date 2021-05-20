@@ -9,6 +9,7 @@ class ItemBehavior {
 protected:
     //Attribute
     Entity *self;
+    int item_id;
     int qty;
     bool stackable;
     float weight;
@@ -17,7 +18,7 @@ protected:
     std::string description;
 public:
     //Attribute
-    TCODList<Purpose*> all_purpose;
+    Purpose *purpose;
     TargetPicking *targeting;
     
     //Constructor & Destructor
@@ -29,6 +30,8 @@ public:
     virtual bool use(Entity *use_by);
     
     //Accessor
+    int getItemId();
+    void setItemId(int input);
     void setQty( int input );
     void setWeight( float input );
     bool isStackable();

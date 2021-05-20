@@ -334,12 +334,7 @@ void UpStairControl::doUpdate() {
     
     game.setFloorNum(game.getFloorNum() - 1);
     
-    if (game.getFloorNum() == 0) {
-        game.town->doRenderTownConsole();
-        game.setFloorNum(1);
-        game.doFloorTravel();
-        return;
-    }
+    if (game.getFloorNum() == 0) {return;}
     
     game.doFloorTravel();
     
@@ -414,6 +409,9 @@ void HoleControl::doUpdate() {
     
     game.player->setX(x);
     game.player->setY(y);
+    
+    game.map->doResetExplored();
+    
     game.map->getFov(game.player->getX(), game.player->getY());
 }
 

@@ -17,7 +17,7 @@ Map::~Map() {
     delete map;
 }
 
-void Map::doGenerateMapCA(int seed) {
+void Map::doGenerateMap(int seed) {
     //PARAMETER
     static const int WALL_CHANCE = 50;
     static const int WALL_NEEDED = 5;
@@ -80,7 +80,7 @@ void Map::doGenerateMapCA(int seed) {
     //Regenerate map if not enough open space
     //If enough open space put player inside
     if (wall_count / (width * height) * 100 >= 55) {
-        doGenerateMapCA();
+        doGenerateMap();
         
     }
     else {
@@ -331,9 +331,17 @@ void Map::addItem(int x, int y) {
 void Map::addTrap(int x, int y) {
     Entity *trap;
     
-    trap = getTrap(x, y, game.global_rng->getInt(5, 5));
+    trap = getTrap(x, y, game.global_rng->getInt(1, 5));
     
     game.all_prop.push(trap);
+}
+
+void Map::doResetExplored() {
+    for (int x = 0; x < width; x++) {
+        for (int y = 0; y < height; y++) {           
+            tiles[x + y * width].is_explored = false;
+        }
+    }
 }
 
 int Map::getWidth() {return width;}

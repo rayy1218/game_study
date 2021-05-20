@@ -1,11 +1,12 @@
 #include "main.hpp"
 
-ItemBehavior::ItemBehavior(Entity *self, float weight, int qty, bool stackable , int equipment_index): 
-                           self( self ), weight(weight), qty(qty), stackable(stackable),
+ItemBehavior::ItemBehavior(Entity *self,  float weight, int qty, bool stackable , int equipment_index): 
+                           self(self), weight(weight), qty(qty), stackable(stackable),
                            equipment_index(equipment_index), is_equiped(false) {}
 
 ItemBehavior::~ItemBehavior() {
-    
+    delete targeting;
+    delete purpose;
 }
 
 bool ItemBehavior::pick(Entity *pick_by) {
@@ -58,7 +59,8 @@ bool ItemEquipmentBehavior::use(Entity *use_by) {
     return true;
 }
 
-
+int ItemBehavior::getItemId() {return item_id;}
+void ItemBehavior::setItemId(int input) {item_id = input;}
 void ItemBehavior::setQty( int input ) { qty = input; }
 void ItemBehavior::setWeight( float input ) { weight = input; }
 bool ItemBehavior::isStackable() { return stackable; }
