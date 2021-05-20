@@ -3,7 +3,7 @@
 
 //Include Library
 #include <libtcod.hpp>
-
+#include <iostream>
 #include <string>
 
 //Include header

@@ -177,6 +177,7 @@ void GameManager::doStartup() {
     
     map = new Map(100, 50);
     gui = new Gui;
+    town = new Town();
     map->doGenerateMapCA();
     
     Entity *starter_kit;
