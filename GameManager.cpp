@@ -1,3 +1,5 @@
+#include <string>
+
 #include "main.hpp"
 
 PlayerStats::PlayerStats(): hunger(nullptr), tension(nullptr) {}
@@ -226,18 +228,24 @@ void GameManager::doSave() {
     
     save_file.open("save.txt");
     
-    save_file << turn_used << ' '
-              << player->combat_behavior->getCurrentHp() << ' '
-              << player_stats->hunger->getCurrentHungerPoint() << ' '
-              << player_stats->tension->getCurrentTension();
+    save_file << turn_used 
+              << ' ' << player->combat_behavior->getCurrentHp() 
+              << ' ' << player_stats->hunger->getCurrentHungerPoint() 
+              << ' ' << player_stats->tension->getCurrentTension();
     
+    int item_count = 0;
+    std::string item_save;
     for (int index = 0; index < player->inventory->getItemNum(); index++) {
         Entity *item = player->inventory->getItem(index);
         for (int i = 1; i <= item->item_behavior->getQty(); i++) {
-            save_file << ' ' << item->item_behavior->getItemId();
-            save_file << ' ' << item->item_behavior->getIsEquip();
+            item_count += 1;
+            item_save += ' ';
+            item_save += std::to_string(item->item_behavior->getItemId());
+            item_save += ' ';
+            item_save += std::to_string(item->item_behavior->getIsEquip());
         }
     }
+    save_file << ' ' << item_count << item_save;
     
     save_file.close();
 }
@@ -253,7 +261,9 @@ void GameManager::doLoad() {
     player_stats->hunger->setCurrentHungerPoint(hunger);
     player_stats->tension->setCurrentTension(tension);
     
-    while (!save_file.eof()) {
+    int item_count;
+    save_file >> item_count;
+    for (int i = 1; i <= item_count; i++) {
         int item_id;
         bool is_equip;
         save_file >> item_id >> is_equip;
