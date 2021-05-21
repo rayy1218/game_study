@@ -235,6 +235,7 @@ void GameManager::doSave() {
         Entity *item = player->inventory->getItem(index);
         for (int i = 1; i <= item->item_behavior->getQty(); i++) {
             save_file << ' ' << item->item_behavior->getItemId();
+            save_file << ' ' << item->item_behavior->getIsEquip();
         }
     }
     
@@ -254,10 +255,14 @@ void GameManager::doLoad() {
     
     while (!save_file.eof()) {
         int item_id;
-        save_file >> item_id;
+        bool is_equip;
+        save_file >> item_id >> is_equip;
         
         Entity *item = getItem(0, 0, item_id);
         player->inventory->addItem(item);
+        if (is_equip) {
+            player->equipment->doEquip(item, item->item_behavior->getEquipmentIndex());
+        }
     }
     
     game.setFloorNum(0);
