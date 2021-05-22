@@ -19,7 +19,7 @@ bool ItemBehavior::use(Entity *use_by) {
     bool purpose_used = false;
     purpose_used = targeting->doTargeting();
     if (!purpose_used) {return false;}
-    use_by->inventory->removeItem(self);
+    use_by->inventory->deleteItem(self);
     return true;
 }
 

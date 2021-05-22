@@ -17,6 +17,7 @@ public:
     //Method
     int getItemNum();
     bool addItem(Entity *to_add);
+    void deleteItem(Entity *to_delete);
     void removeItem(Entity *to_remove);
     void dropItem(Entity *to_drop);
     Entity* getItem(int index);

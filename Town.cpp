@@ -7,11 +7,13 @@ std::string TownOption::getName() {return name;}
 std::string TownOption::getDesc() {return description;}
 
 Town::Town() {
+    storage_room = new Container(NULL, 32768);
     getTownLocList();
     getTownSelfList();
 }
 
 Town::~Town() {
+    delete storage_room;
     loc_list.clearAndDelete();
     self_list.clearAndDelete();
 }
@@ -21,7 +23,7 @@ void Town::doRenderTownConsole() {
     
     int current_pointing = 0;
     
-    while (game.keyboard.vk != TCODK_ESCAPE) {
+    while (true) {
         town_console.setDefaultBackground(TCODColor::darkGrey);
         town_console.setDefaultForeground(TCODColor::darkestGrey);
         town_console.clear();
@@ -38,8 +40,9 @@ void Town::doRenderTownConsole() {
         TCODConsole::root->flush();
         TCODSystem::waitForEvent(TCOD_EVENT_KEY_RELEASE, &game.keyboard, NULL, true);
         
-        if (game.keyboard.vk == TCODK_NONE) {doCloseWindow();}
-        if (game.keyboard.vk == TCODK_ESCAPE) {return;}
+        if (game.keyboard.vk == TCODK_NONE || game.keyboard.vk == TCODK_ESCAPE) {
+            doCloseWindow();
+        }
         
         if (game.keyboard.vk == TCODK_UP) {
             if (current_pointing == 0) {
@@ -56,6 +59,14 @@ void Town::doRenderTownConsole() {
             }
             current_pointing += 1;
         }
+        
+        if (game.keyboard.vk == TCODK_ENTER) {
+            switch (current_pointing) {
+                case 0: return;
+                case 1: doRenderStorage(); break;
+                default: break;
+            }
+        }
     }
 }
 
@@ -64,14 +75,14 @@ void Town::doRenderTownLocTab(TCODConsole *town_console, int current_pointing) {
     town_console->setDefaultForeground(TCODColor::darkestGrey);
     town_console->printFrame(2, 2, 60, 28, false, TCOD_BKGND_SET, "location");
     
-    int y = 4, alphabet = 'a';
+    int y = 4;
     town_console->setDefaultBackground(TCODColor::darkerGrey);
     if (current_pointing < loc_list.size()) {
         town_console->rect(4, y + current_pointing, 56, 1, false, TCOD_BKGND_SET);
     }
     
     for (TownOption *loc : loc_list) {
-        town_console->printf(4, y, "%c) %s", alphabet, loc->getName().c_str());
+        town_console->printf(4, y, "%s",loc->getName().c_str());
         y++;
     }
 }
@@ -81,7 +92,7 @@ void Town::doRenderTownSelfTab(TCODConsole *town_console, int current_pointing) 
     town_console->setDefaultForeground(TCODColor::darkestGrey);
     town_console->printFrame(2, 31, 60, 18, false, TCOD_BKGND_SET, "self");
     
-    int y = 33, alphabet = 'a';
+    int y = 33;
     town_console->setDefaultBackground(TCODColor::darkerGrey);
     if (current_pointing >= loc_list.size()) {
         current_pointing -= loc_list.size();
@@ -89,7 +100,7 @@ void Town::doRenderTownSelfTab(TCODConsole *town_console, int current_pointing) 
     }
     
     for (TownOption *self : self_list) {
-        town_console->printf(4, y, "%c) %s", alphabet, self->getName().c_str());
+        town_console->printf(4, y, "%s", self->getName().c_str());
         y++;
     }
 }
@@ -121,15 +132,225 @@ void Town::doRenderTownUsageTab(TCODConsole *town_console) {
     
     town_console->printRect(67, 39, 38, 8, 
                             "[UP/DOWN] to select\n"
-                            "[ENTER] to go");
+                            "[ENTER] to go\n"
+                            "[ESC] save and exit");
+}
+
+void Town::doRenderStorage() {
+    TCODConsole storage_console(100, 50);
+    const int PAGE_MAX_ITEM = 26;
+    int storage_room_page = 1, inventory_page = 1, current_pointing = 0;
+    bool pointing_storage_or_inventory = true;
+    Entity *pointing_item = nullptr;
+    
+    while (true) {
+        storage_console.setDefaultBackground(TCODColor::darkGrey);
+        storage_console.setDefaultForeground(TCODColor::darkestGrey);
+        storage_console.clear();
+        
+        int storage_page_item_num, inventory_page_item_num,
+            max_storage_room_page = storage_room->getItemNum() / PAGE_MAX_ITEM + 1,
+            max_inventory_page = game.player->inventory->getItemNum() / PAGE_MAX_ITEM + 1;
+        
+        storage_page_item_num = storage_room->getItemNum() % PAGE_MAX_ITEM;
+        inventory_page_item_num = game.player->inventory->getItemNum() % PAGE_MAX_ITEM;
+        
+        int current_page_item_num = (pointing_storage_or_inventory) 
+                                    ? storage_page_item_num
+                                    : inventory_page_item_num;
+
+        storage_console.printFrame(0, 0, 100, 50, false, TCOD_BKGND_SET, "storage room");
+        
+        if (!pointing_storage_or_inventory) {
+            storage_console.setDefaultForeground(TCODColor::darkerGrey);
+        }
+        storage_console.printFrame(2, 2, 47, 33, false, TCOD_BKGND_SET, "storage inventory");
+        {
+            int total_item_num = storage_room->getItemNum(), alphabet = 'a'; 
+            
+            for (int i = 0; i < PAGE_MAX_ITEM; i++) {
+                Entity *item = storage_room->getItem(i + PAGE_MAX_ITEM * (storage_room_page - 1));
+                if (item == nullptr) {break;}
+                int item_qty = item->item_behavior->getQty();
+                if (item_qty > 1) {
+                    storage_console.printf(4, 4 + i, "%c) %s x %i", alphabet, 
+                                           item->getName().c_str(), item_qty);
+                }
+                else {
+                    storage_console.printf(4, 4 + i, "%c) %s", alphabet, 
+                                           item->getName().c_str());
+                }
+                alphabet++;
+            }
+            
+            storage_console.hline(3, 32, 45, TCOD_BKGND_SET);
+            storage_console.printf(3, 33, "page : %i / %i", storage_room_page, 
+                                   max_storage_room_page);
+            
+            if (pointing_storage_or_inventory) {
+                if (storage_page_item_num != 0) {
+                    storage_console.setDefaultBackground(TCODColor::darkerGrey);
+                    storage_console.rect(4, 4 + current_pointing, 43, 1, false, TCOD_BKGND_SET);
+                    storage_console.setDefaultBackground(TCODColor::darkGrey);
+                    pointing_item = storage_room->getItem(current_pointing + PAGE_MAX_ITEM * (storage_room_page - 1));
+                } 
+            }
+        }
+        storage_console.setDefaultForeground(TCODColor::darkestGrey);
+        
+        if (pointing_storage_or_inventory) {
+            storage_console.setDefaultForeground(TCODColor::darkerGrey);
+        }
+        storage_console.printFrame(51, 2, 47, 33, false, TCOD_BKGND_SET, 
+                                   "%s's inventory", game.player->getName().c_str());
+        {
+            int total_item_num = game.player->inventory->getItemNum(), alphabet = 'a';
+            
+            for (int i = 0; i < PAGE_MAX_ITEM; i++) {
+                Entity *item = game.player->inventory->getItem(i + PAGE_MAX_ITEM * (inventory_page - 1));
+                if (item == nullptr) {break;}
+                int item_qty = item->item_behavior->getQty();
+                if (item->item_behavior->isStackable()) {
+                    storage_console.printf(53, 4 + i, "%c) %s x %i", alphabet, 
+                                           item->getName().c_str(), item_qty);
+                }
+                else {
+                    storage_console.printf(53, 4 + i, "%c) %s", alphabet, 
+                                           item->getName().c_str());
+                }
+                alphabet++;
+            }
+            
+            storage_console.hline(52, 32, 45, TCOD_BKGND_SET);
+            storage_console.printf(52, 33, "page : %i / %i", inventory_page, 
+                                   max_inventory_page);
+            storage_console.printf(74, 33, "weight : %.2f / %.2f",
+                                   game.player->inventory->getCurrentWeight(),
+                                   game.player->inventory->getMaxWeight());
+            
+            if (!pointing_storage_or_inventory) {
+                if (inventory_page_item_num != 0) {
+                    storage_console.setDefaultBackground(TCODColor::darkerGrey);
+                    storage_console.rect(53, 4 + current_pointing, 43, 1, false, TCOD_BKGND_SET);
+                    storage_console.setDefaultBackground(TCODColor::darkGrey);
+                    pointing_item = game.player->inventory->getItem(current_pointing +  PAGE_MAX_ITEM * (inventory_page - 1));
+                }
+            }
+        }
+        storage_console.setDefaultForeground(TCODColor::darkestGrey);
+        
+        storage_console.printFrame(2, 36, 70, 13, false, TCOD_BKGND_SET, "description");
+        {
+            if (pointing_item != nullptr) {
+                storage_console.printRect(4, 38, 66, 9, "%s", 
+                                          pointing_item->item_behavior->getDesc().c_str());
+            }
+        }
+        
+        storage_console.printFrame(74, 36, 24, 13, false, TCOD_BKGND_SET, "usage");
+        storage_console.printRect(76, 38, 20, 9, "[ENTER] store / take\n"
+                                                 "[SPACE] toggle storage\n"
+                                                 "[UP/DOWN] move selection\n"
+                                                 "[LEFT/RIGHT] move page\n"
+                                                 "[ESC] return");
+        
+        TCODConsole::blit(&storage_console, 0, 0, 100, 50, TCODConsole::root, 0, 0);
+        TCODConsole::root->flush();
+
+        TCODSystem::waitForEvent(TCOD_EVENT_KEY_RELEASE, &game.keyboard, NULL, false);
+        
+        if (game.keyboard.vk == TCODK_ESCAPE) {return;}
+
+        if (game.keyboard.vk == TCODK_SPACE) {
+            int opposite_page_item_num;
+            opposite_page_item_num = (pointing_storage_or_inventory) 
+                                     ? storage_page_item_num : inventory_page_item_num;
+
+            if (current_pointing > opposite_page_item_num) {
+                current_pointing = opposite_page_item_num;
+            }
+            
+            pointing_storage_or_inventory = !pointing_storage_or_inventory;
+        }
+
+        if (game.keyboard.vk == TCODK_UP) {
+            if (current_pointing == 0) {
+
+                current_pointing = current_page_item_num - 1;
+                continue;
+            }
+
+            current_pointing -= 1;
+        }
+        
+        if (game.keyboard.vk == TCODK_DOWN) {
+            int current_page_item_num = (pointing_storage_or_inventory) 
+                                        ? storage_page_item_num
+                                        : inventory_page_item_num;
+            
+            if (current_pointing == current_page_item_num - 1) {
+                current_pointing = 0;
+                continue;
+            }
+            
+            current_pointing += 1;
+        }
+        
+        if (game.keyboard.vk == TCODK_LEFT) {
+            if (pointing_storage_or_inventory) {
+                if (storage_room_page == 1) {continue;}
+                storage_room_page -= 1;
+            }
+            else {
+                if (inventory_page == 1) {continue;}
+                inventory_page -= 1;
+            }
+        } 
+        
+        if (game.keyboard.vk == TCODK_RIGHT) {
+            if (pointing_storage_or_inventory) {
+                if (storage_room_page == max_storage_room_page) {continue;}
+                storage_room_page += 1;
+            }
+            else {
+                if (inventory_page == max_inventory_page) {continue;}
+                inventory_page += 1;
+            }
+        }
+        
+        if (game.keyboard.vk == TCODK_ENTER) {
+            if (pointing_storage_or_inventory) {
+                Entity *item = storage_room->getItem(current_pointing);
+                if (item == nullptr) {continue;}
+                storage_room->removeItem(item);
+                game.player->inventory->addItem(item);
+            }
+            else {
+                Entity *item = game.player->inventory->getItem(current_pointing);
+                if (item == nullptr) {continue;}
+                game.player->inventory->removeItem(item);
+                storage_room->addItem(item);
+            }
+        }
+        
+        if (game.keyboard.vk == TCODK_NONE) {doCloseWindow();}
+    }
 }
 
 void Town::getTownLocList() {
+    loc_list.push(new TownOption("street - rocky road",
+                                 "lead to the way of the Living Cave, place of"
+                                 "glory, wealth and death"));
+    
     loc_list.push(new TownOption("home - storage room",
                                  "where you store you treasury"));
     
     loc_list.push(new TownOption("home - workshop",
                                  "where you craft item for exploration"));
+    
+    loc_list.push(new TownOption("street - merciful house",
+                                 "preist is here to provide quality healing for "
+                                 "aventurer but with price"));
     
     loc_list.push(new TownOption("market - general shop",
                                  "exploration supplies like food, lantern oil "

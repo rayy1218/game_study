@@ -15,6 +15,8 @@ class Town {
 private:
     TCODList<TownOption*> loc_list, self_list;
 public:
+    Container *storage_room;
+    
     Town();
     ~Town();
     
@@ -24,6 +26,8 @@ public:
     void doRenderTownLocTab(TCODConsole *town_console, int current_pointing);
     void doRenderTownSelfTab(TCODConsole *town_console, int current_pointing);
     void doRenderTownUsageTab(TCODConsole *town_console);
+    
+    void doRenderStorage();
     
     //List
     void getTownLocList();

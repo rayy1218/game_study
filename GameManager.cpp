@@ -234,18 +234,30 @@ void GameManager::doSave() {
               << ' ' << player_stats->tension->getCurrentTension();
     
     int item_count = 0;
-    std::string item_save;
+    std::string inventory_save;
     for (int index = 0; index < player->inventory->getItemNum(); index++) {
         Entity *item = player->inventory->getItem(index);
         for (int i = 1; i <= item->item_behavior->getQty(); i++) {
             item_count += 1;
-            item_save += ' ';
-            item_save += std::to_string(item->item_behavior->getItemId());
-            item_save += ' ';
-            item_save += std::to_string(item->item_behavior->getIsEquip());
+            inventory_save += ' ';
+            inventory_save += std::to_string(item->item_behavior->getItemId());
+            inventory_save += ' ';
+            inventory_save += std::to_string(item->item_behavior->getIsEquip());
         }
     }
-    save_file << ' ' << item_count << item_save;
+    save_file << ' ' << item_count << inventory_save;
+    
+    item_count = 0;
+    std::string storage_save;
+    for (int index = 0; index < game.town->storage_room->getItemNum(); index++) {
+        Entity *item = game.town->storage_room->getItem(index);
+        for (int i = 1; i <= item->item_behavior->getQty(); i++) {
+            item_count += 1;
+            storage_save += ' ';
+            storage_save += std::to_string(item->item_behavior->getItemId());
+        }
+    }
+    save_file << ' ' << item_count << storage_save;
     
     save_file.close();
 }
@@ -261,9 +273,9 @@ void GameManager::doLoad() {
     player_stats->hunger->setCurrentHungerPoint(hunger);
     player_stats->tension->setCurrentTension(tension);
     
-    int item_count;
-    save_file >> item_count;
-    for (int i = 1; i <= item_count; i++) {
+    int inventory_item_count;
+    save_file >> inventory_item_count;
+    for (int i = 1; i <= inventory_item_count; i++) {
         int item_id;
         bool is_equip;
         save_file >> item_id >> is_equip;
@@ -273,6 +285,16 @@ void GameManager::doLoad() {
         if (is_equip) {
             player->equipment->doEquip(item, item->item_behavior->getEquipmentIndex());
         }
+    }
+    
+    int storage_item_count;
+    save_file >> storage_item_count;
+    for (int i = 1; i <= storage_item_count; i++) {
+        int item_id;
+        save_file >> item_id;
+        
+        Entity *item = getItem(0, 0, item_id);
+        game.town->storage_room->addItem(item);
     }
     
     game.setFloorNum(0);
