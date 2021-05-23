@@ -11,4 +11,4 @@ Working On:
 
 TODO:
 - Add more monster and rework monster spawning
-- add monster evasion and hitting chance, rework combat system
+- add evasion and hitting chance, rework combat system
