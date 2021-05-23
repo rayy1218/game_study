@@ -21,8 +21,7 @@ public:
     int doEntityAttack();
     int doEntityAttacked(int damage);
     int doEntityHealed( int heal_amount );
-    void updateEquipmentAttribute();
-    void updateWeaponAttribute(bool is_primary);
+    void updateEquipmentAttribute(bool is_primary);
     
     //Accessor
     int getMaxHp();

@@ -19,9 +19,8 @@ void Entity::doUpdate() {
     if (combat_behavior) {combat_behavior->setSpeed(combat_behavior->getDefaultSpeed());}
     control->doUpdate();
     
-    if (game.getStatus() == status::NEW_TURN && equipment != nullptr) {
-        combat_behavior->updateEquipmentAttribute();
-        combat_behavior->updateWeaponAttribute(equipment->isPrimaryHand());
+    if (equipment != nullptr) {
+        combat_behavior->updateEquipmentAttribute(equipment->isPrimaryHand());
     }
     
     if (game.getStatus() != status::NEW_TURN) {return;}

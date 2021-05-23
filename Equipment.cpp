@@ -27,18 +27,23 @@ Entity* Equipment::getEquipment(int index) {
     return equipment_slot[index];
 }
 
-void Equipment::getAllEquipmentAttribute() {
+void Equipment::getAllEquipmentAttribute(bool is_primary) {
+    Entity *hand_holding = nullptr;
+    if (is_primary) {
+        hand_holding = equipment_slot[equipment_slot_type::primary_hand];
+    }
+    else {
+        hand_holding = equipment_slot[equipment_slot_type::secondary_hand];
+    }
+    
     for (int i = 0; i < 8; i++) {
         if (equipment_slot[i] == nullptr) {continue;}
-        equipment_slot[i]->item_behavior->purpose->doUse(self);
+        equipment_slot[i]->item_behavior->doUpdateEquipmentAttribute(self);
     }
-}
-
-void Equipment::getWeaponAttribute(bool is_primary) {
-    int index = (is_primary) ? 8 : 9;
-    if (equipment_slot[index] == nullptr) {return;}
-    equipment_slot[index]->item_behavior->purpose->doUse(self);
-    return;   
+    
+    if (hand_holding != nullptr) {
+        hand_holding->item_behavior->doUpdateEquipmentAttribute(self);
+    }
 }
 
 bool Equipment::isPrimaryHand() {return is_primary;}

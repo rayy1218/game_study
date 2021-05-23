@@ -510,6 +510,7 @@ void Gui::doRenderMapGenWait() {
     
     wait_console.printf(50, 20, "Map generating...");
     
+    game.gui->doRender();
     TCODConsole::blit(&wait_console, 0, 0, 100, 50, TCODConsole::root, 0, 0);
     TCODConsole::root->flush();
 }

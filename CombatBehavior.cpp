@@ -7,14 +7,10 @@ CombatBehavior::CombatBehavior(Entity *self, int max_hp, int attack_point, int d
                                defense_boost(1), equipment_defense(0),
                                default_speed(default_speed) {}
 
-void CombatBehavior::updateEquipmentAttribute() {
+void CombatBehavior::updateEquipmentAttribute(bool is_primary) {
     equipment_defense = 0;
-    self->equipment->getAllEquipmentAttribute();
-}
-
-void CombatBehavior::updateWeaponAttribute(bool is_primary) {
     equipment_attack = 0;
-    self->equipment->getWeaponAttribute(is_primary);
+    self->equipment->getAllEquipmentAttribute(is_primary);
 }
 
 int CombatBehavior::doEntityAttack() {
@@ -69,7 +65,6 @@ void PlayerCombatBehavior::getEntityDead() {
 }
 
 int PlayerCombatBehavior::doEntityAttack(bool is_primary) {
-    updateWeaponAttribute(is_primary);
     return (attack_point + equipment_attack) * attack_boost;
 }
 

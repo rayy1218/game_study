@@ -45,8 +45,7 @@ public:
     void doEquip(Entity *to_equip, int index);
     void doUnequip(int index);
     Entity* getEquipment(int index);
-    void getAllEquipmentAttribute();
-    void getWeaponAttribute(bool is_primary);
+    void getAllEquipmentAttribute(bool is_primary);
 };
 
 #endif /* EQUIPMENT_HPP */

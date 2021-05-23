@@ -3,7 +3,18 @@
 
 class Purpose;
 class TargetPicking;
-class PurposeItemEquipment;
+
+struct EquipmentAttribute {
+    int defense, speed;
+    
+    EquipmentAttribute(int defense, int speed);
+};
+
+struct WeaponAttribute {
+    int attack, speed;
+    
+    WeaponAttribute(int attack, int speed);
+};
 
 class ItemBehavior {
 protected:
@@ -13,8 +24,6 @@ protected:
     int qty;
     bool stackable;
     float weight;
-    int equipment_index;
-    bool is_equiped;
     std::string description;
 public:
     //Attribute
@@ -22,7 +31,7 @@ public:
     TargetPicking *targeting;
     
     //Constructor & Destructor
-    ItemBehavior(Entity *self, float weight, int qty, bool stackable, int equipment_index = 0);
+    ItemBehavior(Entity *self, float weight, int qty, bool stackable);
     virtual ~ItemBehavior();
     
     //Method
@@ -37,18 +46,34 @@ public:
     bool isStackable();
     int getQty();
     float getWeight();
-    void setIsEquip(bool input);
-    bool getIsEquip();
-    int getEquipmentIndex();
     std::string getDesc();
     void setDesc(std::string desc);
+    virtual void setIsEquip(bool input);
+    virtual bool getIsEquip();
+    virtual int getEquipmentIndex();
+    virtual void doUpdateEquipmentAttribute(Entity *self);
 };
 
 class ItemEquipmentBehavior : public ItemBehavior{
+private:
+    int equipment_index;
+    bool is_equiped;
+    EquipmentAttribute *equipment_attribute;
+    WeaponAttribute *weapon_attribute;
 public:
-    ItemEquipmentBehavior(Entity *self, float weight, int qty, bool stackable, int equipment_index = 0);
+    ItemEquipmentBehavior(Entity *self, float weight, int qty, bool stackable,
+                          int equipment_index = 0,
+                          EquipmentAttribute *equipment_attribute = nullptr,
+                          WeaponAttribute *weapon_attribute = nullptr);
+    
+    ~ItemEquipmentBehavior();
     
     bool use(Entity *use_by);
+    
+    void setIsEquip(bool input);
+    bool getIsEquip();
+    int getEquipmentIndex();
+    void doUpdateEquipmentAttribute(Entity *self);
 };
 
 #endif /* ITEM_HPP */

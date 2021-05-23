@@ -77,27 +77,6 @@ bool PurposeEffectPoison::doUse(Entity *target) {
     return true;
 }
 
-PurposeItemEquipment::PurposeItemEquipment(int attack_point, int defense_point, 
-                             float attack_boost, float defense_boost):
-                             attack_point(attack_point), defense_point(defense_point),
-                             attack_boost(attack_boost), defense_boost(defense_boost) {}
-
-bool PurposeItemEquipment::doUse(Entity *self) {
-    CombatBehavior *cbt = self->combat_behavior;
-    cbt->setEquipmentDefPoint(cbt->getEquipmentDefPoint() + defense_point);
-    return true;
-}
-
-PurposeItemWeapon::PurposeItemWeapon(int attack_point, float speed):
-                          attack_point(attack_point), speed(speed) {}
-
-bool PurposeItemWeapon::doUse(Entity *self) {
-    CombatBehavior *cbt = self->combat_behavior;
-    cbt->setEquipmentAtkPoint(cbt->getEquipmentAtkPoint() + attack_point);
-    cbt->setSpeed(speed);
-    return true;
-}
-
 PurposeItemFood::PurposeItemFood(int hunger_point): hunger_point(hunger_point) {}
 
 bool PurposeItemFood::doUse(Entity *target) {

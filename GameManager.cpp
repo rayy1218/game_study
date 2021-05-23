@@ -189,7 +189,7 @@ void GameManager::doStartup() {
     map = new Map(100, 50);
     gui = new Gui;
     town = new Town();
-    map->doGenerateMap();
+    doFloorTravel();
     
     if (!checkFileExist("save.txt")) {
         Entity *starter_kit;

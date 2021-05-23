@@ -73,26 +73,6 @@ public:
     bool doUse(Entity *target);
 };
 
-class PurposeItemEquipment : public Purpose {
-private:
-    int attack_point, defense_point;
-    float attack_boost, defense_boost;
-public:
-    PurposeItemEquipment(int attack_point, int defense_point, float attack_boost = 0, float defense_boost = 0);
-    
-    bool doUse(Entity *self);
-};
-
-class PurposeItemWeapon : public Purpose {
-private:
-    int attack_point;
-    float speed;
-public:
-    PurposeItemWeapon(int attack_point, float speed);
-    
-    bool doUse(Entity *self);
-};
-
 class PurposeItemFood : public Purpose {
 private:
     int hunger_point;

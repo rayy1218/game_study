@@ -1,12 +1,18 @@
 #include "main.hpp"
 
-ItemBehavior::ItemBehavior(Entity *self,  float weight, int qty, bool stackable , int equipment_index): 
+EquipmentAttribute::EquipmentAttribute(int defense, int speed): defense(defense),
+                                                                speed(speed) {}
+
+WeaponAttribute::WeaponAttribute(int attack, int speed): attack(attack), 
+                                                         speed(speed) {}
+
+ItemBehavior::ItemBehavior(Entity *self,  float weight, int qty, bool stackable): 
                            self(self), weight(weight), qty(qty), stackable(stackable),
-                           equipment_index(equipment_index), is_equiped(false) {}
+                           targeting(nullptr), purpose(nullptr) {}
 
 ItemBehavior::~ItemBehavior() {
-    delete targeting;
-    delete purpose;
+    if (targeting) {delete targeting;}
+    if (purpose) {delete purpose;}
 }
 
 bool ItemBehavior::pick(Entity *pick_by) {
@@ -23,9 +29,21 @@ bool ItemBehavior::use(Entity *use_by) {
     return true;
 }
 
-ItemEquipmentBehavior::ItemEquipmentBehavior(Entity *self, float weight, int qty, bool stackable, int equipment_index):
-                                             ItemBehavior(self, weight, qty, stackable, equipment_index) {
-    is_equiped = false;
+ItemEquipmentBehavior::ItemEquipmentBehavior(Entity *self, float weight, int qty,
+                                             bool stackable, int equipment_index, 
+                                             EquipmentAttribute *equipment_attribute,
+                                             WeaponAttribute *weapon_attribute):
+                                             ItemBehavior(self, weight, qty, stackable),
+                                             equipment_index(equipment_index),
+                                             equipment_attribute(equipment_attribute),
+                                             weapon_attribute(weapon_attribute),
+                                             is_equiped(false) {}
+
+ItemEquipmentBehavior::~ItemEquipmentBehavior() {
+    if (targeting) {delete targeting;}
+    if (purpose) {delete purpose;}
+    if (equipment_attribute) {delete equipment_attribute;}
+    if (weapon_attribute) {delete weapon_attribute;}
 }
 
 bool ItemEquipmentBehavior::use(Entity *use_by) {
@@ -55,8 +73,23 @@ bool ItemEquipmentBehavior::use(Entity *use_by) {
         }
     }
     
-    
     return true;
+}
+
+void ItemBehavior::doUpdateEquipmentAttribute(Entity *self) {
+    return;
+}
+
+void ItemEquipmentBehavior::doUpdateEquipmentAttribute(Entity *self) {
+    CombatBehavior *cbt = self->combat_behavior;
+    if (weapon_attribute != nullptr) {
+        cbt->setEquipmentAtkPoint(cbt->getEquipmentAtkPoint() + weapon_attribute->attack);
+        cbt->setSpeed(weapon_attribute->speed);
+    }
+    if (equipment_attribute != nullptr) {
+        cbt->setEquipmentDefPoint(cbt->getEquipmentDefPoint() + equipment_attribute->defense);
+        cbt->setSpeed(cbt->getSpeed() + equipment_attribute->speed);
+    }
 }
 
 int ItemBehavior::getItemId() {return item_id;}
@@ -66,8 +99,11 @@ void ItemBehavior::setWeight( float input ) { weight = input; }
 bool ItemBehavior::isStackable() { return stackable; }
 int ItemBehavior::getQty() { return qty; }
 float ItemBehavior::getWeight() { return weight; }
-int ItemBehavior::getEquipmentIndex() {return equipment_index;}
-void ItemBehavior::setIsEquip(bool input) {is_equiped = input;}
-bool ItemBehavior::getIsEquip() {return is_equiped;}
+int ItemBehavior::getEquipmentIndex() {return equipment_type::unequipable;}
+void ItemBehavior::setIsEquip(bool input) {return;}
+bool ItemBehavior::getIsEquip() {return false;}
+int ItemEquipmentBehavior::getEquipmentIndex() {return equipment_index;}
+void ItemEquipmentBehavior::setIsEquip(bool input) {is_equiped = input;}
+bool ItemEquipmentBehavior::getIsEquip() {return is_equiped;}
 std::string ItemBehavior::getDesc() {return description;}
 void ItemBehavior::setDesc(std::string input) {description = input;}
