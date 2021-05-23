@@ -16,6 +16,10 @@ enum status{
     VICTORY  = 4
 };
 
+struct GameConfig {
+    std::string font_file_name;
+};
+
 struct PlayerStats {
     Hunger *hunger;
     Tension *tension;
@@ -28,8 +32,10 @@ class GameManager {
 private:
     //Attribute
     int console_width, console_height, status, floor_num, turn_used;
+    GameConfig config;
 public:
     //Attribute
+    
     TCOD_key_t keyboard;
     Map *map;
     
@@ -59,6 +65,7 @@ public:
     
     void doSave();
     void doLoad();
+    void doReadConfig();
     
     //Accessor
     int getConsoleWidth();

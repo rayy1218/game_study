@@ -1,4 +1,3 @@
-
 #include "main.hpp"
 
 Entity::Entity(int x, int y, std::string name, int ascii_char, TCODColor ascii_color)

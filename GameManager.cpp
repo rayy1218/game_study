@@ -1,5 +1,3 @@
-#include <string>
-
 #include "main.hpp"
 
 PlayerStats::PlayerStats(): hunger(nullptr), tension(nullptr) {}
@@ -15,7 +13,8 @@ GameManager::GameManager(int width, int height): console_width(width),
                                                  turn_used(0) {
 
     TCODConsole::initRoot(console_width, console_height, "the living cave", true);
-    TCODConsole::setCustomFont("terminal.png", TCOD_FONT_LAYOUT_ASCII_INROW);
+    doReadConfig();
+    TCODConsole::setCustomFont(config.font_file_name.c_str(), TCOD_FONT_LAYOUT_ASCII_INROW);
     TCODConsole::root->setDefaultBackground(TCODColor::black);
     global_rng = TCODRandom::getInstance();
     
@@ -194,7 +193,7 @@ void GameManager::doStartup() {
     if (!checkFileExist("save.txt")) {
         Entity *starter_kit;
         starter_kit = getItem(player->getX(), player->getY(), item_dict::weapon_dagger);
-        starter_kit->item_behavior->pick(player); 
+        starter_kit->item_behavior->pick(player);
     }
     
     
@@ -302,6 +301,16 @@ void GameManager::doLoad() {
     game.gui->addMessage(TCODColor::yellow, "save file loaded");
     
     save_file.close();
+}
+
+void GameManager::doReadConfig() {
+    std::fstream config_file;
+    config_file.open("config.txt");
+    
+    config_file.ignore(256, ' ');
+    config_file >> config.font_file_name;
+    
+    config_file.close();
 }
 
 int GameManager::getConsoleWidth() {return console_width;}
