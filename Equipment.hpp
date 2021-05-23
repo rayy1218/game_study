@@ -8,7 +8,7 @@ enum equipment_type {
     legwear          = 2,
     footwear         = 3,
     armwear          = 4,
-    ring            = 5,
+    ring             = 5,
     accessory        = 7,
     two_hand         = 8,
     secondary_weapon = 9,
