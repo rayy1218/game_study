@@ -82,7 +82,11 @@ void Town::doRenderTownConsole() {
                         Entity *to_use = game.gui->getSelectedItem(game.player->inventory);
                         if (to_use != NULL) {
                             if (game.keyboard.vk == TCODK_ENTER || game.keyboard.vk == TCODK_CHAR) {
-                                to_use->item_behavior->use(game.player);
+                                if (!to_use->item_behavior->use(game.player)) {
+                                    game.gui->addMessage(TCODColor::white, 
+                                                         "Can't use item in town except equiping");
+                                }
+                                
                             }
                             if (game.keyboard.vk == TCODK_TAB) {
                                 game.player->inventory->deleteItem(to_use);

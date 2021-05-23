@@ -22,6 +22,7 @@ bool ItemBehavior::pick(Entity *pick_by) {
 }
 
 bool ItemBehavior::use(Entity *use_by) {
+    if (game.getFloorNum() == 0) {return false;}
     bool purpose_used = false;
     purpose_used = targeting->doTargeting();
     if (!purpose_used) {return false;}
