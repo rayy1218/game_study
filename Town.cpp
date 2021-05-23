@@ -357,14 +357,27 @@ void Town::doRenderStorage() {
             if (pointing_storage_or_inventory) {
                 Entity *item = storage_room->getItem(current_pointing);
                 if (item == nullptr) {continue;}
+                if (item->item_behavior->isStackable()) {
+                    game.player->inventory->addItem(getItem(0, 0, 
+                                                    item->item_behavior->getItemId()));
+                }
+                else {
+                    game.player->inventory->addItem(item);
+                }
                 storage_room->removeItem(item);
-                game.player->inventory->addItem(item);
+                
             }
             else {
                 Entity *item = game.player->inventory->getItem(current_pointing);
                 if (item == nullptr) {continue;}
+                if (item->item_behavior->isStackable()) {
+                    storage_room->addItem(getItem(0, 0, item->item_behavior->getItemId()));
+                }
+                else {
+                    storage_room->addItem(item);
+                }
                 game.player->inventory->removeItem(item);
-                storage_room->addItem(item);
+                
             }
         }
         

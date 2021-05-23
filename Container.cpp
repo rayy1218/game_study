@@ -27,7 +27,7 @@ bool Container::addItem( Entity *to_add ) {
     if (to_add->item_behavior->isStackable()) {
         bool item_existed = false;
         for (Entity *item : containing) {
-            if (to_add->getName() == item->getName()) {
+            if (to_add->item_behavior->getItemId() == item->item_behavior->getItemId()) {
                 item->item_behavior->setQty(item->item_behavior->getQty() +
                                             to_add->item_behavior->getQty());
                 
@@ -71,10 +71,13 @@ void Container::dropItem(Entity* to_drop) {
     if (to_drop->item_behavior->getIsEquip()) {
         self->equipment->doUnequip(to_drop->item_behavior->getEquipmentIndex());
     }
-    game.all_item.push(to_drop);
     
+    if (to_drop->item_behavior->getQty() > 1 && !to_drop->item_behavior->isStackable()) {
+        to_drop = getItem(to_drop->item_behavior->getItemId());
+    }
     removeItem(to_drop);
     
+    game.all_item.push(to_drop);
     to_drop->setX(self->getX());
     to_drop->setY(self->getY());
 }
