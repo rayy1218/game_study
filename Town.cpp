@@ -204,7 +204,7 @@ void Town::doRenderStorage() {
             int total_item_num = storage_room->getItemNum(), alphabet = 'a'; 
             
             for (int i = 0; i < PAGE_MAX_ITEM; i++) {
-                Entity *item = storage_room->getItem(i + PAGE_MAX_ITEM * (storage_room_page - 1));
+                Entity *item = storage_room->getIndexItem(i + PAGE_MAX_ITEM * (storage_room_page - 1));
                 if (item == nullptr) {break;}
                 int item_qty = item->item_behavior->getQty();
                 if (item_qty > 1) {
@@ -227,7 +227,7 @@ void Town::doRenderStorage() {
                     storage_console.setDefaultBackground(TCODColor::darkerGrey);
                     storage_console.rect(4, 4 + current_pointing, 43, 1, false, TCOD_BKGND_SET);
                     storage_console.setDefaultBackground(TCODColor::darkGrey);
-                    pointing_item = storage_room->getItem(current_pointing + PAGE_MAX_ITEM * (storage_room_page - 1));
+                    pointing_item = storage_room->getIndexItem(current_pointing + PAGE_MAX_ITEM * (storage_room_page - 1));
                 } 
             }
         }
@@ -242,7 +242,7 @@ void Town::doRenderStorage() {
             int total_item_num = game.player->inventory->getItemNum(), alphabet = 'a';
             
             for (int i = 0; i < PAGE_MAX_ITEM; i++) {
-                Entity *item = game.player->inventory->getItem(i + PAGE_MAX_ITEM * (inventory_page - 1));
+                Entity *item = game.player->inventory->getIndexItem(i + PAGE_MAX_ITEM * (inventory_page - 1));
                 if (item == nullptr) {break;}
                 int item_qty = item->item_behavior->getQty();
                 if (item->item_behavior->isStackable()) {
@@ -268,7 +268,7 @@ void Town::doRenderStorage() {
                     storage_console.setDefaultBackground(TCODColor::darkerGrey);
                     storage_console.rect(53, 4 + current_pointing, 43, 1, false, TCOD_BKGND_SET);
                     storage_console.setDefaultBackground(TCODColor::darkGrey);
-                    pointing_item = game.player->inventory->getItem(current_pointing +  PAGE_MAX_ITEM * (inventory_page - 1));
+                    pointing_item = game.player->inventory->getIndexItem(current_pointing +  PAGE_MAX_ITEM * (inventory_page - 1));
                 }
             }
         }
@@ -355,7 +355,7 @@ void Town::doRenderStorage() {
         
         if (game.keyboard.vk == TCODK_ENTER) {
             if (pointing_storage_or_inventory) {
-                Entity *item = storage_room->getItem(current_pointing);
+                Entity *item = storage_room->getIndexItem(current_pointing);
                 if (item == nullptr) {continue;}
                 if (item->item_behavior->isStackable()) {
                     game.player->inventory->addItem(getItem(0, 0, 
@@ -368,7 +368,7 @@ void Town::doRenderStorage() {
                 
             }
             else {
-                Entity *item = game.player->inventory->getItem(current_pointing);
+                Entity *item = game.player->inventory->getIndexItem(current_pointing);
                 if (item == nullptr) {continue;}
                 if (item->item_behavior->isStackable()) {
                     storage_room->addItem(getItem(0, 0, item->item_behavior->getItemId()));

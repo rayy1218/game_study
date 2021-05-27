@@ -63,6 +63,9 @@ enum item_dict{
     //SECONDARY WEAPON
     weapon_knuckle,
     weapon_dagger,
+    
+    //MATERIAL
+    material_gold_chunk
 };
 
 int getIndexWeightedRandom(int *weight_arr, int arr_size);

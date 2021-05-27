@@ -257,6 +257,12 @@ Entity* getItem(const int x, const int y, const int index) {
             break;
         }
         
+        case item_dict::material_gold_chunk: {
+            item = new Entity (x, y, "gold chunk", '$', TCODColor::gold);
+            item->item_behavior = new ItemBehavior(item, 0.2, 1, true);
+            item->item_behavior->setDesc("offical coin of the empire which use widely in trade and curse this corrupted realm");
+        }
+        
     }
     
     item->item_behavior->setItemId(index);

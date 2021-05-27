@@ -39,7 +39,7 @@ int CombatBehavior::doEntityHealed(int heal_amount) {
 void CombatBehavior::getEntityDead() {
     self->setAsciiChar('%');
     self->setAsciiColor(TCODColor::darkRed);
-    self->setName(self->getName() + "'s Corpse");
+    self->setName(self->getName() + "'s corpse");
     
     game.all_character.remove(self);
     game.all_corpse.push(self);

@@ -4,14 +4,16 @@ Entity::Entity(int x, int y, std::string name, int ascii_char, TCODColor ascii_c
               : position_x(x), position_y(y), name(name), ascii(ascii_char),
                 ascii_color(ascii_color), control(nullptr), 
                 move_behavior(nullptr), combat_behavior(nullptr),
-                item_behavior(nullptr), inventory(nullptr), equipment(nullptr) {}
+                item_behavior(nullptr), inventory(nullptr), equipment(nullptr) ,
+                corpse_interact(nullptr) {}
 
 Entity::~Entity() {
-    if (move_behavior != NULL) {delete move_behavior;}
-    if (inventory != NULL) {delete inventory;}
-    if (item_behavior != NULL) {delete item_behavior;}
-    if (equipment != NULL) {delete equipment;}
-    if (control != NULL) {delete control;}
+    if (move_behavior != nullptr) {delete move_behavior;}
+    if (inventory != nullptr) {delete inventory;}
+    if (item_behavior != nullptr) {delete item_behavior;}
+    if (equipment != nullptr) {delete equipment;}
+    if (control != nullptr) {delete control;}
+    if (corpse_interact != nullptr) {delete corpse_interact;}
 }
 
 void Entity::doUpdate() {

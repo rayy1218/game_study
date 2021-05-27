@@ -119,12 +119,12 @@ Entity* Gui::getSelectedItem(Container *inventory) {
         int index = getInventoryIndex(backpack_pointing);
         backpack_pointing = 0;
         if (index == -1) {return nullptr;}
-        return inventory->getItem(index);
+        return inventory->getIndexItem(index);
     }
     if (game.keyboard.vk == TCODK_CHAR) {
         int index = getInventoryIndex();
         if (index == -1) {return nullptr;}
-        return inventory->getItem(index);
+        return inventory->getIndexItem(index);
     }
     return nullptr;
 }
@@ -232,7 +232,7 @@ void Gui::doRenderBackpackTab(TCODConsole *inventory_console, Container *invento
     char alphabet = 'a';
     int item_count = 0;
     for (int y = 25; y <= MAX_ITEM_SHOWN + 25; y++) {
-        Entity *item = inventory->getItem((y - 25) + MAX_ITEM_SHOWN * (page - 1));
+        Entity *item = inventory->getIndexItem((y - 25) + MAX_ITEM_SHOWN * (page - 1));
         if (item != NULL) { 
 
             std::string equiped_str = (item->item_behavior->getIsEquip())? "[equiped]" : "";
@@ -281,7 +281,7 @@ void Gui::doRenderDescTab(TCODConsole *inventory_console, Container *inventory) 
     Entity* backpack_pointing_item;
     int index = getInventoryIndex(backpack_pointing);
     if (index == -1) {backpack_pointing_item = nullptr;}
-    backpack_pointing_item = inventory->getItem(index);
+    backpack_pointing_item = inventory->getIndexItem(index);
     if (backpack_pointing_item != nullptr) {
         int y = 4;
         std::string word, line, desc;

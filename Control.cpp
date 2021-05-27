@@ -142,7 +142,15 @@ bool PlayerControl::handleCharInput(int ascii) {
             Entity *to_use = game.gui->getSelectedItem(self->inventory);
             if (to_use != NULL) {
                 if (game.keyboard.vk == TCODK_ENTER || game.keyboard.vk == TCODK_CHAR) {
-                    return to_use->item_behavior->use(self);
+                    if ((to_use->item_behavior->purpose && to_use->item_behavior->targeting) ||
+                        to_use->item_behavior->getEquipmentIndex() != equipment_type::unequipable) {
+                        
+                        return to_use->item_behavior->use(self);
+                    }
+                    
+                    game.gui->addMessage(TCODColor::white, "%s has no purpose here",
+                                         to_use->getName().c_str());
+                        return false;
                 }
                 if (game.keyboard.vk == TCODK_TAB) {
                     self->inventory->dropItem(to_use);
@@ -181,6 +189,33 @@ bool PlayerControl::handleCharInput(int ascii) {
                                      toppest_item->getName().c_str());
                 new_turn = false;
             }
+            break;
+        }
+        
+        case 'p': {
+            bool is_corpse_here = false;
+            Entity *toppest_corpse;
+            
+            for (Entity *corpse : game.all_corpse) {
+                if (self->getX() == corpse->getX() && self->getY() == corpse->getY()) {
+                    is_corpse_here = true;
+                    toppest_corpse = corpse;
+                }
+            }
+            
+            if (!is_corpse_here) {
+                game.gui->addMessage(TCODColor::white, "it is nothing here");
+                new_turn = false;
+                break;
+            }
+            
+            if (toppest_corpse->corpse_interact == nullptr) {
+                game.gui->addMessage(TCODColor::white, "can't interact with this corpse");
+                new_turn = false;
+                break;
+            }
+            
+            new_turn = toppest_corpse->corpse_interact->doRenderCorpseInteraction();
             break;
         }
         
@@ -373,6 +408,10 @@ void DownStairControl::doUpdate() {
     
     game.setFloorNum(game.getFloorNum() + 1);
     game.doFloorTravel();
+    
+    game.doRender();
+    TCODConsole::root->flush();
+    game.doUpdate();
 }
 
 HoleControl::HoleControl(Entity *self): StepTriggerControl(self) {}

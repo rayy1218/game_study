@@ -1,6 +1,9 @@
 #ifndef ENTITY_HPP
 #define ENTITY_HPP
 
+#include "CorpseInteraction.hpp"
+
+
 class Control;
 class MoveBehavior;
 class CombatBehavior;
@@ -8,6 +11,7 @@ class Container;
 class ItemBehavior;
 class Effect;
 class Equipment;
+class CorpseInteraction;
 
 class Entity {
 private:
@@ -27,6 +31,7 @@ public:
     Container *inventory;
     ItemBehavior *item_behavior;
     Equipment *equipment;
+    CorpseInteraction *corpse_interact;
    
     //Constructer & destructor
     Entity(int x, int y, std::string name, int ascii_char, TCODColor ascii_color);

@@ -73,6 +73,8 @@ void GameManager::doUpdate() {
     }
     
     if (status == status::DEFEAT) {
+        std::remove("save.txt");
+        
         game.gui->addMessage(TCODColor::red, "you are dead");
         game.gui->addMessage(TCODColor::yellow, "[SPACE] restart [ESC] exit");
         
@@ -111,7 +113,8 @@ void GameManager::doUpdate() {
         }
     }
     
-    for ( Entity *prop : all_prop ) {
+    for (Entity *prop : all_prop) {
+        if (!prop) {break;}
         prop->doUpdate();
     }
     
@@ -139,7 +142,7 @@ void GameManager::doRender() {
     }
     
     for ( Entity *entity : all_prop ) {
-        if (!map->isExplored(entity->getX(), entity->getY())) {continue;}
+        if (!map->isExplored(entity->getX(), entity->getY()) && false) {continue;}
         entity->doRender();
         if (entity->getAsciiChar() != '.') {
             TCODConsole::root->setCharBackground(entity->getX(), entity->getY(), 
@@ -235,7 +238,7 @@ void GameManager::doSave() {
     int item_count = 0;
     std::string inventory_save;
     for (int index = 0; index < player->inventory->getItemNum(); index++) {
-        Entity *item = player->inventory->getItem(index);
+        Entity *item = player->inventory->getIndexItem(index);
         for (int i = 1; i <= item->item_behavior->getQty(); i++) {
             item_count += 1;
             inventory_save += ' ';
@@ -249,7 +252,7 @@ void GameManager::doSave() {
     item_count = 0;
     std::string storage_save;
     for (int index = 0; index < game.town->storage_room->getItemNum(); index++) {
-        Entity *item = game.town->storage_room->getItem(index);
+        Entity *item = game.town->storage_room->getIndexItem(index);
         for (int i = 1; i <= item->item_behavior->getQty(); i++) {
             item_count += 1;
             storage_save += ' ';

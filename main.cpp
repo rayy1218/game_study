@@ -29,3 +29,7 @@ bool checkFileExist(std::string file_name) {
     
     return exist;
 }
+
+void printTest(std::string file_name, int line) {
+    std::cout << "FILE: " << file_name << " LINE: " << line << std::endl;
+}
