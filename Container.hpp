@@ -17,10 +17,10 @@ public:
     //Method
     int getItemNum();
     bool addItem(Entity *to_add);
-    void deleteItem(Entity *to_delete);
-    void removeItem(Entity *to_remove);
-    void dropItem(Entity *to_drop);
-    Entity* getItem(int index);
+    void deleteItem(Entity *to_delete, bool delete_all = false);
+    void removeItem(Entity *to_remove, bool remove_all = false);
+    void dropItem(Entity *to_drop, bool drop_all = false);
+    Entity* getIndexItem(int index);
     
     //Accessor
     float getMaxWeight();

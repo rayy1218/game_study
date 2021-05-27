@@ -4,7 +4,9 @@
 //Include Library
 #include <libtcod.hpp>
 #include <fstream>
+#include <iostream>
 #include <string>
+#include <vector>
 
 //Include header
 #include "GameManager.hpp" //Manager game loop
@@ -27,8 +29,12 @@
 #include "Items.hpp" //Item List
 #include "Effect.hpp" //Effect List
 #include "Trap.hpp" //Trap List
+#include "CorpseInteraction.hpp"
+
+#define TEST printTest(__FILE__, __LINE__)
 
 void doCloseWindow();
 bool checkFileExist(std::string file_name);
+void printTest(std::string file_name, int line);
 
 #endif /* MAIN_HPP */

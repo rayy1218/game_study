@@ -1,5 +1,3 @@
-#include <string>
-
 #include "main.hpp"
 
 PlayerStats::PlayerStats(): hunger(nullptr), tension(nullptr) {}
@@ -15,7 +13,8 @@ GameManager::GameManager(int width, int height): console_width(width),
                                                  turn_used(0) {
 
     TCODConsole::initRoot(console_width, console_height, "the living cave", true);
-    TCODConsole::setCustomFont("terminal.png", TCOD_FONT_LAYOUT_ASCII_INROW);
+    doReadConfig();
+    TCODConsole::setCustomFont(config.font_file_name.c_str(), TCOD_FONT_LAYOUT_ASCII_INROW);
     TCODConsole::root->setDefaultBackground(TCODColor::black);
     global_rng = TCODRandom::getInstance();
     
@@ -74,6 +73,8 @@ void GameManager::doUpdate() {
     }
     
     if (status == status::DEFEAT) {
+        std::remove("save.txt");
+        
         game.gui->addMessage(TCODColor::red, "you are dead");
         game.gui->addMessage(TCODColor::yellow, "[SPACE] restart [ESC] exit");
         
@@ -112,7 +113,8 @@ void GameManager::doUpdate() {
         }
     }
     
-    for ( Entity *prop : all_prop ) {
+    for (Entity *prop : all_prop) {
+        if (!prop) {break;}
         prop->doUpdate();
     }
     
@@ -194,7 +196,7 @@ void GameManager::doStartup() {
     if (!checkFileExist("save.txt")) {
         Entity *starter_kit;
         starter_kit = getItem(player->getX(), player->getY(), item_dict::weapon_dagger);
-        starter_kit->item_behavior->pick(player); 
+        starter_kit->item_behavior->pick(player);
     }
     
     
@@ -204,6 +206,7 @@ void GameManager::doStartup() {
 void GameManager::doFloorTravel() {
     gui->doRenderMapGenWait();
     
+    gui->doResetFocusedEnemy();
     game.all_character.remove(game.player);
     game.all_character.clearAndDelete();
     game.all_corpse.clearAndDelete();
@@ -236,7 +239,7 @@ void GameManager::doSave() {
     int item_count = 0;
     std::string inventory_save;
     for (int index = 0; index < player->inventory->getItemNum(); index++) {
-        Entity *item = player->inventory->getItem(index);
+        Entity *item = player->inventory->getIndexItem(index);
         for (int i = 1; i <= item->item_behavior->getQty(); i++) {
             item_count += 1;
             inventory_save += ' ';
@@ -250,7 +253,7 @@ void GameManager::doSave() {
     item_count = 0;
     std::string storage_save;
     for (int index = 0; index < game.town->storage_room->getItemNum(); index++) {
-        Entity *item = game.town->storage_room->getItem(index);
+        Entity *item = game.town->storage_room->getIndexItem(index);
         for (int i = 1; i <= item->item_behavior->getQty(); i++) {
             item_count += 1;
             storage_save += ' ';
@@ -302,6 +305,16 @@ void GameManager::doLoad() {
     game.gui->addMessage(TCODColor::yellow, "save file loaded");
     
     save_file.close();
+}
+
+void GameManager::doReadConfig() {
+    std::fstream config_file;
+    config_file.open("config.txt");
+    
+    config_file.ignore(256, ' ');
+    config_file >> config.font_file_name;
+    
+    config_file.close();
 }
 
 int GameManager::getConsoleWidth() {return console_width;}

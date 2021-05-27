@@ -28,7 +28,7 @@ PurposeDamage::PurposeDamage(int damage): damage(damage) {}
 bool PurposeDamage::doUse(Entity *target) {
     int damage_dealt = target->combat_behavior->doEntityAttacked(damage);
     TCODColor message_color = (target == game.player) ? TCODColor::red : TCODColor::green; 
-    game.gui->addMessage(message_color, "%s take %i - idamage", 
+    game.gui->addMessage(message_color, "%s take %i - %i damage", 
                          target->getName().c_str(), damage, damage - damage_dealt);
     target->combat_behavior->checkEntityDead();
     return true;
