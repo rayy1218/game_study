@@ -23,6 +23,10 @@ float Control::getDistanceTo(float x, float y) {
     return sqrtf(powf(self->getX() - x, 2) + powf(self->getY() - y, 2));
 }
 
+std::string Control::getStatus() {
+    return "entity";
+}
+
 PlayerControl::PlayerControl(Entity* self): Control(self) {}
 
 void PlayerControl::doUpdate() {
@@ -245,6 +249,10 @@ bool PlayerControl::handleCharInput(int ascii) {
     return new_turn;
 }
 
+std::string PlayerControl::getStatus() {
+    return "player";
+}
+
 EnemyControl::EnemyControl(Entity *self): Control(self), move_count(0) {
     path_to_player = new TCODPath(game.map->getWidth(), game.map->getHeight(), 
                                   new Pathfinding, NULL);
@@ -301,10 +309,18 @@ void EnemyControl::handleMoveOrAttack() {
     self->move_behavior->doMoveEntity( x, y );
 }
 
+std::string EnemyControl::getStatus() {
+    return "hostile";
+}
+
 CorpseControl::CorpseControl(): Control(nullptr) {}
 
 void CorpseControl::doUpdate() {
     return;
+}
+
+std::string CorpseControl::getStatus() {
+    return "died";
 }
 
 ConfusedControl::ConfusedControl(Entity *self): Control(self) {}
@@ -345,12 +361,20 @@ void ConfusedControl::handleMoveOrAttack(int to_x, int to_y) {
     }
 }
 
+std::string ConfusedControl::getStatus() {
+    return "confused";
+}
+
 StunnedControl::StunnedControl(Entity* self): Control(self) {}
 
 void StunnedControl::doUpdate() {
     if (self == game.player) {
         game.setStatus(status::NEW_TURN);
     }
+}
+
+std::string StunnedControl::getStatus() {
+    return "stunned";
 }
 
 StepTriggerControl::StepTriggerControl(Entity *self): Control(self) {}

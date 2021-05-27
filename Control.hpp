@@ -13,6 +13,7 @@ public:
     
     virtual void doUpdate();
     float getDistanceTo(float x, float y);
+    virtual std::string getStatus();
 };
 
 class PlayerControl : public Control {
@@ -22,6 +23,7 @@ public:
     void doUpdate();
     bool handleMoveOrAttack(int dx, int dy);
     bool handleCharInput(int ascii);
+    std::string getStatus();
 };
 
 class EnemyControl : public Control {
@@ -35,25 +37,32 @@ public:
     
     void doUpdate();
     void handleMoveOrAttack();
+    std::string getStatus();
 };
 
 class CorpseControl : public Control {
 public:
     CorpseControl();
+    
     void doUpdate();
+    std::string getStatus();
 };
 
 class ConfusedControl : public Control {
 public:
     ConfusedControl(Entity *self);
+    
     void doUpdate();
     void handleMoveOrAttack(int to_x, int to_y);
+    std::string getStatus();
 }; 
 
 class StunnedControl : public Control {
 public:
     StunnedControl(Entity *self);
+    
     void doUpdate();
+    std::string getStatus();
 };
 
 class StepTriggerControl : public Control {

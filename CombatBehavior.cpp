@@ -57,6 +57,14 @@ bool CombatBehavior::checkEntityDead() {
     return (current_hp <= 0);
 }
 
+int CombatBehavior::getTotalAtk() {
+    return (attack_point + equipment_attack) * attack_boost;
+}
+
+int CombatBehavior::getTotalDef() {
+    return (defense_point + equipment_defense) * defense_boost;
+}
+
 PlayerCombatBehavior::PlayerCombatBehavior(Entity *self, int max_hp, 
                                            int attack_point, int defense_point, float default_speed): 
                       CombatBehavior(self, max_hp, attack_point, defense_point, default_speed) {}

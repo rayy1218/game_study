@@ -123,28 +123,79 @@ void Gui::doRenderEnemyInfo() {
     if (focused_enemy) {
         infomation_console->printf(2, START_Y + 2, "name: %s", focused_enemy->getName().c_str());
         
-        std::string health;
+        std::string health_str;
         float health_percentage = (float)focused_enemy->combat_behavior->getCurrentHp() / 
                                          focused_enemy->combat_behavior->getMaxHp();
         if (health_percentage <= 0.2) {
-            health = "dying";
+            health_str = "dying";
         }
         else if (health_percentage <= 0.5) {
-            health = "critical";
+            health_str = "critical";
         }
         else if (health_percentage <= 0.8) {
-            health = "moderate damaged";
+            health_str = "moderate damaged";
         }
         else if (health_percentage < 1) {
-            health = "minor damaged";
+            health_str = "minor damaged";
         }
         else if (health_percentage == 1) {
-            health = "whole";
+            health_str = "whole";
         }
-        infomation_console->printf(2, START_Y + 3, "health: %s", health.c_str());
-        infomation_console->printf(2, START_Y + 4, "dfs adv: %s", "none");
-        infomation_console->printf(2, START_Y + 5, "atk adv: %s", "none");
-        infomation_console->printf(2, START_Y + 6, "status: %s", "hostile");
+        infomation_console->printf(2, START_Y + 3, "health: %s", health_str.c_str());
+        
+        float dfs_adv = (float)game.player->combat_behavior->getTotalDef() /
+                               focused_enemy->combat_behavior->getTotalDef();
+        std::string dfs_str;
+        if (dfs_adv >= 0.8 && dfs_adv < 1.2) {
+            dfs_str = "none";
+        }
+        else if (dfs_adv >= 1.2 && dfs_adv < 1.5) {
+            dfs_str = "adv";
+        }
+        else if (dfs_adv >= 1.5 && dfs_adv < 2) {
+            dfs_str = "high adv";
+        }
+        else if (dfs_adv > 2) {
+            dfs_str = "extreme adv";
+        }
+        if (dfs_adv >= 0.5 && dfs_adv < 0.8) {
+            dfs_str = "disadv";
+        }
+        else if (dfs_adv >= 0.2 && dfs_adv < 0.5) {
+            dfs_str = "high disadv";
+        }
+        else if (dfs_adv < 0.2) {
+            dfs_str = "extreme disadv";
+        }
+        infomation_console->printf(2, START_Y + 4, "dfs: %s", dfs_str.c_str());
+        
+        float atk_adv = (float)game.player->combat_behavior->getTotalAtk() /
+                               focused_enemy->combat_behavior->getTotalAtk();
+        std::string atk_str;
+        if (atk_adv >= 0.8 && atk_adv < 1.2) {
+            atk_str = "none";
+        }
+        else if (atk_adv >= 1.2 && atk_adv < 1.5) {
+            atk_str = "adv";
+        }
+        else if (atk_adv >= 1.5 && atk_adv < 2) {
+            atk_str = "high adv";
+        }
+        else if (atk_adv > 2) {
+            atk_str = "extreme adv";
+        }
+        if (atk_adv >= 0.5 && atk_adv < 0.8) {
+            atk_str = "disadv";
+        }
+        else if (atk_adv >= 0.2 && atk_adv < 0.5) {
+            atk_str = "high disadv";
+        }
+        else if (atk_adv < 0.2) {
+            atk_str = "extreme disadv";
+        }
+        infomation_console->printf(2, START_Y + 5, "atk: %s", atk_str.c_str());
+        infomation_console->printf(2, START_Y + 6, "status: %s", 
+                                   focused_enemy->control->getStatus().c_str());
         
         return;
     }
