@@ -33,6 +33,7 @@ Entity* getItem(const int x, const int y, const int index) {
             item->item_behavior->setDesc("can be throw at any place in sight and"
                                          " deal 6 damage for 4 round to creature"
                                          " in radius of 3");
+            item->item_behavior->tradable = new Tradable(12);
             break;
         }
         
@@ -42,6 +43,7 @@ Entity* getItem(const int x, const int y, const int index) {
             item->item_behavior->targeting = new SelectAreaAllTarget(item, 0, false);
             item->item_behavior->purpose = new PurposeDamage(15);
             item->item_behavior->setDesc("deal 15 damage to selected creature in sight");
+            item->item_behavior->tradable = new Tradable(12);
             break;
         }
         
@@ -52,6 +54,7 @@ Entity* getItem(const int x, const int y, const int index) {
             item->item_behavior->purpose = new PurposeEffectConfusion(8);
             item->item_behavior->setDesc("can be throw at any place in sight and"
                                          " confuse a creature for 8 round");
+            item->item_behavior->tradable = new Tradable(20);
             break;
         }
         
@@ -61,6 +64,7 @@ Entity* getItem(const int x, const int y, const int index) {
             item->item_behavior->targeting = new SelfTarget(item);
             item->item_behavior->purpose = new PurposeHeal(20);
             item->item_behavior->setDesc("heal 20 hp");
+            item->item_behavior->tradable = new Tradable(24);
             break;
         }
         
@@ -70,6 +74,7 @@ Entity* getItem(const int x, const int y, const int index) {
             item->item_behavior->targeting = new SelfTarget(item);
             item->item_behavior->purpose = new PurposeItemFood(100);
             item->item_behavior->setDesc("decrease stravation by 100");
+            item->item_behavior->tradable = new Tradable(8);
             break;
         }
         

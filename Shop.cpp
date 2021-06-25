@@ -1,6 +1,7 @@
 #include "main.hpp"
 
 const int SHOP_PAGE_MAX_ITEM = 26;
+const float SHOP_BUYING_VALUE_RATE = 0.8, SHOP_SELLING_VALUE_RATE = 1;
 
 ShopInterface::ShopInterface(Shop *shop): shop(shop) {}
 
@@ -48,7 +49,8 @@ void ShopInterface::doRenderShop() {
             
             for (int i : shop->selling_item) {
                 Entity *item = getItem(0, 0, i);
-                shop_console.printf(4, y, item->getName().c_str());
+                shop_console.printf(4, y, "%s sell for %i", item->getName().c_str(),
+                                    int(item->item_behavior->tradable->price / SHOP_SELLING_VALUE_RATE));
                 y++;
                 
                 delete item;
@@ -75,11 +77,11 @@ void ShopInterface::doRenderShop() {
             for (int i = 0; i < game.player->inventory->getItemNum(); i++) {
                 Entity *item = game.player->inventory->getIndexItem(i);
                 shop_console.printf(4, y, "%s x %i", item->getName().c_str(), item->item_behavior->getQty());
-                for (int selling_item_id : shop->selling_item) {
-                    if (item->item_behavior->getItemId() == selling_item_id && item->item_behavior->tradable) {
+                for (int buying_item_id : shop->buying_item) {
+                    if (item->item_behavior->getItemId() == buying_item_id && item->item_behavior->tradable) {
                         shop_console.printf(4, y, "%s x %i buy for %i", item->getName().c_str(), 
-                                                                        item->item_behavior->getQty(),
-                                                                        item->item_behavior->tradable->price);
+                                            item->item_behavior->getQty(),
+                                            int(item->item_behavior->tradable->price / SHOP_BUYING_VALUE_RATE));
                     }
                 }
                 
@@ -133,12 +135,18 @@ void ShopInterface::doRenderShop() {
         if (game.keyboard.vk == TCODK_ENTER) {
             if (pointing_shop_or_self) {
                 int index = current_pointing + (shop_current_page - 1) * PAGE_MAX_ITEM;
-                Entity *to_sell = getItem(0, 0, index);
-                doSell(to_sell, 1.2);
+                Entity *to_sell = getItem(0, 0, shop->selling_item.at(index));
+                doSell(to_sell, SHOP_SELLING_VALUE_RATE);
                 
             }
             else {
-                doBuy(game.player->inventory->getIndexItem(current_pointing), 1);
+                int index = current_pointing + (self_current_page - 1) * PAGE_MAX_ITEM;
+                Entity *to_buy = game.player->inventory->getIndexItem(index);
+                for (int shop_buying_id : shop->buying_item) {
+                    if (to_buy->item_behavior->getItemId() == shop_buying_id) {
+                        doBuy(to_buy, SHOP_BUYING_VALUE_RATE);
+                    }
+                }
             }
         }
         
