@@ -74,7 +74,7 @@ Entity* getItem(const int x, const int y, const int index) {
         }
         
         case item_dict::headwear_heavy_metal: {
-            item = new Entity (x, y, "heavy plate helmet", '[', TCODColor::silver);
+            item = new Entity(x, y, "heavy plate helmet", '[', TCODColor::silver);
             item->item_behavior = new ItemEquipmentBehavior(item, 2.5, 1, false, equipment_type::headwear,
                                                             new EquipmentAttribute(3, 0), nullptr);
             item->item_behavior->setDesc("increase self defense by 3");
@@ -82,7 +82,7 @@ Entity* getItem(const int x, const int y, const int index) {
         }
         
         case item_dict::headwear_light_metal: {
-            item = new Entity (x, y, "light plate helmet", '[', TCODColor::silver);
+            item = new Entity(x, y, "light plate helmet", '[', TCODColor::silver);
             item->item_behavior = new ItemEquipmentBehavior(item, 1.2, 1, false, equipment_type::headwear,
                                                             new EquipmentAttribute(2, 0), nullptr);
             item->item_behavior->setDesc("increase self defense by 2");
@@ -90,7 +90,7 @@ Entity* getItem(const int x, const int y, const int index) {
         }
         
         case item_dict::headwear_leather: {
-            item = new Entity (x, y, "leather hood", '(', TCODColor::sepia);
+            item = new Entity(x, y, "leather hood", '(', TCODColor::sepia);
             item->item_behavior = new ItemEquipmentBehavior(item, 0.4, 1, false, equipment_type::headwear,
                                                             new EquipmentAttribute(1, 0), nullptr);
             item->item_behavior->setDesc("increase self defense by 1");
@@ -98,7 +98,7 @@ Entity* getItem(const int x, const int y, const int index) {
         }
         
         case item_dict::bodywear_heavy_metal: {
-            item = new Entity (x, y, "heavy chestplate", '[', TCODColor::silver);
+            item = new Entity(x, y, "heavy chestplate", '[', TCODColor::silver);
             item->item_behavior = new ItemEquipmentBehavior(item, 4.8, 1, false, equipment_type::bodywear,
                                                             new EquipmentAttribute(6, 0), nullptr);
             item->item_behavior->setDesc("increase self defense by 6");
@@ -106,7 +106,7 @@ Entity* getItem(const int x, const int y, const int index) {
         }
         
         case item_dict::bodywear_light_metal: {
-            item = new Entity (x, y, "light chestplate", '[', TCODColor::silver);
+            item = new Entity(x, y, "light chestplate", '[', TCODColor::silver);
             item->item_behavior = new ItemEquipmentBehavior(item, 2.5, 1, false, equipment_type::bodywear,
                                                             new EquipmentAttribute(4, 0), nullptr);
             item->item_behavior->setDesc("increase self defense by 4");
@@ -114,7 +114,7 @@ Entity* getItem(const int x, const int y, const int index) {
         }
         
         case item_dict::bodywear_reinforced_leather: {
-            item = new Entity (x, y, "reinforced leather gambeson", '(', TCODColor::sepia);
+            item = new Entity(x, y, "reinforced leather gambeson", '(', TCODColor::sepia);
             item->item_behavior = new ItemEquipmentBehavior(item, 1, 1, false, equipment_type::bodywear,
                                                             new EquipmentAttribute(2, 0), nullptr);
             item->item_behavior->setDesc("increase self defense by 2");
@@ -122,7 +122,7 @@ Entity* getItem(const int x, const int y, const int index) {
         }
         
         case item_dict::bodywear_cloth: {
-            item = new Entity (x, y, "tunic", '(', TCODColor::lighterGrey);
+            item = new Entity(x, y, "tunic", '(', TCODColor::lighterGrey);
             item->item_behavior = new ItemEquipmentBehavior(item, 0.2, 1, false, equipment_type::bodywear,
                                                             new EquipmentAttribute(1, 0), nullptr);
             item->item_behavior->setDesc("increase self defense by 1");
@@ -130,7 +130,7 @@ Entity* getItem(const int x, const int y, const int index) {
         }
         
         case item_dict::legging_armored: {
-            item = new Entity (x, y, "chausses", '[', TCODColor::silver);
+            item = new Entity(x, y, "chausses", '[', TCODColor::silver);
             item->item_behavior = new ItemEquipmentBehavior(item, 3, 1, false, equipment_type::legwear,
                                                             new EquipmentAttribute(5, 0), nullptr);
             item->item_behavior->setDesc("increase self defense by 5");
@@ -138,7 +138,7 @@ Entity* getItem(const int x, const int y, const int index) {
         }
         
         case item_dict::legging_reinforced_metal: {
-            item = new Entity (x, y, "leg reinforcing metal plate", '[', TCODColor::silver);
+            item = new Entity(x, y, "leg reinforcing metal plate", '[', TCODColor::silver);
             item->item_behavior = new ItemEquipmentBehavior(item, 1.5, 1, false, equipment_type::legwear,
                                                             new EquipmentAttribute(3, 0), nullptr);
             item->item_behavior->setDesc("increase self defense by 3");
@@ -146,7 +146,7 @@ Entity* getItem(const int x, const int y, const int index) {
         }
         
         case item_dict::legging_reinforced_leather: {
-            item = new Entity (x, y, "leg reinforcing leather plate", '(', TCODColor::sepia);
+            item = new Entity(x, y, "leg reinforcing leather plate", '(', TCODColor::sepia);
             item->item_behavior = new ItemEquipmentBehavior(item, 0.8, 1, false, equipment_type::legwear,
                                                             new EquipmentAttribute(1, 0), nullptr);
             item->item_behavior->setDesc("increase self defense by 1");
@@ -154,7 +154,7 @@ Entity* getItem(const int x, const int y, const int index) {
         }
         
         case item_dict::footwear_metal: {
-            item = new Entity (x, y, "plate boots", '[', TCODColor::silver);
+            item = new Entity(x, y, "plate boots", '[', TCODColor::silver);
             item->item_behavior = new ItemEquipmentBehavior(item, 1, 1, false, equipment_type::footwear,
                                                             new EquipmentAttribute(2, 0), nullptr);
             item->item_behavior->setDesc("increase self defense by 2");
@@ -162,7 +162,7 @@ Entity* getItem(const int x, const int y, const int index) {
         }
         
         case item_dict::footwear_leather: {
-            item = new Entity (x, y, "leather boots", '(', TCODColor::sepia);
+            item = new Entity(x, y, "leather boots", '(', TCODColor::sepia);
             item->item_behavior = new ItemEquipmentBehavior(item, 0.4, 1, false, equipment_type::footwear,
                                                             new EquipmentAttribute(1, 0), nullptr);
             item->item_behavior->setDesc("increase self defense by 1");
@@ -170,7 +170,7 @@ Entity* getItem(const int x, const int y, const int index) {
         }
         
         case item_dict::armwear_metal_full: {
-            item = new Entity (x, y, "metal vambrace", '[', TCODColor::silver);
+            item = new Entity(x, y, "metal vambrace", '[', TCODColor::silver);
             item->item_behavior = new ItemEquipmentBehavior(item, 1.8, 1, false, equipment_type::armwear,
                                                             new EquipmentAttribute(4, 0), nullptr);
             item->item_behavior->setDesc("increase self defense by 4");
@@ -178,7 +178,7 @@ Entity* getItem(const int x, const int y, const int index) {
         }
         
         case item_dict::armwear_reinforced_metal: {
-            item = new Entity (x, y, "arm reinforcing metal plate", '[', TCODColor::silver);
+            item = new Entity(x, y, "arm reinforcing metal plate", '[', TCODColor::silver);
             item->item_behavior = new ItemEquipmentBehavior(item, 1.2, 1, false, equipment_type::armwear,
                                                             new EquipmentAttribute(2, 0), nullptr);
             item->item_behavior->setDesc("increase self defense by 2");
@@ -186,7 +186,7 @@ Entity* getItem(const int x, const int y, const int index) {
         }
         
         case item_dict::armwear_reinforced_leather: {
-            item = new Entity (x, y, "arm reinforcing metal plate", '(', TCODColor::sepia);
+            item = new Entity(x, y, "arm reinforcing leather plate", '(', TCODColor::sepia);
             item->item_behavior = new ItemEquipmentBehavior(item, 0.6, 1, false, equipment_type::armwear,
                                                             new EquipmentAttribute(1, 0), nullptr);
             item->item_behavior->setDesc("increase self defense by 1");
@@ -194,7 +194,7 @@ Entity* getItem(const int x, const int y, const int index) {
         }
         
         case item_dict::weapon_gladius: {
-            item = new Entity (x, y, "gladius", '/', TCODColor::silver);
+            item = new Entity(x, y, "gladius", '/', TCODColor::silver);
             item->item_behavior = new ItemEquipmentBehavior(item, 1, 1, false, equipment_type::single_hand,
                                                             nullptr, new WeaponAttribute(8, 45));
             item->item_behavior->setDesc("increase self attack by 8 and have speed of 45");
@@ -202,7 +202,7 @@ Entity* getItem(const int x, const int y, const int index) {
         }
         
         case item_dict::weapon_axe: {
-            item = new Entity (x, y, "axe", '/', TCODColor::silver);
+            item = new Entity(x, y, "axe", '/', TCODColor::silver);
             item->item_behavior = new ItemEquipmentBehavior(item, 1.2, 1, false, equipment_type::single_hand,
                                                             nullptr, new WeaponAttribute(10, 40));
             item->item_behavior->setDesc("increase self attack by 10 and have speed of 40");
@@ -210,7 +210,7 @@ Entity* getItem(const int x, const int y, const int index) {
         }
         
         case item_dict::weapon_mace: {
-            item = new Entity (x, y, "mace", '/', TCODColor::silver);
+            item = new Entity(x, y, "mace", '/', TCODColor::silver);
             item->item_behavior = new ItemEquipmentBehavior(item, 1.5, 1, false, equipment_type::single_hand,
                                                             nullptr, new WeaponAttribute(12, 40));
             item->item_behavior->setDesc("increase self attack by 12 and have speed of 40");
@@ -218,7 +218,7 @@ Entity* getItem(const int x, const int y, const int index) {
         }
         
         case item_dict::weapon_longsword: {
-            item = new Entity (x, y, "longsword", '/', TCODColor::silver);
+            item = new Entity(x, y, "longsword", '/', TCODColor::silver);
             item->item_behavior = new ItemEquipmentBehavior(item, 3, 1, false, equipment_type::two_hand,
                                                             nullptr, new WeaponAttribute(15, 30));
             item->item_behavior->setDesc("increase self attack by 15 and have speed of 30");
@@ -226,7 +226,7 @@ Entity* getItem(const int x, const int y, const int index) {
         }
         
         case item_dict::weapon_battlehammer: {
-            item = new Entity (x, y, "battlehammer", '/', TCODColor::silver);
+            item = new Entity(x, y, "battlehammer", '/', TCODColor::silver);
             item->item_behavior = new ItemEquipmentBehavior(item, 3.5, 1, false, equipment_type::two_hand,
                                                             nullptr, new WeaponAttribute(18, 25));
             item->item_behavior->setDesc("increase self attack by 18 and have speed of 25");
@@ -234,7 +234,7 @@ Entity* getItem(const int x, const int y, const int index) {
         }
         
         case item_dict::weapon_battleaxe: {
-            item = new Entity (x, y, "battleaxe", '/', TCODColor::silver);
+            item = new Entity(x, y, "battleaxe", '/', TCODColor::silver);
             item->item_behavior = new ItemEquipmentBehavior(item, 3, 1, false, equipment_type::two_hand,
                                                             nullptr, new WeaponAttribute(20, 25));
             item->item_behavior->setDesc("increase self attack by 20 and have speed of 25");
@@ -242,7 +242,7 @@ Entity* getItem(const int x, const int y, const int index) {
         }
         
         case item_dict::weapon_knuckle: {
-            item = new Entity (x, y, "knuckle", '/', TCODColor::silver);
+            item = new Entity(x, y, "knuckle", '/', TCODColor::silver);
             item->item_behavior = new ItemEquipmentBehavior(item, 0.2, 1, false, equipment_type::secondary_weapon,
                                                             nullptr, new WeaponAttribute(6, 90));
             item->item_behavior->setDesc("increase self attack by 6 and have speed of 90");
@@ -250,19 +250,103 @@ Entity* getItem(const int x, const int y, const int index) {
         }
         
         case item_dict::weapon_dagger: {
-            item = new Entity (x, y, "dagger", '/', TCODColor::silver);
+            item = new Entity(x, y, "dagger", '/', TCODColor::silver);
             item->item_behavior = new ItemEquipmentBehavior(item, 0.2, 1, false, equipment_type::secondary_weapon,
                                                             nullptr, new WeaponAttribute(6, 80));
             item->item_behavior->setDesc("increase self attack by 6 and have speed of 80");
             break;
         }
         
-        case item_dict::material_gold_chunk: {
-            item = new Entity (x, y, "gold chunk", '$', TCODColor::gold);
-            item->item_behavior = new ItemBehavior(item, 0.2, 1, true);
-            item->item_behavior->setDesc("offical coin of the empire which use widely in trade and curse this corrupted realm");
+        case item_dict::material_copper_chunk: {
+            item = new Entity(x, y, "copper chunk", '$', TCODColor::gold);
+            item->item_behavior = new ItemBehavior(item, 0.05, 1, true);
+            item->item_behavior->setDesc("a dull copper buscuit with a number "
+                                         "one and name of current emperor "
+                                         "carved on it and opposite. widely use "
+                                         "in trade.");
+            break;
         }
         
+        case item_dict::loot_goblin_braclet: {
+            item = new Entity(x, y, "mundane braclet", '"', TCODColor::silver);
+            item->item_behavior = new ItemBehavior(item, 0.1, 1, true);
+            item->item_behavior->setDesc("braclet made by bending a metal plate to"
+                                         "shape of circle");
+            item->item_behavior->tradable = new Tradable(14);
+            break;
+        }
+        
+        case item_dict::loot_goblin_necklace: {
+            item = new Entity(x, y, "necklace of teeth", '"', TCODColor::grey);
+            item->item_behavior = new ItemBehavior(item, 0.1, 1, true);
+            item->item_behavior->setDesc("teeth of small creature string together "
+                                         "by a rope of straw");
+            item->item_behavior->tradable = new Tradable(9);
+            break;
+        }
+        
+        case item_dict::loot_goblin_helmet: {
+            item = new Entity(x, y, "skull helmet", '"', TCODColor::grey);
+            item->item_behavior = new ItemBehavior(item, 0.2, 1, true);
+            item->item_behavior->setDesc("a flat long skull of creature wear by "
+                                         "high goblin");
+            item->item_behavior->tradable = new Tradable(9);
+            break;
+        }
+        
+        case item_dict::harvest_meat: {
+            item = new Entity(x, y, "raw meat", 'Q', TCODColor::darkRed);
+            item->item_behavior = new ItemBehavior(item, 0.1, 1, true);
+            item->item_behavior->setDesc("harvested from various creature, shouldn't "
+                                         "be eaten raw");
+            item->item_behavior->tradable = new Tradable(3);
+            break;
+        }
+        
+        case item_dict::harvest_goblin_hide: {
+            item = new Entity(x, y, "goblin hide", '"', TCODColor::darkLime);
+            item->item_behavior = new ItemBehavior(item, 0.2, 1, true);
+            item->item_behavior->setDesc("harvested from goblin often used in "
+                                         "cloth and armor crafting");
+            item->item_behavior->tradable = new Tradable(10);
+            break;
+        }
+        
+        case item_dict::harvest_goblin_bone: {
+            item = new Entity(x, y, "goblin bone", '"', TCODColor::grey);
+            item->item_behavior = new ItemBehavior(item, 0.2, 1, true);
+            item->item_behavior->setDesc("harvested from goblin often used in "
+                                         "nercomancy");
+            item->item_behavior->tradable = new Tradable(8);
+            break;
+        }
+        
+        case item_dict::harvest_goblin_eye: {
+            item = new Entity(x, y, "goblin eye", '"', TCODColor::grey);
+            item->item_behavior = new ItemBehavior(item, 0.1, 1, true);
+            item->item_behavior->setDesc("harvested from goblin often used in "
+                                         "potion alchemy and medium magus");
+            item->item_behavior->tradable = new Tradable(14);
+            break;
+        }
+        
+        case item_dict::harvest_wolf_hide: {
+            item = new Entity(x, y, "wolf hide", '"', TCODColor::lightGrey);
+            item->item_behavior = new ItemBehavior(item, 0.3, 1, true);
+            item->item_behavior->setDesc("harvested from wolf often used in "
+                                         "cloth and armor crafting");
+            item->item_behavior->tradable = new Tradable(16);
+            break;
+        }
+        
+        case item_dict::harvest_wolf_bone: {
+            item = new Entity(x, y, "wolf bone", '"', TCODColor::grey);
+            item->item_behavior = new ItemBehavior(item, 0.2, 1, true);
+            item->item_behavior->setDesc("harvested from wolf often used in "
+                                         "nercomancy");
+            item->item_behavior->tradable = new Tradable(16);
+            break;
+        }
     }
     
     item->item_behavior->setItemId(index);

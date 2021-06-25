@@ -6,6 +6,7 @@
 #include <fstream>
 #include <iostream>
 #include <string>
+#include <vector>
 
 //Include header
 #include "GameManager.hpp" //Manager game loop
@@ -29,8 +30,12 @@
 #include "Effect.hpp" //Effect List
 #include "Trap.hpp" //Trap List
 #include "CorpseInteraction.hpp"
+<<<<<<< HEAD
 
 #define TEST printTest(__FILE__, __LINE__)
+=======
+#include "Shop.hpp"
+>>>>>>> fight_focus
 
 void doCloseWindow();
 bool checkFileExist(std::string file_name);

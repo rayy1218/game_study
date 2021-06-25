@@ -15,9 +15,14 @@ Entity* getMonster(int x, int y, int index) {
                                                              nullptr); 
             
             monster->inventory = new Container(monster, 20);
-            monster->corpse_interact->addLootableItem(getItem(0, 0, 
-                                                         item_dict::material_gold_chunk),
-                                                         10, 20);
+            monster->corpse_interact->addLootableItem(getItem(0, 0, item_dict::material_copper_chunk),10, 20);
+            monster->corpse_interact->addLootableItem(getItem(0, 0, item_dict::loot_goblin_helmet), 0, 1);
+            monster->corpse_interact->addLootableItem(getItem(0, 0, item_dict::loot_goblin_braclet), 0, 4);
+            monster->corpse_interact->addLootableItem(getItem(0, 0, item_dict::loot_goblin_necklace), 0, 1);
+            
+            monster->corpse_interact->addHasvestableItem(getItem(0, 0, item_dict::harvest_goblin_bone), 4, 6);
+            monster->corpse_interact->addHasvestableItem(getItem(0, 0, item_dict::harvest_goblin_hide), 1, 3);
+            monster->corpse_interact->addHasvestableItem(getItem(0, 0, item_dict::harvest_goblin_eye), 0, 2);
                     
             break;
         }
@@ -34,9 +39,14 @@ Entity* getMonster(int x, int y, int index) {
                                                              nullptr); 
             
             monster->inventory = new Container(monster, 20);
-            monster->corpse_interact->addLootableItem(getItem(0, 0, 
-                                                         item_dict::material_gold_chunk),
-                                                         10, 20);
+            monster->corpse_interact->addLootableItem(getItem(0, 0, item_dict::material_copper_chunk), 10, 20);
+            monster->corpse_interact->addLootableItem(getItem(0, 0, item_dict::loot_goblin_helmet), 0, 1);
+            monster->corpse_interact->addLootableItem(getItem(0, 0, item_dict::loot_goblin_braclet), 0, 4);
+            monster->corpse_interact->addLootableItem(getItem(0, 0, item_dict::loot_goblin_necklace), 0, 1);
+            
+            monster->corpse_interact->addHasvestableItem(getItem(0, 0, item_dict::harvest_goblin_bone), 4, 6);
+            monster->corpse_interact->addHasvestableItem(getItem(0, 0, item_dict::harvest_goblin_hide), 1, 3);
+            monster->corpse_interact->addHasvestableItem(getItem(0, 0, item_dict::harvest_goblin_eye), 0, 2);
             
             break;
         }
@@ -54,9 +64,14 @@ Entity* getMonster(int x, int y, int index) {
                                                              nullptr); 
             
             monster->inventory = new Container(monster, 20);
-            monster->corpse_interact->addLootableItem(getItem(0, 0, 
-                                                         item_dict::material_gold_chunk),
-                                                         10, 20);
+            monster->corpse_interact->addLootableItem(getItem(0, 0, item_dict::material_copper_chunk), 10, 20);
+            monster->corpse_interact->addLootableItem(getItem(0, 0, item_dict::loot_goblin_helmet), 0, 1);
+            monster->corpse_interact->addLootableItem(getItem(0, 0, item_dict::loot_goblin_braclet), 0, 4);
+            monster->corpse_interact->addLootableItem(getItem(0, 0, item_dict::loot_goblin_necklace), 0, 1);
+            
+            monster->corpse_interact->addHasvestableItem(getItem(0, 0, item_dict::harvest_goblin_bone), 4, 6);
+            monster->corpse_interact->addHasvestableItem(getItem(0, 0, item_dict::harvest_goblin_hide), 1, 3);
+            monster->corpse_interact->addHasvestableItem(getItem(0, 0, item_dict::harvest_goblin_eye), 0, 2);
             
             break;
         }
@@ -72,6 +87,8 @@ Entity* getMonster(int x, int y, int index) {
                                                              new CorpseBurn, 
                                                              new CorpseRecall(1)); 
             
+            monster->corpse_interact->addHasvestableItem(getItem(0, 0, item_dict::harvest_wolf_hide), 1, 3);
+            monster->corpse_interact->addHasvestableItem(getItem(0, 0, item_dict::harvest_wolf_bone), 3, 5);
             
             break;
         }
@@ -86,6 +103,9 @@ Entity* getMonster(int x, int y, int index) {
                                                              nullptr, 
                                                              new CorpseBurn, 
                                                              new CorpseRecall(1));
+            
+            monster->corpse_interact->addHasvestableItem(getItem(0, 0, item_dict::harvest_wolf_hide), 2, 4);
+            monster->corpse_interact->addHasvestableItem(getItem(0, 0, item_dict::harvest_wolf_bone), 4, 6);
             
             break;
         }

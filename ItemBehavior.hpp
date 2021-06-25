@@ -16,6 +16,12 @@ struct WeaponAttribute {
     WeaponAttribute(int attack, int speed);
 };
 
+struct Tradable {
+    int price;
+    
+    Tradable(int price);
+};
+
 class ItemBehavior {
 protected:
     //Attribute
@@ -27,6 +33,7 @@ protected:
     std::string description;
 public:
     //Attribute
+    Tradable *tradable;
     Purpose *purpose;
     TargetPicking *targeting;
     

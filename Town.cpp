@@ -3,6 +3,7 @@
 enum menu_dict {
     cave,
     storage,
+    general_shop,
     status,
     inventory
 };
@@ -72,6 +73,18 @@ void Town::doRenderTownConsole() {
                 case menu_dict::cave: return;
                 
                 case menu_dict::storage: doRenderStorage(); break;
+                
+                case menu_dict::general_shop: {
+                    Shop *shop = new Shop;
+                    shop->selling_item.push_back(item_dict::food);
+                    shop->selling_item.push_back(item_dict::incense);
+                    shop->selling_item.push_back(item_dict::molotov);
+                    shop->selling_item.push_back(item_dict::potion_healing);
+                    ShopInterface *shop_interface = new ShopInterface(shop);
+                    
+                    shop_interface->doRenderShop();
+                    delete shop;
+                }
                 
                 case menu_dict::status: break;
                 
@@ -400,9 +413,9 @@ void Town::getTownLocList() {
 //                                 "preist is here to provide quality healing for "
 //                                 "aventurer but with price"));
 //    
-//    loc_list.push(new TownOption("market - general shop",
-//                                 "exploration supplies like food, lantern oil "
-//                                 "sold here"));
+    loc_list.push(new TownOption("market - general shop",
+                                 "exploration supplies like food, lantern oil "
+                                 "sold here"));
 //    
 //    loc_list.push(new TownOption("market - armorsmith shop",
 //                                 "armor, cloth and shield sold here"));

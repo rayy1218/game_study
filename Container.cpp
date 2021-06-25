@@ -46,22 +46,24 @@ bool Container::addItem( Entity *to_add ) {
     return true;
 }
 
-void Container::deleteItem(Entity* to_delete, bool delete_all) {
-    int qty = (delete_all)? to_delete->item_behavior->getQty() : 1;
-    setCurrentWeight(getCurrentWeight() - to_delete->item_behavior->getWeight() * qty);
-    if (to_delete->item_behavior->getQty() == 1 || delete_all) {
+void Container::deleteItem(Entity* to_delete, int delete_num) {
+    setCurrentWeight(getCurrentWeight() - to_delete->item_behavior->getWeight() * delete_num);
+    if (to_delete->item_behavior->getQty() == 1 || 
+        delete_num == to_delete->item_behavior->getQty()) {
+        
         containing.remove(to_delete);
         delete to_delete;
         return;
     }
     
-    to_delete->item_behavior->setQty(to_delete->item_behavior->getQty() - 1);
+    to_delete->item_behavior->setQty(to_delete->item_behavior->getQty() - delete_num);
 }
 
-void Container::removeItem(Entity* to_remove, bool remove_all) {
-    int qty = (remove_all)? to_remove->item_behavior->getQty() : 1;
-    setCurrentWeight(getCurrentWeight() - to_remove->item_behavior->getWeight() * qty);
-    if (to_remove->item_behavior->getQty() == 1 || remove_all) {
+void Container::removeItem(Entity* to_remove, int remove_num) {
+    setCurrentWeight(getCurrentWeight() - to_remove->item_behavior->getWeight() * remove_num);
+    if (to_remove->item_behavior->getQty() == 1 ||
+        to_remove->item_behavior->getQty() == remove_num) {
+        
         containing.remove(to_remove);
         return;
     }
@@ -69,30 +71,24 @@ void Container::removeItem(Entity* to_remove, bool remove_all) {
     to_remove->item_behavior->setQty(to_remove->item_behavior->getQty() - 1);
 }
 
-void Container::dropItem(Entity* to_drop, bool drop_all) {
+void Container::dropItem(Entity* to_drop, int drop_num) {
     if (to_drop->item_behavior->getIsEquip()) {
         self->equipment->doUnequip(to_drop->item_behavior->getEquipmentIndex());
     }
     
-    if (drop_all || to_drop->item_behavior->getQty() == 1) {
-        removeItem(to_drop, drop_all);
-    
-        game.all_item.push(to_drop);
-        to_drop->setX(self->getX());
-        to_drop->setY(self->getY());
+    if (to_drop->item_behavior->getQty() == 1 ||
+        to_drop->item_behavior->getQty() == drop_num) {
         
-        return;
+        removeItem(to_drop, drop_num);
     }
-    else if (to_drop->item_behavior->getQty() > 1) {
+    else {
         removeItem(to_drop);
         to_drop = getItem(0, 0, to_drop->item_behavior->getItemId());
-        
-        game.all_item.push(to_drop);
-        to_drop->setX(self->getX());
-        to_drop->setY(self->getY());
-        
-        return;
     }
+    
+    game.all_item.push(to_drop);
+    to_drop->setX(self->getX());
+    to_drop->setY(self->getY());
 }
 
 Entity* Container::getIndexItem(int index) {

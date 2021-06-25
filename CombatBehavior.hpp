@@ -23,6 +23,9 @@ public:
     int doEntityHealed( int heal_amount );
     void updateEquipmentAttribute(bool is_primary);
     
+    int getTotalAtk();
+    int getTotalDef();
+    
     //Accessor
     int getMaxHp();
     int getCurrentHp();

@@ -30,6 +30,10 @@ void Hunger::doUpdateHungerEffect() {
         game.gui->addMessage(TCODColor::red, "%s take 1 damage due to stravation", game.player->getName().c_str());
     }
     
+    if (game.player->combat_behavior->checkEntityDead()) {
+        game.player->combat_behavior->getEntityDead();
+    }
+    
     game.player->combat_behavior->setAtkBoost(game.player->combat_behavior->getAtkBoost() + (hunger_percentage - 0.5));
     game.player->inventory->setBurdenBoost(game.player->inventory->getBurdenBoost() + (hunger_percentage - 0.5));
 }

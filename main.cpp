@@ -4,6 +4,16 @@ static const int CONSOLE_WIDTH = 130, CONSOLE_HEIGHT = 60;
 
 GameManager game(CONSOLE_WIDTH, CONSOLE_HEIGHT);
 
+void* operator new(size_t size) {
+//    std::cout << "allocate: " <<  size << std::endl;
+    return malloc(size);
+}
+
+void operator delete(void* memory, size_t size) {
+//    std::cout << "dellocate: " << size << std::endl;
+    free(memory);
+}
+
 int main(void) {
     if (checkFileExist("save.txt")) {game.doLoad();}
     
@@ -28,8 +38,4 @@ bool checkFileExist(std::string file_name) {
     file.close();
     
     return exist;
-}
-
-void printTest(std::string file_name, int line) {
-    std::cout << "FILE: " << file_name << " LINE: " << line << std::endl;
 }

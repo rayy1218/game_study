@@ -44,6 +44,8 @@ void CombatBehavior::getEntityDead() {
     game.all_character.remove(self);
     game.all_corpse.push(self);
     
+    game.gui->doResetFocusedEnemy();
+    
     delete self->control;
     self->control = new CorpseControl;
 }
@@ -53,6 +55,14 @@ bool CombatBehavior::checkEntityDead() {
         getEntityDead();
     }
     return (current_hp <= 0);
+}
+
+int CombatBehavior::getTotalAtk() {
+    return (attack_point + equipment_attack) * attack_boost;
+}
+
+int CombatBehavior::getTotalDef() {
+    return (defense_point + equipment_defense) * defense_boost;
 }
 
 PlayerCombatBehavior::PlayerCombatBehavior(Entity *self, int max_hp, 

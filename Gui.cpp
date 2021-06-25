@@ -13,17 +13,25 @@ Message::Message(std::string message, TCODColor text_color): message( message ),
 Gui::Gui() {
     log_console = new TCODConsole( 100, 10 );
     infomation_console = new TCODConsole(30 , 60);
+    focused_enemy = nullptr;
 }
 
 Gui::~Gui() {
-    
+    message_log.clearAndDelete();
+    delete log_console;
+    delete infomation_console;
 }
 
 void Gui::doRender() {
     log_console->setDefaultBackground( TCODColor::black );
     log_console->clear();
     
-    doCreateInfomationConsole();
+    infomation_console->setDefaultBackground(TCODColor::black);
+    infomation_console->setDefaultForeground(TCODColor::white);
+    infomation_console->clear();
+    infomation_console->printf(1, 1, "floor: %i", game.getFloorNum());
+    doRenderPlayerInfo();
+    doRenderEnemyInfo();
     
     int y = 1;
     for ( Message *message : message_log ) {
@@ -53,34 +61,188 @@ void Gui::addBar( int x, int y, int w, int h, TCODColor empty_color, TCODColor f
     infomation_console->printf( x, y, "%s: %.0f / %.0f", bar_title.c_str(), current_value, max_value );
 }
 
-void Gui::doCreateInfomationConsole() {
-    infomation_console->setDefaultBackground(TCODColor::black);
-    infomation_console->clear();
+void Gui::doRenderPlayerInfo() {
+    const int START_Y = 3;
     
+    infomation_console->setDefaultBackground(TCODColor::black);
     infomation_console->setDefaultForeground(TCODColor::white);
-    infomation_console->printf(1, 1, "floor: %i", game.getFloorNum());
-    infomation_console->printf(1, 3, "%s ", game.player->getName());
-    infomation_console->printf(1, 4, "attack: %i * %.2f", game.player->combat_behavior->getAtkPoint() +
+
+    infomation_console->printFrame(1, START_Y, 28, 10, false, TCOD_BKGND_SET, 
+                                   "player's status");
+    infomation_console->printf(2, START_Y + 1, "attack: %i * %.2f", game.player->combat_behavior->getAtkPoint() +
                                                           game.player->combat_behavior->getEquipmentAtkPoint(), 
                                                           game.player->combat_behavior->getAtkBoost());
-    infomation_console->printf(1, 5, "defense: %i * %.2f", game.player->combat_behavior->getDefPoint() +
+    infomation_console->printf(2, START_Y + 2, "defense: %i * %.2f", game.player->combat_behavior->getDefPoint() +
                                                            game.player->combat_behavior->getEquipmentDefPoint(), 
                                                            game.player->combat_behavior->getDefBoost());
     
     std::string hand_using = (game.player->equipment->isPrimaryHand())? "primary Hand" : "secondary Hand";
-    infomation_console->printf(1, 6, "using: %s", hand_using.c_str());
+    infomation_console->printf(2, START_Y + 3, "using: %s", hand_using.c_str());
     
-    addBar(1, 8, 28, 1, TCODColor::lighterRed, TCODColor::red, 
+    addBar(2, START_Y + 5, 26, 1, TCODColor::lighterRed, TCODColor::red, 
            game.player->combat_behavior->getMaxHp(), 
            game.player->combat_behavior->getCurrentHp(), "health", TCODColor::white);
-    addBar(1, 9, 28, 1, TCODColor::lighterBlue, TCODColor::han, 50, 25, "Mana", TCODColor::white);
-    addBar(1, 10, 28, 1, TCODColor::lighterViolet, TCODColor::violet, 
+    addBar(2, START_Y + 6, 26, 1, TCODColor::lighterBlue, TCODColor::han, 50, 25, "Mana", TCODColor::white);
+    addBar(2, START_Y + 7, 26, 1, TCODColor::lighterViolet, TCODColor::violet, 
            game.player_stats->tension->getMaxTension(), 
            game.player_stats->tension->getCurrentTension(), "tension", TCODColor::white);
-    addBar(1, 11, 28, 1, TCODColor::lighterSepia, TCODColor::sepia, 
+    addBar(2, START_Y + 8, 26, 1, TCODColor::lighterSepia, TCODColor::sepia, 
            game.player_stats->hunger->getMaxHungerPoint(), 
            game.player_stats->hunger->getCurrentHungerPoint(), "hunger", TCODColor::white );
 }
+
+void Gui::doRenderEnemyInfo() {
+    const int START_Y = 14;
+    
+    bool previous_focused_exist = false;
+    
+    infomation_console->setDefaultBackground(TCODColor::black);
+    infomation_console->setDefaultForeground(TCODColor::white);
+    
+    infomation_console->printFrame(1, START_Y, 28, 10, false, TCOD_BKGND_SET, "focusing enemy");
+
+    character_in_fov.erase(character_in_fov.begin(), character_in_fov.end());
+    for (Entity *character : game.all_character) {
+        if (character == game.player) {continue;}
+        if (!game.map->isInFov(character->getX(), character->getY())) {continue;}
+        character_in_fov.push_back(character);
+        if (focused_enemy == character) {
+            previous_focused_exist = true;
+        }
+    }
+    
+    if (!previous_focused_exist) {
+        if (character_in_fov.empty()) {
+            focused_enemy = nullptr;
+        }
+        else {
+            focused_enemy = character_in_fov[0];
+        }
+    }
+    
+    if (focused_enemy) {
+        infomation_console->printf(2, START_Y + 2, "name: %s", focused_enemy->getName().c_str());
+        
+        std::string health_str;
+        float health_percentage = (float)focused_enemy->combat_behavior->getCurrentHp() / 
+                                         focused_enemy->combat_behavior->getMaxHp();
+        if (health_percentage <= 0.2) {
+            health_str = "dying";
+        }
+        else if (health_percentage <= 0.5) {
+            health_str = "critical";
+        }
+        else if (health_percentage <= 0.8) {
+            health_str = "moderate damaged";
+        }
+        else if (health_percentage < 1) {
+            health_str = "minor damaged";
+        }
+        else if (health_percentage == 1) {
+            health_str = "whole";
+        }
+        infomation_console->printf(2, START_Y + 3, "health: %s", health_str.c_str());
+        
+        float dfs_adv = (float)game.player->combat_behavior->getTotalDef() /
+                               focused_enemy->combat_behavior->getTotalDef();
+        std::string dfs_str;
+        if (dfs_adv >= 0.8 && dfs_adv < 1.2) {
+            dfs_str = "none";
+        }
+        else if (dfs_adv >= 1.2 && dfs_adv < 1.5) {
+            dfs_str = "adv";
+        }
+        else if (dfs_adv >= 1.5 && dfs_adv < 2) {
+            dfs_str = "high adv";
+        }
+        else if (dfs_adv > 2) {
+            dfs_str = "extreme adv";
+        }
+        if (dfs_adv >= 0.5 && dfs_adv < 0.8) {
+            dfs_str = "disadv";
+        }
+        else if (dfs_adv >= 0.2 && dfs_adv < 0.5) {
+            dfs_str = "high disadv";
+        }
+        else if (dfs_adv < 0.2) {
+            dfs_str = "extreme disadv";
+        }
+        infomation_console->printf(2, START_Y + 4, "dfs: %s", dfs_str.c_str());
+        
+        float atk_adv = (float)game.player->combat_behavior->getTotalAtk() /
+                               focused_enemy->combat_behavior->getTotalAtk();
+        std::string atk_str;
+        if (atk_adv >= 0.8 && atk_adv < 1.2) {
+            atk_str = "none";
+        }
+        else if (atk_adv >= 1.2 && atk_adv < 1.5) {
+            atk_str = "adv";
+        }
+        else if (atk_adv >= 1.5 && atk_adv < 2) {
+            atk_str = "high adv";
+        }
+        else if (atk_adv > 2) {
+            atk_str = "extreme adv";
+        }
+        if (atk_adv >= 0.5 && atk_adv < 0.8) {
+            atk_str = "disadv";
+        }
+        else if (atk_adv >= 0.2 && atk_adv < 0.5) {
+            atk_str = "high disadv";
+        }
+        else if (atk_adv < 0.2) {
+            atk_str = "extreme disadv";
+        }
+        infomation_console->printf(2, START_Y + 5, "atk: %s", atk_str.c_str());
+        infomation_console->printf(2, START_Y + 6, "status: %s", 
+                                   focused_enemy->control->getStatus().c_str());
+        
+        return;
+    }
+    
+    infomation_console->printf(2, START_Y + 2, "name: none");
+}
+
+void Gui::doResetFocusedEnemy() {
+    focused_enemy = nullptr;
+}
+
+void Gui::doRenderFocusedEnemy() {
+    int enemy_num_in_fov = character_in_fov.size();
+    int index = 0;
+    
+    if (enemy_num_in_fov == 0) {
+        game.gui->addMessage(TCODColor::yellow, "no enemy around");
+        return;
+    }
+    
+    game.gui->addMessage(TCODColor::yellow, "[F] change target [SPACE] confirm target");
+    
+    while (true) {
+        focused_enemy = character_in_fov.at(index);
+        
+        game.doRender();
+        TCODConsole::root->setCharBackground(focused_enemy->getX(), focused_enemy->getY(), 
+                                             TCODColor::lightLime, TCOD_BKGND_SET);
+        
+        TCODConsole::root->flush();
+        
+        TCODSystem::waitForEvent(TCOD_EVENT_KEY_RELEASE, &game.keyboard, NULL, false);
+
+        if (game.keyboard.vk == TCODK_SPACE) {
+            break;
+        }
+
+        if (game.keyboard.vk == TCODK_CHAR && game.keyboard.c == 'f') {
+            index++;
+            if (index == enemy_num_in_fov) {
+                index = 0;
+            }
+            continue;
+        }
+    }
+}
+    
 
 void Gui::addMessage(TCODColor text_color, const char *fmt, ...) {
     va_list ap;
@@ -368,7 +530,9 @@ void Gui::doRenderTutorial() {
                                "[G] grab\n"
                                "[T] toggle primary/secondary hand"
                                "[I] inventory\n"
-                               "[O] observing mode\n\n"
+                               "[O] observing mode\n"
+                               "[F] change focusing enemy\n"
+                               "[P] interact with corpse\n\n"
                                "game\n\n"
                                "[F11] toggle fullscreen\n");
     

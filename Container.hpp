@@ -17,9 +17,9 @@ public:
     //Method
     int getItemNum();
     bool addItem(Entity *to_add);
-    void deleteItem(Entity *to_delete, bool delete_all = false);
-    void removeItem(Entity *to_remove, bool remove_all = false);
-    void dropItem(Entity *to_drop, bool drop_all = false);
+    void deleteItem(Entity *to_delete, int delete_num = 1);
+    void removeItem(Entity *to_remove, int remove_num = 1);
+    void dropItem(Entity *to_drop, int drop_num = 1);
     Entity* getIndexItem(int index);
     
     //Accessor

@@ -206,6 +206,7 @@ void GameManager::doStartup() {
 void GameManager::doFloorTravel() {
     gui->doRenderMapGenWait();
     
+    gui->doResetFocusedEnemy();
     game.all_character.remove(game.player);
     game.all_character.clearAndDelete();
     game.all_corpse.clearAndDelete();

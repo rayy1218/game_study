@@ -6,13 +6,16 @@ EquipmentAttribute::EquipmentAttribute(int defense, int speed): defense(defense)
 WeaponAttribute::WeaponAttribute(int attack, int speed): attack(attack), 
                                                          speed(speed) {}
 
+Tradable::Tradable(int price): price(price) {}
+
 ItemBehavior::ItemBehavior(Entity *self,  float weight, int qty, bool stackable): 
                            self(self), weight(weight), qty(qty), stackable(stackable),
-                           targeting(nullptr), purpose(nullptr) {}
+                           targeting(nullptr), purpose(nullptr), tradable(nullptr) {}
 
 ItemBehavior::~ItemBehavior() {
     if (targeting) {delete targeting;}
     if (purpose) {delete purpose;}
+    if (tradable) {delete tradable;}
 }
 
 bool ItemBehavior::pick(Entity *pick_by) {
