@@ -16,7 +16,7 @@ void ShopInterface::doRenderShop() {
         int shop_max_page = int(shop->selling_item.size() / PAGE_MAX_ITEM) + 1,
             self_max_page = int(game.player->inventory->getItemNum() / PAGE_MAX_ITEM) + 1,
             shop_page_item_num = shop->selling_item.size() - (shop_current_page - 1) * PAGE_MAX_ITEM,
-            self_page_item_num = game.player->inventory->getItemNum() - (self_current_page - 1) * PAGE_MAX_ITEM; 
+            self_page_item_num = game.player->inventory->getItemNum() - (self_current_page - 1) * PAGE_MAX_ITEM;
         
         if (pointing_shop_or_self) {
             int index = current_pointing + (shop_current_page - 1) * PAGE_MAX_ITEM;
@@ -130,6 +130,28 @@ void ShopInterface::doRenderShop() {
             int page_item_num = (pointing_shop_or_self)? shop_page_item_num : self_page_item_num;
             if (current_pointing >= page_item_num - 1) {continue;}
             current_pointing += 1;
+        }
+        
+        if (game.keyboard.vk == TCODK_LEFT) {
+            if (pointing_shop_or_self) {
+                if (shop_current_page == 1) {continue;}
+                shop_current_page -= 1;
+            }
+            else {
+                if (self_current_page == 1) {continue;}
+                self_current_page -= 1;
+            }
+        }
+        
+        if (game.keyboard.vk == TCODK_RIGHT) {
+            if (pointing_shop_or_self) {
+                if (shop_current_page == shop_max_page) {continue;}
+                shop_current_page -= 1;
+            }
+            else {
+                if (self_current_page == self_max_page) {continue;}
+                self_current_page -= 1;
+            }
         }
         
         if (game.keyboard.vk == TCODK_ENTER) {
