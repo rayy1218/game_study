@@ -30,15 +30,9 @@
 #include "Effect.hpp" //Effect List
 #include "Trap.hpp" //Trap List
 #include "CorpseInteraction.hpp"
-<<<<<<< HEAD
-
-#define TEST printTest(__FILE__, __LINE__)
-=======
 #include "Shop.hpp"
->>>>>>> fight_focus
 
 void doCloseWindow();
 bool checkFileExist(std::string file_name);
-void printTest(std::string file_name, int line);
 
 #endif /* MAIN_HPP */

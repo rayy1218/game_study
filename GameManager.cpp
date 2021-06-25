@@ -142,7 +142,7 @@ void GameManager::doRender() {
     }
     
     for ( Entity *entity : all_prop ) {
-        if (!map->isExplored(entity->getX(), entity->getY()) && false) {continue;}
+        if (!map->isExplored(entity->getX(), entity->getY())) {continue;}
         entity->doRender();
         if (entity->getAsciiChar() != '.') {
             TCODConsole::root->setCharBackground(entity->getX(), entity->getY(), 

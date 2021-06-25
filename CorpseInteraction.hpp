@@ -5,11 +5,7 @@ class CorpseHarvest {
 private:
     Entity *self;
 public:    
-<<<<<<< HEAD
-    TCODList<Entity*> harvest_item;
-=======
     std::vector<Entity*> harvest_item;
->>>>>>> fight_focus
     
     CorpseHarvest(Entity *self);
     ~CorpseHarvest();
