@@ -36,7 +36,6 @@ public:
     void doRenderMapGenWait();
     void doResetFocusedEnemy();
     
-    
     //Inventory
     Entity* getSelectedItem(Container *inventory);
     void doRenderPlayerInventory(Container *inventory);\
