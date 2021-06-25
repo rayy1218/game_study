@@ -5,7 +5,7 @@ class CorpseHarvest {
 private:
     Entity *self;
 public:    
-    TCODList<Entity*> harvest_item;
+    std::vector<Entity*> harvest_item;
     
     CorpseHarvest(Entity *self);
     ~CorpseHarvest();

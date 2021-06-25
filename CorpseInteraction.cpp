@@ -119,17 +119,19 @@ bool CorpseInteraction::doRenderCorpseInteraction() {
 CorpseHarvest::CorpseHarvest(Entity *self): self(self) {}
 
 CorpseHarvest::~CorpseHarvest() {
-    harvest_item.clearAndDelete();
+    for (Entity *item : harvest_item) {
+        delete item;
+    }
 }
 
 void CorpseInteraction::addHasvestableItem(Entity* item, int max_qty, int min_qty) {
     item->item_behavior->setQty(game.global_rng->getInt(min_qty, max_qty));
-    corpse_harvest->harvest_item.push(item);
+    corpse_harvest->harvest_item.push_back(item);
 }
 
 bool CorpseHarvest::doUse(int index) {
     Entity *item = nullptr;
-    item = harvest_item.get(index);
+    item = harvest_item.at(index);
     
     if (!game.player->inventory->addItem(item)) {
         game.gui->addMessage(TCODColor::red, "%s is too heavy to pick up", 
@@ -137,13 +139,12 @@ bool CorpseHarvest::doUse(int index) {
         return false;
     }
     
-    harvest_item.remove(item);
+    harvest_item.erase(harvest_item.begin() + index);
     
     game.gui->addMessage(TCODColor::green, "%s harvest %i %s",
                          game.player->getName().c_str(), item->item_behavior->getQty(),
                          item->getName().c_str());
-    
-    
+
     return true;
 }
 
@@ -164,15 +165,13 @@ int CorpseHarvest::doRenderContainer() {
         container_console.printFrame(0, 0, 50, 16, false, TCOD_BKGND_SET, "harvestable");
         
         container_console.setDefaultBackground(TCODColor::darkerGrey);
-        container_console.rect(2, 2, 46, 1, false, TCOD_BKGND_SET);
+        container_console.rect(2, pointing + 2, 46, 1, false, TCOD_BKGND_SET);
         
-        int y, alphabet = 'a';
-        for (y = 2; y <= 14; y++) {
-            Entity *item = harvest_item.get(y - 2);
-            if (item == nullptr) {continue;}
+        int y = 2, alphabet = 'a';
+        for (Entity *item : harvest_item) {
             container_console.printf(2, y, "%c) %s", alphabet, item->getName().c_str());
-            y++;
             alphabet++;
+            y++;
         }
         
         game.doRender();
@@ -220,7 +219,7 @@ bool CorpseLooting::doUse(int index) {
         return false;
     }
     
-    self->inventory->removeItem(item, true);
+    self->inventory->removeItem(item, item->item_behavior->getQty());
     
     game.gui->addMessage(TCODColor::green, "%s loot %i %s",
                          game.player->getName().c_str(), item->item_behavior->getQty(),
@@ -245,14 +244,13 @@ int CorpseLooting::doRenderContainer() {
         container_console.printFrame(0, 0, 50, 16, false, TCOD_BKGND_SET, "harvestable");
         
         container_console.setDefaultBackground(TCODColor::darkerGrey);
-        container_console.rect(2, 2, 46, 1, false, TCOD_BKGND_SET);
+        container_console.rect(2, pointing + 2, 46, 1, false, TCOD_BKGND_SET);
         
         int y, alphabet = 'a';
         for (y = 2; y <= 14; y++) {
             Entity *item = self->inventory->getIndexItem(y - 2);
-            if (item == nullptr) {continue;}
+            if (item == nullptr) {break;}
             container_console.printf(2, y, "%c) %s", alphabet, item->getName().c_str());
-            y++;
             alphabet++;
         }
         
