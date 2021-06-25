@@ -80,6 +80,11 @@ void Town::doRenderTownConsole() {
                     shop->selling_item.push_back(item_dict::incense);
                     shop->selling_item.push_back(item_dict::molotov);
                     shop->selling_item.push_back(item_dict::potion_healing);
+                    
+                    shop->buying_item.push_back(item_dict::loot_goblin_braclet);
+                    shop->buying_item.push_back(item_dict::loot_goblin_helmet);
+                    shop->buying_item.push_back(item_dict::loot_goblin_necklace);
+                    shop->buying_item.push_back(item_dict::harvest_meat);
                     ShopInterface *shop_interface = new ShopInterface(shop);
                     
                     shop_interface->doRenderShop();
