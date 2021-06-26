@@ -201,7 +201,7 @@ Entity* getItem(const int x, const int y, const int index) {
         case item_dict::weapon_gladius: {
             item = new Entity(x, y, "gladius", '/', TCODColor::silver);
             item->item_behavior = new ItemEquipmentBehavior(item, 1, 1, false, equipment_type::single_hand,
-                                                            nullptr, new WeaponAttribute(8, 45));
+                                                            nullptr, new WeaponAttribute(8, -1));
             item->item_behavior->setDesc("increase self attack by 8 and have speed of 45");
             break;
         }
@@ -209,7 +209,7 @@ Entity* getItem(const int x, const int y, const int index) {
         case item_dict::weapon_axe: {
             item = new Entity(x, y, "axe", '/', TCODColor::silver);
             item->item_behavior = new ItemEquipmentBehavior(item, 1.2, 1, false, equipment_type::single_hand,
-                                                            nullptr, new WeaponAttribute(10, 40));
+                                                            nullptr, new WeaponAttribute(10, -1));
             item->item_behavior->setDesc("increase self attack by 10 and have speed of 40");
             break;
         }
@@ -217,7 +217,7 @@ Entity* getItem(const int x, const int y, const int index) {
         case item_dict::weapon_mace: {
             item = new Entity(x, y, "mace", '/', TCODColor::silver);
             item->item_behavior = new ItemEquipmentBehavior(item, 1.5, 1, false, equipment_type::single_hand,
-                                                            nullptr, new WeaponAttribute(12, 40));
+                                                            nullptr, new WeaponAttribute(12, -1));
             item->item_behavior->setDesc("increase self attack by 12 and have speed of 40");
             break;
         }
@@ -225,7 +225,7 @@ Entity* getItem(const int x, const int y, const int index) {
         case item_dict::weapon_longsword: {
             item = new Entity(x, y, "longsword", '/', TCODColor::silver);
             item->item_behavior = new ItemEquipmentBehavior(item, 3, 1, false, equipment_type::two_hand,
-                                                            nullptr, new WeaponAttribute(15, 30));
+                                                            nullptr, new WeaponAttribute(15, -3));
             item->item_behavior->setDesc("increase self attack by 15 and have speed of 30");
             break;
         }
@@ -233,7 +233,7 @@ Entity* getItem(const int x, const int y, const int index) {
         case item_dict::weapon_battlehammer: {
             item = new Entity(x, y, "battlehammer", '/', TCODColor::silver);
             item->item_behavior = new ItemEquipmentBehavior(item, 3.5, 1, false, equipment_type::two_hand,
-                                                            nullptr, new WeaponAttribute(18, 25));
+                                                            nullptr, new WeaponAttribute(18, -3));
             item->item_behavior->setDesc("increase self attack by 18 and have speed of 25");
             break;
         }
@@ -241,7 +241,7 @@ Entity* getItem(const int x, const int y, const int index) {
         case item_dict::weapon_battleaxe: {
             item = new Entity(x, y, "battleaxe", '/', TCODColor::silver);
             item->item_behavior = new ItemEquipmentBehavior(item, 3, 1, false, equipment_type::two_hand,
-                                                            nullptr, new WeaponAttribute(20, 25));
+                                                            nullptr, new WeaponAttribute(20, -3));
             item->item_behavior->setDesc("increase self attack by 20 and have speed of 25");
             break;
         }
@@ -249,7 +249,7 @@ Entity* getItem(const int x, const int y, const int index) {
         case item_dict::weapon_knuckle: {
             item = new Entity(x, y, "knuckle", '/', TCODColor::silver);
             item->item_behavior = new ItemEquipmentBehavior(item, 0.2, 1, false, equipment_type::secondary_weapon,
-                                                            nullptr, new WeaponAttribute(6, 90));
+                                                            nullptr, new WeaponAttribute(6, 2));
             item->item_behavior->setDesc("increase self attack by 6 and have speed of 90");
             break;
         }
@@ -257,7 +257,7 @@ Entity* getItem(const int x, const int y, const int index) {
         case item_dict::weapon_dagger: {
             item = new Entity(x, y, "dagger", '/', TCODColor::silver);
             item->item_behavior = new ItemEquipmentBehavior(item, 0.2, 1, false, equipment_type::secondary_weapon,
-                                                            nullptr, new WeaponAttribute(6, 80));
+                                                            nullptr, new WeaponAttribute(6, 2));
             item->item_behavior->setDesc("increase self attack by 6 and have speed of 80");
             break;
         }

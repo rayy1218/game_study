@@ -165,7 +165,7 @@ void GameManager::doSpawnPlayer() {
     player->inventory = new Container(player, 20);
     player->equipment = new Equipment(player);
     player->move_behavior = new MoveBehavior(player);
-    player->combat_behavior = new PlayerCombatBehavior(player, 100, 2, 1, 50);
+    player->combat_behavior = new PlayerCombatBehavior(player, 100, 2, 1, 10, 10);
     
     all_character.push(player);
     

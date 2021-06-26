@@ -1,10 +1,10 @@
 #include "main.hpp"
 
-EquipmentAttribute::EquipmentAttribute(int defense, int speed): defense(defense),
-                                                                speed(speed) {}
+EquipmentAttribute::EquipmentAttribute(int defense, int agility): defense(defense),
+                                                                agility(agility) {}
 
-WeaponAttribute::WeaponAttribute(int attack, int speed): attack(attack), 
-                                                         speed(speed) {}
+WeaponAttribute::WeaponAttribute(int attack, int agility): attack(attack), 
+                                                         agility(agility) {}
 
 Tradable::Tradable(int price): price(price) {}
 
@@ -89,11 +89,11 @@ void ItemEquipmentBehavior::doUpdateEquipmentAttribute(Entity *self) {
     CombatBehavior *cbt = self->combat_behavior;
     if (weapon_attribute != nullptr) {
         cbt->setEquipmentAtkPoint(cbt->getEquipmentAtkPoint() + weapon_attribute->attack);
-        cbt->setSpeed(weapon_attribute->speed);
+        cbt->setAgility(weapon_attribute->agility);
     }
     if (equipment_attribute != nullptr) {
         cbt->setEquipmentDefPoint(cbt->getEquipmentDefPoint() + equipment_attribute->defense);
-        cbt->setSpeed(cbt->getSpeed() + equipment_attribute->speed);
+        cbt->setAgility(cbt->getAgility() + equipment_attribute->agility);
     }
 }
 

@@ -17,7 +17,6 @@ Entity::~Entity() {
 }
 
 void Entity::doUpdate() {
-    if (combat_behavior) {combat_behavior->setSpeed(combat_behavior->getDefaultSpeed());}
     control->doUpdate();
     
     if (equipment != nullptr) {

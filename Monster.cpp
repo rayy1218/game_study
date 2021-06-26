@@ -7,7 +7,7 @@ Entity* getMonster(int x, int y, int index) {
             monster = new Entity(x, y, "goblin", 'o', TCODColor::darkLime);
             monster->control = new EnemyControl(monster);
             monster->move_behavior = new MoveBehavior(monster);
-            monster->combat_behavior = new EnemyCombatBehavior(monster, 20, 8, 0, 50);
+            monster->combat_behavior = new EnemyCombatBehavior(monster, 20, 8, 0, 8, 12);
             monster->corpse_interact = new CorpseInteraction(monster,
                                                              new CorpseHarvest(monster), 
                                                              new CorpseLooting(monster), 
@@ -31,7 +31,7 @@ Entity* getMonster(int x, int y, int index) {
             monster = new Entity(x, y, "goblin skirmisher", 'o', TCODColor::darkerGreen);
             monster->control = new EnemyControl(monster);
             monster->move_behavior = new MoveBehavior(monster);
-            monster->combat_behavior = new EnemyCombatBehavior(monster, 25, 10, 1, 50);
+            monster->combat_behavior = new EnemyCombatBehavior(monster, 25, 10, 10, 12, 12);
             monster->corpse_interact = new CorpseInteraction(monster,
                                                              new CorpseHarvest(monster), 
                                                              new CorpseLooting(monster), 
@@ -56,7 +56,7 @@ Entity* getMonster(int x, int y, int index) {
                                  TCODColor::darkerGreen + TCODColor::grey);
             monster->control = new EnemyControl(monster);
             monster->move_behavior = new MoveBehavior(monster);
-            monster->combat_behavior = new EnemyCombatBehavior(monster, 25, 10, 4,30);
+            monster->combat_behavior = new EnemyCombatBehavior(monster, 25, 10, 4, 10, 7);
             monster->corpse_interact = new CorpseInteraction(monster,
                                                              new CorpseHarvest(monster), 
                                                              new CorpseLooting(monster), 
@@ -80,7 +80,7 @@ Entity* getMonster(int x, int y, int index) {
             monster = new Entity(x, y, "wolf", 'G', TCODColor::lightestGrey);
             monster->control = new EnemyControl(monster);
             monster->move_behavior = new MoveBehavior(monster);
-            monster->combat_behavior = new EnemyCombatBehavior(monster, 20, 8, 0, 80);
+            monster->combat_behavior = new EnemyCombatBehavior(monster, 20, 8, 0, 9, 14);
             monster->corpse_interact = new CorpseInteraction(monster,
                                                              new CorpseHarvest(monster), 
                                                              nullptr, 
@@ -97,7 +97,7 @@ Entity* getMonster(int x, int y, int index) {
             monster = new Entity(x, y, "gaint wolf", 'G', TCODColor::lighterGrey);
             monster->control = new EnemyControl(monster);
             monster->move_behavior = new MoveBehavior(monster);
-            monster->combat_behavior = new EnemyCombatBehavior(monster, 30, 15, 1, 70);
+            monster->combat_behavior = new EnemyCombatBehavior(monster, 30, 15, 1, 10, 15);
             monster->corpse_interact = new CorpseInteraction(monster,
                                                              new CorpseHarvest(monster), 
                                                              nullptr, 

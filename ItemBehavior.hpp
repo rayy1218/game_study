@@ -5,13 +5,13 @@ class Purpose;
 class TargetPicking;
 
 struct EquipmentAttribute {
-    int defense, speed;
+    int defense, agility;
     
     EquipmentAttribute(int defense, int speed);
 };
 
 struct WeaponAttribute {
-    int attack, speed;
+    int attack, agility;
     
     WeaponAttribute(int attack, int speed);
 };

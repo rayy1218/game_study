@@ -1,11 +1,12 @@
 #include "main.hpp"
 
-CombatBehavior::CombatBehavior(Entity *self, int max_hp, int attack_point, int defense_point, float default_speed):
+CombatBehavior::CombatBehavior(Entity *self, int max_hp, int attack_point, 
+                               int defense_point, int accuracy, int agility):
                                self(self), max_hp(max_hp), current_hp(max_hp), 
                                attack_point(attack_point), defense_point(defense_point), 
                                attack_boost(1), equipment_attack(0), 
                                defense_boost(1), equipment_defense(0),
-                               default_speed(default_speed) {}
+                               accuracy(accuracy), agility(agility) {}
 
 void CombatBehavior::updateEquipmentAttribute(bool is_primary) {
     equipment_defense = 0;
@@ -66,8 +67,10 @@ int CombatBehavior::getTotalDef() {
 }
 
 PlayerCombatBehavior::PlayerCombatBehavior(Entity *self, int max_hp, 
-                                           int attack_point, int defense_point, float default_speed): 
-                      CombatBehavior(self, max_hp, attack_point, defense_point, default_speed) {}
+                                           int attack_point, int defense_point, 
+                                           int accuracy, int agility): 
+                      CombatBehavior(self, max_hp, attack_point, defense_point, 
+                                     accuracy, agility) {}
 
 void PlayerCombatBehavior::getEntityDead() {
     game.setStatus(status::DEFEAT);
@@ -79,30 +82,33 @@ int PlayerCombatBehavior::doEntityAttack(bool is_primary) {
 }
 
 EnemyCombatBehavior::EnemyCombatBehavior(Entity *self, int max_hp, 
-                                         int attack_point, int defense_point, float default_speed):
-                     CombatBehavior(self, max_hp, attack_point, defense_point, default_speed) {}
+                                         int attack_point, int defense_point, 
+                                         int accuracy, int agility):
+                     CombatBehavior(self, max_hp, attack_point, defense_point, 
+                                    accuracy, agility) {}
 
 void EnemyCombatBehavior::getEntityDead() {
     game.gui->addMessage(TCODColor::green, "%s is dead", self->getName().c_str());
     CombatBehavior::getEntityDead();
 }
 
-int CombatBehavior::getMaxHp() { return max_hp; }
-int CombatBehavior::getCurrentHp() { return current_hp; }
-int CombatBehavior::getAtkPoint() { return attack_point; }
-int CombatBehavior::getDefPoint() { return defense_point; }
-int CombatBehavior::getEquipmentAtkPoint() { return equipment_attack; }
-int CombatBehavior::getEquipmentDefPoint() { return equipment_defense; }
-float CombatBehavior::getAtkBoost() { return attack_boost; }
-float CombatBehavior::getDefBoost() { return defense_boost; }
-float CombatBehavior::getDefaultSpeed() {return default_speed;}
-float CombatBehavior::getSpeed() {return speed;}
-void CombatBehavior::setMaxHp( int input ) { max_hp = input; }
-void CombatBehavior::setCurrentHp( int input ) { current_hp = input; }
-void CombatBehavior::setAtkPoint( int input ) { attack_point = input; }
-void CombatBehavior::setDefPoint( int input ) { defense_point = input; }
-void CombatBehavior::setEquipmentAtkPoint( int input ) { equipment_attack = input; }
-void CombatBehavior::setEquipmentDefPoint( int input ) { equipment_defense = input; }
-void CombatBehavior::setAtkBoost( float input ) { attack_boost = input; }
-void CombatBehavior::setDefBoost( float input ) { defense_boost = input; }
-void CombatBehavior::setSpeed(float input) {speed = input;}
+int CombatBehavior::getMaxHp() {return max_hp;}
+int CombatBehavior::getCurrentHp() {return current_hp;}
+int CombatBehavior::getAtkPoint() {return attack_point;}
+int CombatBehavior::getDefPoint() {return defense_point;}
+int CombatBehavior::getEquipmentAtkPoint() {return equipment_attack;}
+int CombatBehavior::getEquipmentDefPoint() {return equipment_defense;}
+float CombatBehavior::getAtkBoost() {return attack_boost;}
+float CombatBehavior::getDefBoost() {return defense_boost;}
+int CombatBehavior::getAccuracy() {return accuracy;}
+int CombatBehavior::getAgility() {return agility;}
+void CombatBehavior::setMaxHp(int input) {max_hp = input;}
+void CombatBehavior::setCurrentHp(int input) {current_hp = input;}
+void CombatBehavior::setAtkPoint(int input) {attack_point = input;}
+void CombatBehavior::setDefPoint(int input) {defense_point = input;}
+void CombatBehavior::setEquipmentAtkPoint(int input) {equipment_attack = input;}
+void CombatBehavior::setEquipmentDefPoint(int input) {equipment_defense = input;}
+void CombatBehavior::setAtkBoost(float input) {attack_boost = input;}
+void CombatBehavior::setDefBoost(float input) {defense_boost = input;}
+void CombatBehavior::setAccuracy(int input) {accuracy = input;}
+void CombatBehavior::setAgility(int input) {agility = input;}

@@ -2,6 +2,8 @@
 
 #include "main.hpp"
 
+const int BASE_MISS_RATE = 30, BASE_HIT_RATE = 50, BASE_CRITICAL_RATE = 20;
+
 class Pathfinding : public ITCODPathCallback {
     public:
         float getWalkCost(int xFrom, int yFrom, int xTo, int yTo, void *userData) const {
@@ -106,28 +108,34 @@ bool PlayerControl::handleMoveOrAttack(int dx, int dy) {
     
     for (Entity *character : game.all_character) {
         if (character->getX() == to_x && character->getY() == to_y) {
-            int hitting_count = (self->combat_behavior->getSpeed() / 
-                                 character->combat_behavior->getSpeed());
-            if (hitting_count == 0) {hitting_count = 1;}
+            int hitting_count = (self->combat_behavior->getAgility() / 
+                                 character->combat_behavior->getAgility()),
+                miss_rate = BASE_MISS_RATE * (self->combat_behavior->getAgility() / 10),
+                hit_rate = BASE_HIT_RATE * (character->combat_behavior->getAccuracy() / 10),
+                critical_rate = BASE_CRITICAL_RATE * (character->combat_behavior->getAccuracy() / 10);
             
+            if (hitting_count == 0) {hitting_count = 1;}
+
             for (int i = 1; i <= hitting_count; i++) {
-                int attack_damage = self->combat_behavior->doEntityAttack();
-                int dice = game.global_rng->getInt(1, 10);
                 
-                if (dice <= 3) {
+                
+                int attack_damage = self->combat_behavior->doEntityAttack();
+                int dice = game.global_rng->getInt(1, miss_rate + hit_rate + critical_rate);
+                
+                if (dice <= miss_rate) {
                     game.gui->addMessage(TCODColor::red, "%s missed its attack",
                                          self->getName().c_str());
                     return true;
                 }
-                if (dice == 10) {
+                if (dice > miss_rate + hit_rate) {
                     attack_damage *= 1.5;
                 }
                 
                 int damage_taken = character->combat_behavior->doEntityAttacked(attack_damage);
                 
-                game.gui->addMessage( (damage_taken == 0)? TCODColor::red : TCODColor::green,
-                                      "you attack %s and dealt %i - %i damage"
-                                      , character->getName().c_str(), attack_damage, attack_damage - damage_taken);
+                game.gui->addMessage((damage_taken == 0)? TCODColor::red : TCODColor::green,
+                                     "you attack %s and dealt %i - %i damage"
+                                     , character->getName().c_str(), attack_damage, attack_damage - damage_taken);
 
                 if (character->combat_behavior->checkEntityDead()) {break;}
             }
@@ -135,7 +143,7 @@ bool PlayerControl::handleMoveOrAttack(int dx, int dy) {
         }
     }
     
-    return self->move_behavior->doMoveEntity( to_x, to_y );
+    return self->move_behavior->doMoveEntity(to_x, to_y);
 }
 
 bool PlayerControl::handleCharInput(int ascii) {
@@ -277,20 +285,23 @@ void EnemyControl::handleMoveOrAttack() {
     path_to_player->walk(&x, &y, false);
     
     if (getDistanceTo(game.player->getX(), game.player->getY()) < 2 ) {
-        int hitting_count = (self->combat_behavior->getSpeed() / 
-                             game.player->combat_behavior->getSpeed());
+        int hitting_count = (self->combat_behavior->getAgility() / 
+                             game.player->combat_behavior->getAgility()),
+            miss_rate = BASE_MISS_RATE * (self->combat_behavior->getAgility() / 10),
+            hit_rate = BASE_HIT_RATE * (game.player->combat_behavior->getAccuracy() / 10),
+            critical_rate = BASE_CRITICAL_RATE * (game.player->combat_behavior->getAccuracy() / 10);
         if (hitting_count == 0) {hitting_count = 1;}
         
         for (int i = 1; i <= hitting_count; i++) {
             int attack_damage = self->combat_behavior->doEntityAttack();
-            int dice = game.global_rng->getInt(1, 10);
+            int dice = game.global_rng->getInt(1, miss_rate + hit_rate + critical_rate);
             
-            if (dice <= 3) {
+            if (dice <= miss_rate) {
                 game.gui->addMessage(TCODColor::green, "%s missed its attack",
                                      self->getName().c_str());
                 return;
             }
-            if (dice == 10) {
+            if (dice > miss_rate + hit_rate) {
                 attack_damage *= 1.5;
             }
                 
@@ -306,7 +317,7 @@ void EnemyControl::handleMoveOrAttack() {
         return;
     }
     
-    self->move_behavior->doMoveEntity( x, y );
+    self->move_behavior->doMoveEntity(x, y);
 }
 
 std::string EnemyControl::getStatus() {
