@@ -5,12 +5,13 @@ CombatBehavior::CombatBehavior(Entity *self, int max_hp, int attack_point,
                                self(self), max_hp(max_hp), current_hp(max_hp), 
                                attack_point(attack_point), defense_point(defense_point), 
                                attack_boost(1), equipment_attack(0), 
-                               defense_boost(1), equipment_defense(0),
+                               defense_boost(1), equipment_defense(0), equipment_agility(0),
                                accuracy(accuracy), agility(agility) {}
 
 void CombatBehavior::updateEquipmentAttribute(bool is_primary) {
     equipment_defense = 0;
     equipment_attack = 0;
+    equipment_agility = 0;
     self->equipment->getAllEquipmentAttribute(is_primary);
 }
 
@@ -58,14 +59,6 @@ bool CombatBehavior::checkEntityDead() {
     return (current_hp <= 0);
 }
 
-int CombatBehavior::getTotalAtk() {
-    return (attack_point + equipment_attack) * attack_boost;
-}
-
-int CombatBehavior::getTotalDef() {
-    return (defense_point + equipment_defense) * defense_boost;
-}
-
 PlayerCombatBehavior::PlayerCombatBehavior(Entity *self, int max_hp, 
                                            int attack_point, int defense_point, 
                                            int accuracy, int agility): 
@@ -98,6 +91,7 @@ int CombatBehavior::getAtkPoint() {return attack_point;}
 int CombatBehavior::getDefPoint() {return defense_point;}
 int CombatBehavior::getEquipmentAtkPoint() {return equipment_attack;}
 int CombatBehavior::getEquipmentDefPoint() {return equipment_defense;}
+int CombatBehavior::getEquipmentAgPoint() {return equipment_agility;}
 float CombatBehavior::getAtkBoost() {return attack_boost;}
 float CombatBehavior::getDefBoost() {return defense_boost;}
 int CombatBehavior::getAccuracy() {return accuracy;}
@@ -108,7 +102,20 @@ void CombatBehavior::setAtkPoint(int input) {attack_point = input;}
 void CombatBehavior::setDefPoint(int input) {defense_point = input;}
 void CombatBehavior::setEquipmentAtkPoint(int input) {equipment_attack = input;}
 void CombatBehavior::setEquipmentDefPoint(int input) {equipment_defense = input;}
+void CombatBehavior::setEquipmentAgPoint(int input) {equipment_agility = input;}
 void CombatBehavior::setAtkBoost(float input) {attack_boost = input;}
 void CombatBehavior::setDefBoost(float input) {defense_boost = input;}
 void CombatBehavior::setAccuracy(int input) {accuracy = input;}
 void CombatBehavior::setAgility(int input) {agility = input;}
+
+int CombatBehavior::getTotalAtk() {
+    return int((getAtkPoint() + getEquipmentAtkPoint()) * getAtkBoost());
+}
+
+int CombatBehavior::getTotalDef() {
+    return int((getDefPoint() + getEquipmentDefPoint()) * getDefBoost());
+}
+
+int CombatBehavior::getTotalAg() {
+    return int(getAgility() + getEquipmentAgPoint());
+}

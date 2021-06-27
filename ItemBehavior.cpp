@@ -89,11 +89,11 @@ void ItemEquipmentBehavior::doUpdateEquipmentAttribute(Entity *self) {
     CombatBehavior *cbt = self->combat_behavior;
     if (weapon_attribute != nullptr) {
         cbt->setEquipmentAtkPoint(cbt->getEquipmentAtkPoint() + weapon_attribute->attack);
-        cbt->setAgility(weapon_attribute->agility);
+        cbt->setEquipmentAgPoint(cbt->getEquipmentAgPoint() + weapon_attribute->agility);
     }
     if (equipment_attribute != nullptr) {
         cbt->setEquipmentDefPoint(cbt->getEquipmentDefPoint() + equipment_attribute->defense);
-        cbt->setAgility(cbt->getAgility() + equipment_attribute->agility);
+        cbt->setEquipmentAgPoint(cbt->getEquipmentAgPoint() + equipment_attribute->agility);
     }
 }
 

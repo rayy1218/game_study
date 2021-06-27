@@ -108,11 +108,10 @@ bool PlayerControl::handleMoveOrAttack(int dx, int dy) {
     
     for (Entity *character : game.all_character) {
         if (character->getX() == to_x && character->getY() == to_y) {
-            int hitting_count = (self->combat_behavior->getAgility() / 
-                                 character->combat_behavior->getAgility()),
-                miss_rate = BASE_MISS_RATE * (self->combat_behavior->getAgility() / 10),
-                hit_rate = BASE_HIT_RATE * (character->combat_behavior->getAccuracy() / 10),
-                critical_rate = BASE_CRITICAL_RATE * (character->combat_behavior->getAccuracy() / 10);
+            int hitting_count = (self->combat_behavior->getTotalAg() / character->combat_behavior->getTotalAg()),
+                miss_rate = BASE_MISS_RATE * float(character->combat_behavior->getTotalAg() / 10),
+                hit_rate = BASE_HIT_RATE * float(self->combat_behavior->getAccuracy() / 10),
+                critical_rate = BASE_CRITICAL_RATE * float(self->combat_behavior->getAccuracy() / 10);
             
             if (hitting_count == 0) {hitting_count = 1;}
 
@@ -285,11 +284,10 @@ void EnemyControl::handleMoveOrAttack() {
     path_to_player->walk(&x, &y, false);
     
     if (getDistanceTo(game.player->getX(), game.player->getY()) < 2 ) {
-        int hitting_count = (self->combat_behavior->getAgility() / 
-                             game.player->combat_behavior->getAgility()),
-            miss_rate = BASE_MISS_RATE * (self->combat_behavior->getAgility() / 10),
-            hit_rate = BASE_HIT_RATE * (game.player->combat_behavior->getAccuracy() / 10),
-            critical_rate = BASE_CRITICAL_RATE * (game.player->combat_behavior->getAccuracy() / 10);
+        int hitting_count = (self->combat_behavior->getTotalAg() / game.player->combat_behavior->getTotalAg()),
+            miss_rate = BASE_MISS_RATE * float(game.player->combat_behavior->getTotalAg() / 10),
+            hit_rate = BASE_HIT_RATE * float(self->combat_behavior->getAccuracy() / 10),
+            critical_rate = BASE_CRITICAL_RATE * float(self->combat_behavior->getAccuracy() / 10);
         if (hitting_count == 0) {hitting_count = 1;}
         
         for (int i = 1; i <= hitting_count; i++) {

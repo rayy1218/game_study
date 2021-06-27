@@ -68,17 +68,12 @@ enum item_dict{
     material_copper_chunk,
             
     //loot
-    loot_goblin_necklace,
-    loot_goblin_braclet,
-    loot_goblin_helmet,
+    loot_goblin,
     
     //harvest
     harvest_meat,
-    harvest_goblin_hide,
-    harvest_goblin_bone,
-    harvest_goblin_eye,
-    harvest_wolf_hide,
-    harvest_wolf_bone,
+    harvest_hide,
+    harvest_bone
 };
 
 int getIndexWeightedRandom(int *weight_arr, int arr_size);

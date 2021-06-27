@@ -3,14 +3,36 @@
 
 class Entity;
 
-static const int MONSTER_TYPE = 5;
+static const int MONSTER_TYPE = 15;
 
 enum monster_dict{
-    goblin_archer       = 1,
-    goblin_skirmisher   = 2,
-    goblin_armored      = 3,
-    wolf                = 4,
-    gaint_wolf          = 5
+    goblin_skirmisher   = 1,
+    goblin_armored      = 2,
+    wolf                = 3,
+    skeleton            = 4,
+    zombie              = 5,
+    zombie_high         = 6,
+    slime               = 7,
+    slime_acid          = 8,
+    slime_gaint         = 9,
+    minotaur            = 10,
+    medusa              = 11,
+    griffin             = 12,
+    imp                 = 13,
+    demon               = 14,
+    tentacle            = 15,
+    dragon_child,
+    dragon_adult,
+    dragon_boss,
+    one_eyed_infantry,
+    one_eyed_cavalry,
+    one_eyed_boss,
+    tyrant_blade,
+    tyrant_lance,
+    tyrant_boss,
+    elder_marble,
+    elder_tome,
+    elder_boss
 };
 
 Entity* getMonster(int x, int y, int index);

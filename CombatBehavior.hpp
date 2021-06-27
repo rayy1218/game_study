@@ -8,7 +8,7 @@ protected:
     //Attribute
     Entity *self;
     int max_hp, current_hp, attack_point, defense_point, equipment_attack,  
-        equipment_defense, accuracy, agility;
+        equipment_defense, accuracy, agility, equipment_agility;
     Equipment *self_equipment;
     float attack_boost, defense_boost;
 public:
@@ -24,9 +24,6 @@ public:
     int doEntityHealed(int heal_amount);
     void updateEquipmentAttribute(bool is_primary);
     
-    int getTotalAtk();
-    int getTotalDef();
-    
     //Accessor
     int getMaxHp();
     int getCurrentHp();
@@ -34,17 +31,21 @@ public:
     int getDefPoint();
     int getEquipmentAtkPoint();
     int getEquipmentDefPoint();
+    int getEquipmentAgPoint();
     float getAtkBoost();
     float getDefBoost();
-    float getDefaultSpeed();
     int getAccuracy();
     int getAgility();
+    int getTotalAtk();
+    int getTotalDef();
+    int getTotalAg();
     void setMaxHp(int input);
     void setCurrentHp(int input);
     void setAtkPoint(int input);
     void setDefPoint(int input);
     void setEquipmentAtkPoint(int input);
     void setEquipmentDefPoint(int input);
+    void setEquipmentAgPoint(int input);
     void setAtkBoost(float input);
     void setDefBoost(float input);
     void setAccuracy(int input);

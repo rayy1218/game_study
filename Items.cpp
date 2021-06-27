@@ -272,30 +272,12 @@ Entity* getItem(const int x, const int y, const int index) {
             break;
         }
         
-        case item_dict::loot_goblin_braclet: {
-            item = new Entity(x, y, "mundane braclet", '"', TCODColor::silver);
+        case item_dict::loot_goblin: {
+            item = new Entity(x, y, "goblin loot", '"', TCODColor::darkGreen);
             item->item_behavior = new ItemBehavior(item, 0.1, 1, true);
-            item->item_behavior->setDesc("braclet made by bending a metal plate to"
-                                         "shape of circle");
+            item->item_behavior->setDesc("loot from goblin contain common goblin equipment such as "
+                                         "braclet, necklace, skull helmet");
             item->item_behavior->tradable = new Tradable(14);
-            break;
-        }
-        
-        case item_dict::loot_goblin_necklace: {
-            item = new Entity(x, y, "necklace of teeth", '"', TCODColor::grey);
-            item->item_behavior = new ItemBehavior(item, 0.1, 1, true);
-            item->item_behavior->setDesc("teeth of small creature string together "
-                                         "by a rope of straw");
-            item->item_behavior->tradable = new Tradable(9);
-            break;
-        }
-        
-        case item_dict::loot_goblin_helmet: {
-            item = new Entity(x, y, "skull helmet", '"', TCODColor::grey);
-            item->item_behavior = new ItemBehavior(item, 0.2, 1, true);
-            item->item_behavior->setDesc("a flat long skull of creature wear by "
-                                         "high goblin");
-            item->item_behavior->tradable = new Tradable(9);
             break;
         }
         
@@ -308,50 +290,24 @@ Entity* getItem(const int x, const int y, const int index) {
             break;
         }
         
-        case item_dict::harvest_goblin_hide: {
-            item = new Entity(x, y, "goblin hide", '"', TCODColor::darkLime);
+        case item_dict::harvest_bone: {
+            item = new Entity(x, y, "bone", '"', TCODColor::grey);
             item->item_behavior = new ItemBehavior(item, 0.2, 1, true);
-            item->item_behavior->setDesc("harvested from goblin often used in "
-                                         "cloth and armor crafting");
-            item->item_behavior->tradable = new Tradable(10);
-            break;
-        }
-        
-        case item_dict::harvest_goblin_bone: {
-            item = new Entity(x, y, "goblin bone", '"', TCODColor::grey);
-            item->item_behavior = new ItemBehavior(item, 0.2, 1, true);
-            item->item_behavior->setDesc("harvested from goblin often used in "
+            item->item_behavior->setDesc("harvested from creature often used in "
                                          "nercomancy");
             item->item_behavior->tradable = new Tradable(8);
             break;
         }
         
-        case item_dict::harvest_goblin_eye: {
-            item = new Entity(x, y, "goblin eye", '"', TCODColor::grey);
-            item->item_behavior = new ItemBehavior(item, 0.1, 1, true);
-            item->item_behavior->setDesc("harvested from goblin often used in "
-                                         "potion alchemy and medium magus");
-            item->item_behavior->tradable = new Tradable(14);
-            break;
-        }
-        
-        case item_dict::harvest_wolf_hide: {
-            item = new Entity(x, y, "wolf hide", '"', TCODColor::lightGrey);
+        case item_dict::harvest_hide: {
+            item = new Entity(x, y, "hide", '"', TCODColor::lightGrey);
             item->item_behavior = new ItemBehavior(item, 0.3, 1, true);
-            item->item_behavior->setDesc("harvested from wolf often used in "
+            item->item_behavior->setDesc("harvested from creature often used in "
                                          "cloth and armor crafting");
             item->item_behavior->tradable = new Tradable(16);
             break;
         }
         
-        case item_dict::harvest_wolf_bone: {
-            item = new Entity(x, y, "wolf bone", '"', TCODColor::grey);
-            item->item_behavior = new ItemBehavior(item, 0.2, 1, true);
-            item->item_behavior->setDesc("harvested from wolf often used in "
-                                         "nercomancy");
-            item->item_behavior->tradable = new Tradable(16);
-            break;
-        }
     }
     
     item->item_behavior->setItemId(index);
