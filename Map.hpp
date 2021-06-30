@@ -27,6 +27,7 @@ public:
     void getFov(int x, int y);
     bool isInFov(int x, int y);
     void doRender();
+    void doGenerateBoss();
     void addMonster(int x, int y);
     void addItem(int x, int y);
     void addTrap(int x, int y);

@@ -250,51 +250,120 @@ Entity* getMonster(int x, int y, int index) {
         }
         
         case monster_dict::dragon_child: {
-            
+            monster = new Entity(x, y, "dragon infant", 'd', TCODColor::darkerRed);
+            monster->control = new EnemyControl(monster);
+            monster->move_behavior = new MoveBehavior(monster);
+            monster->combat_behavior = new EnemyCombatBehavior(monster, 18, 7, 3, 10, 12);
+            monster->corpse_interact = new CorpseInteraction(monster,
+                                                             nullptr, 
+                                                             nullptr, 
+                                                             new CorpseBurn, 
+                                                             new CorpseRecall(1)); 
+            break;
         }
         
         case monster_dict::dragon_adult: {
-            
+            monster = new Entity(x, y, "grown dragon", 'd', TCODColor::darkerRed);
+            monster->control = new EnemyControl(monster);
+            monster->move_behavior = new MoveBehavior(monster);
+            monster->combat_behavior = new EnemyCombatBehavior(monster, 28, 7, 5, 10, 14);
+            monster->corpse_interact = new CorpseInteraction(monster,
+                                                             nullptr, 
+                                                             nullptr, 
+                                                             new CorpseBurn, 
+                                                             new CorpseRecall(1)); 
+            break;
         }
         
         case monster_dict::dragon_boss: {
-            
+            monster = new Entity(x, y, "the obsidian", 'D', TCODColor::darkerPurple);
+            monster->control = new EnemyControl(monster);
+            monster->move_behavior = new MoveBehavior(monster);
+            monster->combat_behavior = new EnemyCombatBehavior(monster, 50, 20, 9, 9, 10);
+            monster->corpse_interact = new CorpseInteraction(monster,
+                                                             nullptr, 
+                                                             nullptr, 
+                                                             new CorpseBurn, 
+                                                             nullptr); 
+            break;
         }
         
         case monster_dict::one_eyed_infantry: {
-            
+            monster = new Entity(x, y, "walking wall", 't', TCODColor::darkerPurple);
+            monster->control = new EnemyControl(monster);
+            monster->move_behavior = new MoveBehavior(monster);
+            monster->combat_behavior = new EnemyCombatBehavior(monster, 18, 12, 5, 10, 10);
+            monster->corpse_interact = new CorpseInteraction(monster,
+                                                             nullptr, 
+                                                             nullptr, 
+                                                             new CorpseBurn, 
+                                                             new CorpseRecall(1)); 
+            break;
         }
         
         case monster_dict::one_eyed_cavalry: {
-            
+            monster = new Entity(x, y, "iron rider", 't', TCODColor::darkerPurple);
+            monster->control = new EnemyControl(monster);
+            monster->move_behavior = new MoveBehavior(monster);
+            monster->combat_behavior = new EnemyCombatBehavior(monster, 18, 12, 3, 8, 15);
+            monster->corpse_interact = new CorpseInteraction(monster,
+                                                             nullptr, 
+                                                             nullptr, 
+                                                             new CorpseBurn, 
+                                                             new CorpseRecall(1)); 
+            break;
         }
         
         case monster_dict::one_eyed_boss: {
-            
+            monster = new Entity(x, y, "the one eyed", 'T', TCODColor::darkerPurple);
+            monster->control = new EnemyControl(monster);
+            monster->move_behavior = new MoveBehavior(monster);
+            monster->combat_behavior = new EnemyCombatBehavior(monster, 32, 18, 3, 12, 10);
+            monster->corpse_interact = new CorpseInteraction(monster,
+                                                             nullptr, 
+                                                             nullptr, 
+                                                             new CorpseBurn, 
+                                                             nullptr); 
+            break;
         }
         
         case monster_dict::tyrant_blade: {
-            
+            monster = new Entity(x, y, "blade of king", 't', TCODColor::darkerPurple);
+            monster->control = new EnemyControl(monster);
+            monster->move_behavior = new MoveBehavior(monster);
+            monster->combat_behavior = new EnemyCombatBehavior(monster, 10, 32, 0, 8, 18);
+            monster->corpse_interact = new CorpseInteraction(monster,
+                                                             nullptr, 
+                                                             nullptr, 
+                                                             new CorpseBurn, 
+                                                             new CorpseRecall(1)); 
+            break;
         }
         
         case monster_dict::tyrant_lance: {
-            
+            monster = new Entity(x, y, "lance of king", 't', TCODColor::darkerPurple);
+            monster->control = new EnemyControl(monster);
+            monster->move_behavior = new MoveBehavior(monster);
+            monster->combat_behavior = new EnemyCombatBehavior(monster, 8, 40, 0, 8, 18);
+            monster->corpse_interact = new CorpseInteraction(monster,
+                                                             nullptr, 
+                                                             nullptr, 
+                                                             new CorpseBurn, 
+                                                             new CorpseRecall(1)); 
+            break;
         }
         
         case monster_dict::tyrant_boss: {
-            
-        }
-        
-        case monster_dict::elder_marble: {
-            
-        }
-        
-        case monster_dict::elder_tome: {
-            
-        }
-        
-        case monster_dict::elder_boss: {
-            
+            monster = new Entity(x, y, "the tyrant", 'T', TCODColor::darkerPurple);
+            monster->control = new EnemyControl(monster);
+            monster->move_behavior = new MoveBehavior(monster);
+            monster->combat_behavior = new EnemyCombatBehavior(monster, 32, 16, 4, 8, 8);
+            monster->corpse_interact = new CorpseInteraction(monster,
+                                                             nullptr, 
+                                                             nullptr, 
+                                                             new CorpseBurn, 
+                                                             nullptr); 
+            break;
         }
     }
     

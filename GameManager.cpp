@@ -34,13 +34,30 @@ GameManager::~GameManager() {
 }
 
 void GameManager::doUpdate() {
-    if (game.getFloorNum() == 0) {
-        game.town->doRenderTownConsole();
-        game.setFloorNum(1);
-        game.doFloorTravel();
+    if (getFloorNum() == 0) {
+        town->doRenderTownConsole();
+        setFloorNum(1);
+        doFloorTravel();
         
         doRender();
         TCODConsole::root->flush();
+    }
+    
+    if (getFloorNum() == 10 && !player->combat_behavior->checkEntityDead()) {
+        bool is_enemy_exist = false;
+        for (Entity *character : all_character) {
+            if (character->control->getStatus() == "enemy") {
+                is_enemy_exist = true;
+            }
+        }
+        
+        if (!is_enemy_exist) {
+            int x = 0, y = 0;
+            while (!map->canWalk(x, y)) {
+                x = game.global_rng->getInt(0, map->getWidth() - 1);
+                y = game.global_rng->getInt(0, map->getHeight() - 1);
+            }
+        }
     }
     
     if (status == status::STARTUP) {

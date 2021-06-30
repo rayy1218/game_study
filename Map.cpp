@@ -96,6 +96,11 @@ void Map::doGenerateMap(int seed) {
         
         getFov(x, y);
         
+        if (game.getFloorNum() == 10) {
+            doGenerateBoss();
+            return;
+        }
+        
         Entity *prop; 
         Control *control;
         
@@ -256,10 +261,89 @@ void Map::doRender() {
     }
 }
 
+void Map::doGenerateBoss() {
+    switch(game.global_rng->getInt(1, 3)) {
+        case 1: {
+            for (int monster_num = 0; monster_num < 3; monster_num++) {
+                int x = 0, y = 0;
+                while (!canWalk(x, y)) {
+                    x = game.global_rng->getInt(0, width - 1);
+                    y = game.global_rng->getInt(0, height - 1);
+                }
+                Entity* monster = getMonster(x, y, monster_dict::dragon_child);
+                game.all_character.push(monster);
+            }
+            
+            for (int monster_num = 0; monster_num < 2; monster_num++) {
+                int x = 0, y = 0;
+                while (!canWalk(x, y)) {
+                    x = game.global_rng->getInt(0, width - 1);
+                    y = game.global_rng->getInt(0, height - 1);
+                }
+                Entity* monster = getMonster(x, y, monster_dict::dragon_adult);
+                game.all_character.push(monster);
+            }
+            
+            int x = 0, y = 0;
+            while (!canWalk(x, y)) {
+                x = game.global_rng->getInt(0, width - 1);
+                y = game.global_rng->getInt(0, height - 1);
+            }
+            Entity* monster = getMonster(x, y, monster_dict::dragon_boss);
+            game.all_character.push(monster);
+            
+            break;
+        }
+        
+        case 2: {
+            int x = 0, y = 0;
+            while (!canWalk(x, y)) {
+                x = game.global_rng->getInt(0, width - 1);
+                y = game.global_rng->getInt(0, height - 1);
+            }
+            Entity* monster = getMonster(x, y, monster_dict::tyrant_boss);
+            game.all_character.push(monster);
+            break;
+        }
+        
+        case 3: {
+            for (int monster_num = 0; monster_num < MAX_MONSTER_IN_MAP; monster_num++) {
+                int x = 0, y = 0;
+                while (!canWalk(x, y)) {
+                    x = game.global_rng->getInt(0, width - 1);
+                    y = game.global_rng->getInt(0, height - 1);
+                }
+                Entity* monster = getMonster(x, y, monster_dict::one_eyed_infantry + game.global_rng->getInt(0, 1));
+                game.all_character.push(monster);
+            }
+            
+            int x = 0, y = 0;
+            while (!canWalk(x, y)) {
+                x = game.global_rng->getInt(0, width - 1);
+                y = game.global_rng->getInt(0, height - 1);
+            }
+            Entity* monster = getMonster(x, y, monster_dict::dragon_boss);
+            game.all_character.push(monster);
+            break;
+        }
+    }
+    
+    int x = 0, y = 0;
+    while (!canWalk(x, y)) {
+        x = game.global_rng->getInt(game.player->getX() - 1, game.player->getX() + 1);
+        y = game.global_rng->getInt(game.player->getY() - 1, game.player->getY() + 1);
+    }
+        
+    Entity *prop = new Entity(x, y, "Up Stair", '<', TCODColor::white);
+    Control *control = new UpStairControl(prop);
+    prop->control = control;
+    game.all_prop.push(prop);
+}
+
 void Map::addMonster(int x, int y) {
     Entity *monster;
     
-    monster = getMonster(x, y, game.global_rng->getInt(1, 5));
+    monster = getMonster(x, y, game.global_rng->getInt(1, MONSTER_TYPE));
     
     game.all_character.push(monster);
 }

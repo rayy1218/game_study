@@ -439,7 +439,7 @@ void DownStairControl::doUpdate() {
     Entity *step_by = getCharacterStepOn();
     if (step_by != game.player || step_by == nullptr) {return;}
     
-    if (game.getFloorNum() == 10) {
+    if (game.getFloorNum() == 11) {
         game.gui->addMessage(TCODColor::yellow, "you reach the end of the Living Cave");
         game.setStatus(status::VICTORY);
         return;
