@@ -109,15 +109,13 @@ bool PlayerControl::handleMoveOrAttack(int dx, int dy) {
     for (Entity *character : game.all_character) {
         if (character->getX() == to_x && character->getY() == to_y) {
             int hitting_count = (self->combat_behavior->getTotalAg() / character->combat_behavior->getTotalAg()),
-                miss_rate = BASE_MISS_RATE * float(character->combat_behavior->getTotalAg() / 10),
-                hit_rate = BASE_HIT_RATE * float(self->combat_behavior->getAccuracy() / 10),
-                critical_rate = BASE_CRITICAL_RATE * float(self->combat_behavior->getAccuracy() / 10);
+                miss_rate = BASE_MISS_RATE * float(character->combat_behavior->getTotalAg()) / 10,
+                hit_rate = BASE_HIT_RATE * float(self->combat_behavior->getAccuracy()) / 10,
+                critical_rate = BASE_CRITICAL_RATE * float(self->combat_behavior->getAccuracy()) / 10;
             
             if (hitting_count == 0) {hitting_count = 1;}
 
             for (int i = 1; i <= hitting_count; i++) {
-                
-                
                 int attack_damage = self->combat_behavior->doEntityAttack();
                 int dice = game.global_rng->getInt(1, miss_rate + hit_rate + critical_rate);
                 
@@ -288,8 +286,6 @@ void EnemyControl::handleMoveOrAttack() {
             miss_rate = BASE_MISS_RATE * float(game.player->combat_behavior->getTotalAg()) / 10,
             hit_rate = BASE_HIT_RATE * float(self->combat_behavior->getAccuracy()) / 10,
             critical_rate = BASE_CRITICAL_RATE * float(self->combat_behavior->getAccuracy()) / 10;
-
-        game.gui->addMessage(TCODColor::white, "%i %i %i", miss_rate, hit_rate, critical_rate);
 
         if (hitting_count == 0) {hitting_count = 1;}
         

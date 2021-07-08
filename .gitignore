@@ -32,13 +32,8 @@
 *.app
 
 # Subdirectory
-build/
-dist/
-nbproject/
-
-# File
-todo
-Makefile
-
-*.inc
-*.ini
+.git/
+.idea/
+cmake-build-debug/
+lib/
+include/
