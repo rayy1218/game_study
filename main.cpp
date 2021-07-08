@@ -5,12 +5,18 @@ static const int CONSOLE_WIDTH = 130, CONSOLE_HEIGHT = 60;
 GameManager game(CONSOLE_WIDTH, CONSOLE_HEIGHT);
 
 void* operator new(size_t size) {
-//    std::cout << "allocate: " <<  size << std::endl;
+    std::fstream mem_log;
+    mem_log.open("mem_log.txt", std::fstream::in | std::fstream::out | std::fstream::app);
+    mem_log << "allocate: " <<  size << '\n';
+    mem_log.close();
     return malloc(size);
 }
 
 void operator delete(void* memory, size_t size) {
-//    std::cout << "dellocate: " << size << std::endl;
+    std::fstream mem_log;
+    mem_log.open("mem_log.txt", std::fstream::in | std::fstream::out | std::fstream::app);
+    mem_log << "dellocate: " << size << '\n';
+    mem_log.close();
     free(memory);
 }
 

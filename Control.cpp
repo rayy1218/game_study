@@ -285,9 +285,12 @@ void EnemyControl::handleMoveOrAttack() {
     
     if (getDistanceTo(game.player->getX(), game.player->getY()) < 2 ) {
         int hitting_count = (self->combat_behavior->getTotalAg() / game.player->combat_behavior->getTotalAg()),
-            miss_rate = BASE_MISS_RATE * float(game.player->combat_behavior->getTotalAg() / 10),
-            hit_rate = BASE_HIT_RATE * float(self->combat_behavior->getAccuracy() / 10),
-            critical_rate = BASE_CRITICAL_RATE * float(self->combat_behavior->getAccuracy() / 10);
+            miss_rate = BASE_MISS_RATE * float(game.player->combat_behavior->getTotalAg()) / 10,
+            hit_rate = BASE_HIT_RATE * float(self->combat_behavior->getAccuracy()) / 10,
+            critical_rate = BASE_CRITICAL_RATE * float(self->combat_behavior->getAccuracy()) / 10;
+
+        game.gui->addMessage(TCODColor::white, "%i %i %i", miss_rate, hit_rate, critical_rate);
+
         if (hitting_count == 0) {hitting_count = 1;}
         
         for (int i = 1; i <= hitting_count; i++) {

@@ -224,7 +224,8 @@ bool CorpseLooting::doUse(int index) {
     game.gui->addMessage(TCODColor::green, "%s loot %i %s",
                          game.player->getName().c_str(), item->item_behavior->getQty(),
                          item->getName().c_str());
-    
+
+    return true;
 }
 
 int CorpseLooting::doRenderContainer() {
@@ -295,4 +296,5 @@ CorpseRecall::CorpseRecall(int success_chance): success_chance(success_chance) {
 bool CorpseRecall::doUse() {
     game.gui->addMessage(TCODColor::white, "recall success");
     //change control to ally control
+    return true;
 }

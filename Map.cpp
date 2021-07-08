@@ -343,7 +343,7 @@ void Map::doGenerateBoss() {
 void Map::addMonster(int x, int y) {
     Entity *monster;
     
-    monster = getMonster(x, y, game.global_rng->getInt(1, MONSTER_TYPE));
+    monster = getMonster(x, y, monster_dict::skeleton);
     
     game.all_character.push(monster);
 }
