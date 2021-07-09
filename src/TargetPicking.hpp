@@ -7,6 +7,7 @@ class TargetPicking {
 protected:
     Entity *self;
 public:
+    std::vector<Entity*> all_target;
 
     TargetPicking(Entity *self);
     virtual ~TargetPicking();

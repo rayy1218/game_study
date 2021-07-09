@@ -9,7 +9,9 @@ TargetPicking::~TargetPicking() {
 SelfTarget::SelfTarget(Entity *self): TargetPicking(self) {}
 
 bool SelfTarget::doTargeting() {
-    return self->item_behavior->purpose->doUse(game.player);
+    all_target.push_back(game.player);
+
+    return true;
 }
 
 NearestTarget::NearestTarget(Entity *self, int range): TargetPicking(self), 
@@ -35,8 +37,10 @@ bool NearestTarget::doTargeting() {
         game.gui->addMessage(TCODColor::white, "No enemy around you");        
         return false;
     } 
-    
-    return self->item_behavior->purpose->doUse(closest_enemy);
+
+    all_target.push_back(closest_enemy);
+
+    return true;
 }
 
 SelectAreaAllTarget::SelectAreaAllTarget(Entity *self, int radius, 
@@ -109,13 +113,14 @@ bool SelectAreaAllTarget::doTargeting() {
         if (target->getX() < x - radius || target->getX() > x + radius) {continue;}
         if (target->getY() < y - radius || target->getY() > y + radius) {continue;}
         
-        self->item_behavior->purpose->doUse(target);
+        all_target.push_back(target);
         any_target_existed = true;
     }
     
     if (!any_target_existed) {
         game.gui->addMessage(TCODColor::white, "There is no enemy");
+        return false;
     }
     
-    return any_target_existed;
+    return true;
 }

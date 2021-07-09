@@ -216,7 +216,7 @@ void Gui::doRenderFocusedEnemy() {
         return;
     }
     
-    game.gui->addMessage(TCODColor::yellow, "[F] change target [SPACE] confirm target");
+    game.gui->addMessage(TCODColor::yellow, "[F] change all_target [SPACE] confirm all_target");
     
     while (true) {
         focused_enemy = character_in_fov.at(index);

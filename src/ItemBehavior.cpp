@@ -27,8 +27,14 @@ bool ItemBehavior::pick(Entity *pick_by) {
 bool ItemBehavior::use(Entity *use_by) {
     if (game.getFloorNum() == 0) {return false;}
     if (purpose == nullptr || targeting == nullptr) {return false;}
+    bool target_exist = targeting->doTargeting();
+    if (!target_exist) {return false;}
     bool purpose_used = false;
-    purpose_used = targeting->doTargeting();
+    for (Entity *target : targeting->all_target) {
+        if (self->item_behavior->purpose->doUse(target)) {
+            purpose_used = true;
+        }
+    }
     if (!purpose_used) {return false;}
     use_by->inventory->deleteItem(self);
     return true;

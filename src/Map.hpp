@@ -28,11 +28,9 @@ public:
     bool isInFov(int x, int y);
     void doRender();
     void doGenerateBoss();
-    void addMonster(int x, int y);
+    void addMonster(int x, int y, int floor = -1);
     void addItem(int x, int y);
     void addTrap(int x, int y);
-    void doSaveMap();
-    void doLoadMap(); 
     void doGenerateMap(int seed = 0);
     void doCellularAutomata(int process_count, int high_bound, int low_bound);
     bool checkNeighborWall(int x, int y, int high_bound, int low_bound);

@@ -18,8 +18,8 @@
 #include "Gui.hpp" //Off screen console
 #include "ItemBehavior.hpp" //Item entity
 #include "Container.hpp" //Entity to store item
-#include "TargetPicking.hpp" //For item to select target
-#include "Purpose.hpp" //For item to do something to selected target
+#include "TargetPicking.hpp" //For item to select all_target
+#include "Purpose.hpp" //For item to do something to selected all_target
 #include "Equipment.hpp"
 #include "Hunger.hpp"
 #include "Tension.hpp"

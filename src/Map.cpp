@@ -1,9 +1,10 @@
 #include "main.hpp"
 
-static int MAX_MONSTER_IN_MAP = 6;
-static int MAX_ITEM_IN_MAP = 12;
-static int MAX_HOLE_IN_MAP = 4;
-static int MAX_TRAP_IN_MAP = 20;
+const int MAX_MONSTER_IN_MAP = 6;
+const int MAX_ITEM_IN_MAP = 12;
+const int MAX_HOLE_IN_MAP = 4;
+const int MAX_TRAP_IN_MAP = 20;
+const int FLOOR_MONSTER_TYPE = 5;
 
 Tile::Tile(): is_explored(false) {} 
 
@@ -141,13 +142,14 @@ void Map::doGenerateMap(int seed) {
         }
         
         int monster_in_map = 0;
+        const int FLOOR = game.global_rng->getInt(0, FLOOR_MONSTER_TYPE - 1);
         while (monster_in_map < MAX_MONSTER_IN_MAP) {
             x = game.global_rng->getInt(1, width - 1);
             y = game.global_rng->getInt(1, height - 1);
             if (!canWalk(x, y) || isInFov(x, y) || 
                 game.map->isInFov(x, y)) {continue;}
             
-            addMonster(x, y);
+            addMonster(x, y, FLOOR);
             monster_in_map++;
         }
 
@@ -340,10 +342,17 @@ void Map::doGenerateBoss() {
     game.all_prop.push(prop);
 }
 
-void Map::addMonster(int x, int y) {
+void Map::addMonster(int x, int y, int floor) {
     Entity *monster;
-    
-    monster = getMonster(x, y, monster_dict::skeleton);
+
+    static int monster_each_floor_type[FLOOR_MONSTER_TYPE][3] = {{monster_dict::slime, monster_dict::slime_acid, monster_dict::slime_gaint},
+                                                                      {monster_dict::skeleton, monster_dict::zombie, monster_dict::zombie_high},
+                                                                      {monster_dict::demon, monster_dict::imp, monster_dict::tentacle},
+                                                                      {monster_dict::griffin, monster_dict::minotaur, monster_dict::medusa},
+                                                                      {monster_dict::goblin_armored, monster_dict::goblin_skirmisher, monster_dict::wolf}};
+
+    monster = getMonster(x, y, monster_each_floor_type[floor][game.global_rng->getInt(0, 2)]);
+    game.gui->addMessage(TCODColor::white, "%s", monster->getName().c_str());
     
     game.all_character.push(monster);
 }
