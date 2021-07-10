@@ -25,10 +25,6 @@ enum item_dict{
     potion_protection_fine,
     potion_protection_standard,
     potion_protection_flawed,
-    potion_joy_fine,
-    potion_joy_standard,
-    potion_joy_flawed,
-    potion_feather_fall,
     
     //HEADWEAR
     headwear_heavy_metal,

@@ -77,6 +77,38 @@ bool PurposeEffectPoison::doUse(Entity *target) {
     return true;
 }
 
+PurposeEffectHpRegen::PurposeEffectHpRegen(int duration, int regen_amount): duration(duration), regen_amount(regen_amount) {}
+
+bool PurposeEffectHpRegen::doUse(Entity *target) {
+    Effect *hp_regen = new EffectHpRegen(target, duration, regen_amount);
+    target->all_effect.push(hp_regen);
+    return true;
+}
+
+PurposeEffectMpRegen::PurposeEffectMpRegen(int duration, int regen_amount): duration(duration), regen_amount(regen_amount) {}
+
+bool PurposeEffectMpRegen::doUse(Entity *target) {
+    Effect *mp_regen = new EffectHpRegen(target, duration, regen_amount);
+    target->all_effect.push(mp_regen);
+    return true;
+}
+
+PurposeEffectRage::PurposeEffectRage(float atk_boost, int duration): duration(duration), atk_boost(atk_boost) {}
+
+bool PurposeEffectRage::doUse(Entity *target) {
+    Effect *rage = new EffectRage(target, duration, atk_boost);
+    target->all_effect.push(rage);
+    return true;
+}
+
+PurposeEffectProtection::PurposeEffectProtection(float def_boost, int duration): duration(duration), def_boost(def_boost) {}
+
+bool PurposeEffectProtection::doUse(Entity *target) {
+    Effect *protection = new EffectProtection(target, duration, atk_boost);
+    target->all_effect.push(protection);
+    return true;
+}
+
 PurposeItemFood::PurposeItemFood(int hunger_point): hunger_point(hunger_point) {}
 
 bool PurposeItemFood::doUse(Entity *target) {
