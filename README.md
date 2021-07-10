@@ -7,8 +7,6 @@ http://www.roguebasin.com/index.php?title=Complete_roguelike_tutorial_using_C%2B
 
 Working On:
 - Refactor the code
-
-TODO:
 - Add more effect and potion
 - Effect for high tension
 - Magic System
