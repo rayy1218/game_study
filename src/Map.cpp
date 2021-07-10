@@ -352,7 +352,6 @@ void Map::addMonster(int x, int y, int floor) {
                                                                       {monster_dict::goblin_armored, monster_dict::goblin_skirmisher, monster_dict::wolf}};
 
     monster = getMonster(x, y, monster_each_floor_type[floor][game.global_rng->getInt(0, 2)]);
-    game.gui->addMessage(TCODColor::white, "%s", monster->getName().c_str());
     
     game.all_character.push(monster);
 }
