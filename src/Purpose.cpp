@@ -104,7 +104,7 @@ bool PurposeEffectRage::doUse(Entity *target) {
 PurposeEffectProtection::PurposeEffectProtection(float def_boost, int duration): duration(duration), def_boost(def_boost) {}
 
 bool PurposeEffectProtection::doUse(Entity *target) {
-    Effect *protection = new EffectProtection(target, duration, atk_boost);
+    Effect *protection = new EffectProtection(target, duration, def_boost);
     target->all_effect.push(protection);
     return true;
 }
