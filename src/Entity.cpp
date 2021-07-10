@@ -18,13 +18,13 @@ Entity::~Entity() {
 
 void Entity::doUpdate() {
     control->doUpdate();
-    
+
+    if (game.getStatus() != status::NEW_TURN) {return;}
+
     if (equipment != nullptr) {
         combat_behavior->updateEquipmentAttribute(equipment->isPrimaryHand());
     }
-    
-    if (game.getStatus() != status::NEW_TURN) {return;}
-    
+
     for (Effect *effect : all_effect) {
         effect->doUpdate();
     }

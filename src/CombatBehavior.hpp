@@ -7,10 +7,10 @@ class CombatBehavior {
 protected:
     //Attribute
     Entity *self;
-    int max_hp, current_hp, attack_point, defense_point, equipment_attack,  
-        equipment_defense, accuracy, agility, equipment_agility;
-    Equipment *self_equipment;
-    float attack_boost, defense_boost;
+    int max_hp, current_hp, attack_point, defense_point, accuracy, agility,
+        equipment_attack, equipment_defense, equipment_agility,
+        effect_attack, effect_defense, effect_agility;
+    float attack_boost, defense_boost, agility_boost;
 public:
     //Constructor
     CombatBehavior(Entity *self, int max_hp, int attack_point, int defense_point, 
@@ -29,13 +29,17 @@ public:
     int getCurrentHp();
     int getAtkPoint();
     int getDefPoint();
+    int getAccuracy();
+    int getAgility();
     int getEquipmentAtkPoint();
     int getEquipmentDefPoint();
     int getEquipmentAgPoint();
+    int getEffectAtkPoint();
+    int getEffectDefPoint();
+    int getEffectAgPoint();
     float getAtkBoost();
     float getDefBoost();
-    int getAccuracy();
-    int getAgility();
+    float getAgBoost();
     int getTotalAtk();
     int getTotalDef();
     int getTotalAg();
@@ -43,13 +47,17 @@ public:
     void setCurrentHp(int input);
     void setAtkPoint(int input);
     void setDefPoint(int input);
+    void setAccuracy(int input);
+    void setAgility(int input);
     void setEquipmentAtkPoint(int input);
     void setEquipmentDefPoint(int input);
     void setEquipmentAgPoint(int input);
+    void setEffectAtkPoint(int input);
+    void setEffectDefPoint(int input);
+    void setEffectAgPoint(int input);
     void setAtkBoost(float input);
     void setDefBoost(float input);
-    void setAccuracy(int input);
-    void setAgility(int input);
+    void setAgBoost(float input);
 };
 
 class PlayerCombatBehavior : public CombatBehavior {

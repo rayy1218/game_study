@@ -3,10 +3,11 @@
 CombatBehavior::CombatBehavior(Entity *self, int max_hp, int attack_point, 
                                int defense_point, int accuracy, int agility):
                                self(self), max_hp(max_hp), current_hp(max_hp), 
-                               attack_point(attack_point), defense_point(defense_point), 
+                               attack_point(attack_point), defense_point(defense_point),
+                               accuracy(accuracy), agility(agility),
                                attack_boost(1), equipment_attack(0), 
-                               defense_boost(1), equipment_defense(0), equipment_agility(0),
-                               accuracy(accuracy), agility(agility) {}
+                               defense_boost(1), equipment_defense(0),
+                               agility_boost(1), equipment_agility(0) {}
 
 void CombatBehavior::updateEquipmentAttribute(bool is_primary) {
     equipment_defense = 0;
@@ -89,33 +90,42 @@ int CombatBehavior::getMaxHp() {return max_hp;}
 int CombatBehavior::getCurrentHp() {return current_hp;}
 int CombatBehavior::getAtkPoint() {return attack_point;}
 int CombatBehavior::getDefPoint() {return defense_point;}
+int CombatBehavior::getAccuracy() {return accuracy;}
+int CombatBehavior::getAgility() {return agility;}
 int CombatBehavior::getEquipmentAtkPoint() {return equipment_attack;}
 int CombatBehavior::getEquipmentDefPoint() {return equipment_defense;}
 int CombatBehavior::getEquipmentAgPoint() {return equipment_agility;}
+int CombatBehavior::getEffectAtkPoint() {return effect_attack;}
+int CombatBehavior::getEffectDefPoint() {return effect_defense;}
+int CombatBehavior::getEffectAgPoint() {return effect_agility;}
 float CombatBehavior::getAtkBoost() {return attack_boost;}
 float CombatBehavior::getDefBoost() {return defense_boost;}
-int CombatBehavior::getAccuracy() {return accuracy;}
-int CombatBehavior::getAgility() {return agility;}
+float CombatBehavior::getAgBoost() {return agility_boost;}
 void CombatBehavior::setMaxHp(int input) {max_hp = input;}
 void CombatBehavior::setCurrentHp(int input) {current_hp = input;}
 void CombatBehavior::setAtkPoint(int input) {attack_point = input;}
 void CombatBehavior::setDefPoint(int input) {defense_point = input;}
+void CombatBehavior::setAccuracy(int input) {accuracy = input;}
+void CombatBehavior::setAgility(int input) {agility = input;}
 void CombatBehavior::setEquipmentAtkPoint(int input) {equipment_attack = input;}
 void CombatBehavior::setEquipmentDefPoint(int input) {equipment_defense = input;}
 void CombatBehavior::setEquipmentAgPoint(int input) {equipment_agility = input;}
+void CombatBehavior::setEffectAtkPoint(int input) {effect_attack = input;}
+void CombatBehavior::setEffectDefPoint(int input) {effect_defense = input;}
+void CombatBehavior::setEffectAgPoint(int input) {effect_agility = input;}
 void CombatBehavior::setAtkBoost(float input) {attack_boost = input;}
 void CombatBehavior::setDefBoost(float input) {defense_boost = input;}
-void CombatBehavior::setAccuracy(int input) {accuracy = input;}
-void CombatBehavior::setAgility(int input) {agility = input;}
+void CombatBehavior::setAgBoost(float input) {agility_boost = input;}
+
 
 int CombatBehavior::getTotalAtk() {
-    return int((getAtkPoint() + getEquipmentAtkPoint()) * getAtkBoost());
+    return int((getAtkPoint() + getEquipmentAtkPoint() + getEffectAtkPoint()) * getAtkBoost());
 }
 
 int CombatBehavior::getTotalDef() {
-    return int((getDefPoint() + getEquipmentDefPoint()) * getDefBoost());
+    return int((getDefPoint() + getEquipmentDefPoint() + getEffectDefPoint()) * getDefBoost());
 }
 
 int CombatBehavior::getTotalAg() {
-    return int(getAgility() + getEquipmentAgPoint());
+    return int(getAgility() + getEquipmentAgPoint() + getEffectAgPoint());
 }

@@ -13,7 +13,22 @@ enum item_dict{
     food,
     
     //POTION
-    potion_healing,
+    potion_healing_fine,
+    potion_healing_standard,
+    potion_healing_flawed,
+    potion_mana_fine,
+    potion_mana_standard,
+    potion_mana_flawed,
+    potion_rage_fine,
+    potion_rage_standard,
+    potion_rage_flawed,
+    potion_protection_fine,
+    potion_protection_standard,
+    potion_protection_flawed,
+    potion_joy_fine,
+    potion_joy_standard,
+    potion_joy_flawed,
+    potion_feather_fall,
     
     //HEADWEAR
     headwear_heavy_metal,

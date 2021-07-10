@@ -58,7 +58,7 @@ Entity* getItem(const int x, const int y, const int index) {
             break;
         }
         
-        case item_dict::potion_healing: {
+        case item_dict::potion_healing_standard: {
             item = new Entity(x, y, "potion of healing", '!', TCODColor::darkerCrimson);
             item->item_behavior = new ItemBehavior(item, 0.2, 1, true);
             item->item_behavior->targeting = new SelfTarget(item);
