@@ -6,6 +6,7 @@ class Entity;
 static const int ITEM_TYPE = 19;
 
 enum item_dict{
+    null = 0,
     //UTILITY
     molotov = 1,
     throwing_knife,

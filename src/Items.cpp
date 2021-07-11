@@ -62,7 +62,7 @@ Entity* getItem(const int x, const int y, const int index) {
             item = new Entity(x, y, "fine healing potion", '!', TCODColor::darkerCrimson);
             item->item_behavior = new ItemBehavior(item, 0.2, 1, true);
             item->item_behavior->targeting = new SelfTarget(item);
-            item->item_behavior->purpose = new PurposeHeal(35);
+            item->item_behavior->purpose = new PurposeHpRestore(35);
             item->item_behavior->setDesc("heal 35 hp");
             item->item_behavior->tradable = new Tradable(64);
 
@@ -73,7 +73,7 @@ Entity* getItem(const int x, const int y, const int index) {
             item = new Entity(x, y, "standard healing potion", '!', TCODColor::darkerCrimson);
             item->item_behavior = new ItemBehavior(item, 0.2, 1, true);
             item->item_behavior->targeting = new SelfTarget(item);
-            item->item_behavior->purpose = new PurposeHeal(20);
+            item->item_behavior->purpose = new PurposeHpRestore(20);
             item->item_behavior->setDesc("heal 20 hp");
             item->item_behavior->tradable = new Tradable(24);
             break;
@@ -83,7 +83,7 @@ Entity* getItem(const int x, const int y, const int index) {
             item = new Entity(x, y, "flawed healing potion", '!', TCODColor::darkerCrimson);
             item->item_behavior = new ItemBehavior(item, 0.2, 1, true);
             item->item_behavior->targeting = new SelfTarget(item);
-            item->item_behavior->purpose = new PurposeHeal(12);
+            item->item_behavior->purpose = new PurposeHpRestore(12);
             item->item_behavior->setDesc("heal 12 hp");
             item->item_behavior->tradable = new Tradable(10);
             break;
@@ -418,7 +418,12 @@ Entity* getItem(const int x, const int y, const int index) {
             item->item_behavior->tradable = new Tradable(16);
             break;
         }
-        
+
+        default: {
+            item = new Entity(x, y, "NULL", '0', TCODColor::purple);
+            item->item_behavior = new ItemBehavior(item, 0, 1, true);
+            item->item_behavior->setDesc("NULL");
+        }
     }
     
     item->item_behavior->setItemId(index);

@@ -11,12 +11,21 @@ public:
     virtual bool doUse(Entity *target) = 0;
 };
 
-class PurposeHeal : public Purpose {
+class PurposeHpRestore : public Purpose {
 private:
-    int heal_amount;
+    int restore_amount;
 public:
-    PurposeHeal(int heal_amount);
+    PurposeHpRestore(int restore_amount);
     
+    bool doUse(Entity *target);
+};
+
+class PurposeMpRestore : public Purpose {
+private:
+    int restore_amount;
+public:
+    PurposeMpRestore(int restore_amount);
+
     bool doUse(Entity *target);
 };
 
@@ -79,15 +88,6 @@ private:
 public:
     PurposeItemFood(int hunger_point);
     
-    bool doUse(Entity *target);
-};
-
-class PurposeMpRestore : public Purpose {
-private:
-    int restore_amount;
-public:
-    PurposeMpRestore(int restore_amount);
-
     bool doUse(Entity *target);
 };
 

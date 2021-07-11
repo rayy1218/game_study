@@ -8,18 +8,25 @@ Purpose::~Purpose() {
     
 }
 
-PurposeHeal::PurposeHeal(int heal_amount): heal_amount(heal_amount) {}
+PurposeHpRestore::PurposeHpRestore(int restore_amount): restore_amount(restore_amount) {}
 
-bool PurposeHeal::doUse(Entity* target) {
-    int healed = target->combat_behavior->doEntityHealed(heal_amount);
+bool PurposeHpRestore::doUse(Entity* target) {
+    int restored = target->combat_behavior->doEntityHealed(restore_amount);
     
-    if (healed <= 0) {
+    if (restored <= 0) {
         game.gui->addMessage(TCODColor::white, "Heal didn't apply to %s due to HP already full",
                              target->getName().c_str());
         return false;
     }
-    game.gui->addMessage(TCODColor::green, "%s was healed for %iHP", 
-                         target->getName().c_str(), healed);
+    game.gui->addMessage(TCODColor::green, "%s was restored for %iHP",
+                         target->getName().c_str(), restored);
+    return true;
+}
+
+PurposeMpRestore::PurposeMpRestore(int restore_amount): restore_amount(restore_amount) {}
+
+bool PurposeMpRestore::doUse(Entity* target) {
+
     return true;
 }
 

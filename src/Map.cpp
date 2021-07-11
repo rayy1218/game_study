@@ -357,66 +357,103 @@ void Map::addMonster(int x, int y, int floor) {
 }
 
 void Map::addItem(int x, int y) {
-    Entity *item;
-    
-    static int item_type_weight_list[] = {60,  //Item 
-                                          20,   //Equipment
-                                          20}; //Weapon
-    
-    static int equipment_weight_list[] = {1,  //headwear_heavy_metal
-                                          6,  //headwear_light_metal
-                                          10,  //headwear_leather
-                                          1,  //bodywear_heavy_metal
-                                          6,  //bodywear_light_metal
-                                          10,  //bodywear_reinforced_leather
-                                          16,  //bodywear_cloth
-                                          1,  //legging_armored
-                                          6,  //legging_reinforced_metal
-                                          10,  //legging_reinforced_leather
-                                          2,  //footwear_metal
-                                          14,  //footwear_leather
-                                          1,  //armwear_metal_fuul
-                                          6,  //armwear_reinforced_metal
-                                          10}; //armwear_reinforced_leather
-                                          
-    
-    static int item_weight_list[] = {10, //molotov
-                                     12, //throwing_Axe
-                                     8,  //incense
-                                     18, //potion_healing
-                                     20};  
-                                        
-    static int weapon_weight_list[] = {1,
-                                       1,
-                                       1,
-                                       1,
-                                       1,
-                                       1,
-                                       1,
-                                       1};
-    
-    int index = getIndexWeightedRandom(item_type_weight_list, 3);
+    struct ItemWeight {
+        int item_id, weight;
+    };
 
+    class ItemChance {
+    public:
+        std::vector<ItemWeight> item_weight_list;
+
+        int getRandomItemID() {
+            int total_weight = 0;
+
+            for (ItemWeight item_weight : item_weight_list) {
+                total_weight += item_weight.weight;
+            }
+
+            int random_num = game.global_rng->getInt(1, total_weight), cumulative_weight = 0;
+            for (ItemWeight item_weight : item_weight_list) {
+                cumulative_weight += item_weight.weight;
+                if (random_num - cumulative_weight <= 0) {return item_weight.item_id;}
+            }
+        }
+    };
+
+    ItemChance equipment_chance, potion_chance, weapon_chance, utility_chance;
+
+    equipment_chance.item_weight_list = {{item_dict::headwear_heavy_metal, 1},
+                                         {item_dict::headwear_light_metal, 6},
+                                         {item_dict::headwear_leather, 10},
+                                         {item_dict::bodywear_heavy_metal, 1},
+                                         {item_dict::bodywear_light_metal, 6},
+                                         {item_dict::bodywear_reinforced_leather, 10},
+                                         {item_dict::bodywear_cloth, 16},
+                                         {item_dict::legging_armored, 1},
+                                         {item_dict::legging_reinforced_metal, 6},
+                                         {item_dict::legging_reinforced_leather, 10},
+                                         {item_dict::footwear_metal, 2},
+                                         {item_dict::footwear_leather, 14},
+                                         {item_dict::armwear_metal_full, 1},
+                                         {item_dict::armwear_reinforced_metal, 6},
+                                         {item_dict::armwear_reinforced_leather, 10}};
+
+    potion_chance.item_weight_list = {{item_dict::potion_healing_standard, 1},
+                                      {item_dict::potion_healing_flawed, 4},
+                                      //{item_dict::potion_mana_standard, 1},
+                                      //{item_dict::potion_mana_flawed, 4},
+                                      {item_dict::potion_rage_standard, 1},
+                                      {item_dict::potion_rage_flawed, 4},
+                                      {item_dict::potion_protection_standard, 1},
+                                      {item_dict::potion_protection_flawed, 4}};
+
+    utility_chance.item_weight_list = {{item_dict::molotov, 10},
+                                       {item_dict::throwing_knife, 10},
+                                       {item_dict::incense, 6},
+                                       {item_dict::food, 20}};
+
+    weapon_chance.item_weight_list = {{item_dict::weapon_dagger, 20},
+                                      {item_dict::weapon_knuckle, 20},
+                                      {item_dict::weapon_gladius, 15},
+                                      {item_dict::weapon_mace, 15},
+                                      {item_dict::weapon_axe, 15},
+                                      {item_dict::weapon_battleaxe, 10},
+                                      {item_dict::weapon_battlehammer, 10},
+                                      {item_dict::weapon_longsword, 10}};
+
+    int item_type_list[] = {40, 20, 20, 20};
+    int index = getIndexWeightedRandom(item_type_list, 4);
+
+    int item_id;
     switch (index) {
         case 1: {
-            int index = getIndexWeightedRandom(item_weight_list, 5);
-            item = getItem(x, y, index);
+            item_id = utility_chance.getRandomItemID();
             break;
         }
         
         case 2: {
-            int index = getIndexWeightedRandom(equipment_weight_list, 15);
-            item = getItem(x, y, index + 5);
+            item_id = potion_chance.getRandomItemID();
             break;
         }
         
         case 3: {
-            int index = getIndexWeightedRandom(weapon_weight_list, 8);
-            item = getItem(x, y, index + 26);
+            item_id = equipment_chance.getRandomItemID();
+            break;
+        }
+
+        case 4: {
+            item_id = weapon_chance.getRandomItemID();
             break;
         }
     }
-    
+
+    Entity *item = getItem(x, y, item_id);
+
+    std::fstream map_item;
+    map_item.open("map_item.txt", std::fstream::in | std::fstream::out | std::fstream::app);
+    map_item << item->getName() << '\n';
+    map_item.close();
+
     game.all_item.push(item);
 }
 

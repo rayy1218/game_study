@@ -79,7 +79,7 @@ void Town::doRenderTownConsole() {
                     shop->selling_item.push_back(item_dict::food);
                     shop->selling_item.push_back(item_dict::incense);
                     shop->selling_item.push_back(item_dict::molotov);
-                    shop->selling_item.push_back(item_dict::potion_healing);
+                    shop->selling_item.push_back(item_dict::potion_healing_flawed);
                     
                     shop->buying_item.push_back(item_dict::loot_goblin);
                     shop->buying_item.push_back(item_dict::harvest_meat);
