@@ -82,23 +82,23 @@ int EffectPoison::getEffectID() {
     return effect_id::poison;
 }
 
-EffectFrozen::EffectFrozen(Entity *self, int duration): Effect(self, duration), orig(self->control) {
+EffectStun::EffectStun(Entity *self, int duration): Effect(self, duration), orig(self->control) {
     self->control = new StunnedControl(self);
     TCODColor message_color = (self == game.player) ? TCODColor::red : TCODColor::green;
     if (game.map->isInFov(self->getX(), self->getY())) {
-        game.gui->addMessage(message_color, "%s is frezzed", self->getName().c_str());
+        game.gui->addMessage(message_color, "%s is stunned", self->getName().c_str());
     }
 }
 
-int EffectFrozen::getEffectID() {
+int EffectStun::getEffectID() {
     return effect_id::frozen;
 }
 
-bool EffectFrozen::doUpdate() {
+bool EffectStun::doUpdate() {
     if (duration - 1 <= 0) {
         TCODColor message_color = (self == game.player) ? TCODColor::green : TCODColor::red;
         if (game.map->isInFov(self->getX(), self->getY())) {
-            game.gui->addMessage(message_color, "%s is not longer freezed", self->getName().c_str());
+            game.gui->addMessage(message_color, "%s is not longer stunned", self->getName().c_str());
         }
         Control *temp = self->control;
         self->control = orig;

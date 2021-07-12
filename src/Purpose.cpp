@@ -71,7 +71,7 @@ bool PurposeEffectConfusion::doUse(Entity *target) {
 PurposeEffectFrozen::PurposeEffectFrozen(int duration): duration(duration) {}
 
 bool PurposeEffectFrozen::doUse(Entity *target) {
-    Effect *frozen_effect = new EffectFrozen(target, duration);
+    Effect *frozen_effect = new EffectStun(target, duration);
     target->all_effect.push(frozen_effect);
     return true;
 }

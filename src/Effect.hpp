@@ -44,11 +44,11 @@ public:
     int getEffectID();
 };
 
-class EffectFrozen : public Effect {
+class EffectStun : public Effect {
 private:
     Control *orig;
 public:
-    EffectFrozen(Entity *self, int duration);
+    EffectStun(Entity *self, int duration);
     bool doUpdate();
     int getEffectID();
 };
