@@ -36,7 +36,40 @@ void Tension::doUpdateTension() {
 }
 
 void Tension::doUpdateTensionEffect() {
-    
+    if (getCurrentTension() > (getMaxTension() / 5 * 3) && game.global_rng->getInt(1, 100) >= 95) {
+        switch (game.global_rng->getInt(1, 3)) {
+            case 1: {
+                //drop weapon
+                Entity *to_drop;
+                if (game.player->equipment->isPrimaryHand()) {
+                    to_drop = game.player->equipment->getEquipment(equipment_slot_type::primary_hand);
+                }
+                else {
+                    to_drop = game.player->equipment->getEquipment(equipment_slot_type::secondary_hand);
+                }
+                game.player->inventory->dropItem(to_drop);
+                break;
+            }
+
+            case 2: {
+                //slipped and stunned
+                const int slipped_damage = 5;
+                int damaged = game.player->combat_behavior->doEntityAttacked(slipped_damage);
+                game.gui->addMessage(TCODColor::red, "%s slipped and take %i - %i damage",
+                                     game.player->getName().c_str(), slipped_damage, damaged - slipped_damage);
+                Effect *effect = new EffectStun(game.player, 3);
+                game.player->all_effect.push(effect);
+                break;
+            }
+
+            case 3: {
+                //confused
+                Effect *effect = new EffectConfusion(game.player, 5);
+                game.player->all_effect.push(effect);
+                break;
+            }
+        }
+    }
 }
 
 int Tension::getMonsterNumInFov() {
