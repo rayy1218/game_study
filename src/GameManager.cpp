@@ -185,7 +185,13 @@ void GameManager::doSpawnPlayer() {
     player->combat_behavior = new PlayerCombatBehavior(player, 100, 2, 1, 10, 10);
     
     all_character.push(player);
-    
+
+    if (!checkFileExist("save.txt")) {
+        Entity *starter_kit;
+        starter_kit = getItem(player->getX(), player->getY(), item_dict::weapon_dagger);
+        starter_kit->item_behavior->pick(player);
+    }
+
     player_stats = new PlayerStats();
     player_stats->hunger = new Hunger(500);
     player_stats->tension = new Tension(100);
@@ -206,17 +212,10 @@ void GameManager::doStartup() {
     doSpawnPlayer();
     
     map = new Map(100, 50);
-    gui = new Gui;
     town = new Town();
+    gui = new Gui;
     doFloorTravel();
-    
-    if (!checkFileExist("save.txt")) {
-        Entity *starter_kit;
-        starter_kit = getItem(player->getX(), player->getY(), item_dict::weapon_dagger);
-        starter_kit->item_behavior->pick(player);
-    }
-    
-    
+
     status = status::STARTUP;
 }
 
