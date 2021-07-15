@@ -409,52 +409,13 @@ void Town::getTownLocList() {
     
     loc_list.push(new TownOption("home - storage room",
                                  "where you store you treasury"));
-    
-//    loc_list.push(new TownOption("home - workshop",
-//                                 "where you craft item for exploration"));
-//    
-//    loc_list.push(new TownOption("street - merciful house",
-//                                 "preist is here to provide quality healing for "
-//                                 "aventurer but with price"));
-//    
+
     loc_list.push(new TownOption("market - general shop",
                                  "exploration supplies like food, lantern oil "
                                  "sold here"));
-//    
-//    loc_list.push(new TownOption("market - armorsmith shop",
-//                                 "armor, cloth and shield sold here"));
-//    
-//    loc_list.push(new TownOption("market - weaponsmith shop",
-//                                 "melee and missle weapon sold here"));
-//    
-//    loc_list.push(new TownOption("market - enchanted accessory shop",
-//                                 "accessory enchanted by priest or witch sold here"));
-//    
-//    loc_list.push(new TownOption("market - potion alchemist",
-//                                 "flawed and low quality potion, alchemy material"
-//                                 "and empty bottle sold here"));
-//    
-//    loc_list.push(new TownOption("market - witchcraft", 
-//                                 "scroll, jar of sprite orb and ritual medium "
-//                                 "sold here"));
-//    
-//    loc_list.push(new TownOption("guild - aventurer marketplace",
-//                                 "all the loot from cave creature can only be "
-//                                 "sell here for guild to collect \"cave entering fee\""));
-//    
-//    loc_list.push(new TownOption("guild - mission board",
-//                                 "favourite place of bounty hunter, quest usually"
-//                                 "consist of suppllies request, great cave creature "
-//                                 "hunting and rare cave creature loot request"));
-//    
-//    loc_list.push(new TownOption("guild - chamber of master",
-//                                 "voluntary assembly for master class aventurer "
-//                                 "to provide skill lecture for guild member"));
 }
 
 void Town::getTownSelfList() {
     self_list.push(new TownOption("status", "check current status"));
     self_list.push(new TownOption("inventory", "check inventory"));
-//    self_list.push(new TownOption("journal", "check journal for last aventure"));
-//    self_list.push(new TownOption("skill", "check level for each skill you have"));
 }

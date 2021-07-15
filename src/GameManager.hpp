@@ -7,6 +7,7 @@ class Gui;
 class Town;
 class Hunger;
 class Tension;
+class Magic;
 
 enum status{
     STARTUP  = 0, 
@@ -23,6 +24,7 @@ struct GameConfig {
 struct PlayerStats {
     Hunger *hunger;
     Tension *tension;
+    Magic *magic;
     
     PlayerStats();
     ~PlayerStats();

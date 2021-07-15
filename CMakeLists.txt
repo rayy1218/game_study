@@ -15,7 +15,7 @@ link_directories(${PROJECT_SOURCE_DIR}/lib)
 file(GLOB TCODINC include/libtcod-1.16.6-x86-mingw/include/*.h include/libtcod-1.16.6-x86-mingw/include/*.hpp)
 file(GLOB SRC src/*.hpp src/*.cpp)
 
-set(SOURCE_FILES ${SRC} ${TCODINC} )
+set(SOURCE_FILES ${SRC} ${TCODINC})
 
 add_executable(${EXE_NAME} ${SOURCE_FILES})
 

@@ -5,6 +5,7 @@ PlayerStats::PlayerStats(): hunger(nullptr), tension(nullptr) {}
 PlayerStats::~PlayerStats() {
     if (hunger) {delete hunger;}
     if (tension) {delete tension;}
+    if (magic) {delete magic;}
 }
 
 GameManager::GameManager(int width, int height): console_width(width), 
@@ -111,7 +112,7 @@ void GameManager::doUpdate() {
     }
     
     status = status::IDLE;
-    
+
     TCODSystem::waitForEvent(TCOD_EVENT_KEY_RELEASE, &keyboard, NULL, false);
     
     player_stats->hunger->doUpdateHungerEffect();
@@ -195,6 +196,7 @@ void GameManager::doSpawnPlayer() {
     player_stats = new PlayerStats();
     player_stats->hunger = new Hunger(500);
     player_stats->tension = new Tension(100);
+    player_stats->magic = new Magic(50);
 }
 
 void GameManager::doStartup() {
@@ -250,7 +252,8 @@ void GameManager::doSave() {
     save_file << turn_used 
               << ' ' << player->combat_behavior->getCurrentHp() 
               << ' ' << player_stats->hunger->getCurrentHungerPoint() 
-              << ' ' << player_stats->tension->getCurrentTension();
+              << ' ' << player_stats->tension->getCurrentTension()
+              << ' ' << player_stats->magic->getMp();
     
     int item_count = 0;
     std::string inventory_save;
@@ -285,12 +288,13 @@ void GameManager::doLoad() {
     std::ifstream save_file;
     save_file.open("save.txt");
     
-    int hp, hunger, tension;
-    save_file >> turn_used >> hp >> hunger >> tension;
+    int hp, hunger, tension, mp;
+    save_file >> turn_used >> hp >> hunger >> tension >> mp;
     
     player->combat_behavior->setCurrentHp(hp);
     player_stats->hunger->setCurrentHungerPoint(hunger);
     player_stats->tension->setCurrentTension(tension);
+    player_stats->magic->setMp(mp);
     
     int inventory_item_count;
     save_file >> inventory_item_count;

@@ -245,6 +245,11 @@ bool PlayerControl::handleCharInput(int ascii) {
             new_turn = false;
             break;
         }
+
+        case 'm': {
+            new_turn = game.player_stats->magic->doRenderCastingList();
+            break;
+        }
             
         default:
             new_turn = false;

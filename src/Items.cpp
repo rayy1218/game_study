@@ -28,7 +28,7 @@ Entity* getItem(const int x, const int y, const int index) {
         case item_dict::molotov: {
             item = new Entity(x, y, "molotov", 'd', TCODColor::darkRed);
             item->item_behavior = new ItemBehavior(item, 0.2, 1, true);
-            item->item_behavior->targeting = new SelectAreaAllTarget(item, 1, true);
+            item->item_behavior->targeting = new SelectAreaAllTarget(1, true);
             item->item_behavior->purpose = new PurposeEffectBurn(6, 4);
             item->item_behavior->setDesc("can be throw at any place in sight and"
                                          " deal 6 damage for 4 round to creature"
@@ -40,7 +40,7 @@ Entity* getItem(const int x, const int y, const int index) {
         case item_dict::throwing_knife: {
             item = new Entity(x, y, "throwing knife", 'P', TCODColor::darkSepia);
             item->item_behavior = new ItemBehavior(item, 0.8, 1, true);
-            item->item_behavior->targeting = new SelectAreaAllTarget(item, 0, false);
+            item->item_behavior->targeting = new SelectAreaAllTarget(0, false);
             item->item_behavior->purpose = new PurposeDamage(15);
             item->item_behavior->setDesc("deal 15 damage to selected creature in sight");
             item->item_behavior->tradable = new Tradable(12);
@@ -50,7 +50,7 @@ Entity* getItem(const int x, const int y, const int index) {
         case item_dict::incense: {
             item = new Entity(x, y, "incense", '8', TCODColor::gold);
             item->item_behavior = new ItemBehavior(item, 0.5, 1, true);
-            item->item_behavior->targeting = new SelectAreaAllTarget(item, 2, true);
+            item->item_behavior->targeting = new SelectAreaAllTarget(2, true);
             item->item_behavior->purpose = new PurposeEffectConfusion(8);
             item->item_behavior->setDesc("can be throw at any place in sight and"
                                          " confuse a creature for 8 round");
@@ -61,7 +61,7 @@ Entity* getItem(const int x, const int y, const int index) {
         case item_dict::potion_healing_fine: {
             item = new Entity(x, y, "fine healing potion", '!', TCODColor::darkerCrimson);
             item->item_behavior = new ItemBehavior(item, 0.2, 1, true);
-            item->item_behavior->targeting = new SelfTarget(item);
+            item->item_behavior->targeting = new SelfTarget;
             item->item_behavior->purpose = new PurposeHpRestore(35);
             item->item_behavior->setDesc("heal 35 hp");
             item->item_behavior->tradable = new Tradable(64);
@@ -72,7 +72,7 @@ Entity* getItem(const int x, const int y, const int index) {
         case item_dict::potion_healing_standard: {
             item = new Entity(x, y, "standard healing potion", '!', TCODColor::darkerCrimson);
             item->item_behavior = new ItemBehavior(item, 0.2, 1, true);
-            item->item_behavior->targeting = new SelfTarget(item);
+            item->item_behavior->targeting = new SelfTarget;
             item->item_behavior->purpose = new PurposeHpRestore(20);
             item->item_behavior->setDesc("heal 20 hp");
             item->item_behavior->tradable = new Tradable(24);
@@ -82,7 +82,7 @@ Entity* getItem(const int x, const int y, const int index) {
         case item_dict::potion_healing_flawed: {
             item = new Entity(x, y, "flawed healing potion", '!', TCODColor::darkerCrimson);
             item->item_behavior = new ItemBehavior(item, 0.2, 1, true);
-            item->item_behavior->targeting = new SelfTarget(item);
+            item->item_behavior->targeting = new SelfTarget;
             item->item_behavior->purpose = new PurposeHpRestore(12);
             item->item_behavior->setDesc("heal 12 hp");
             item->item_behavior->tradable = new Tradable(10);
@@ -92,7 +92,7 @@ Entity* getItem(const int x, const int y, const int index) {
         case item_dict::potion_mana_fine: {
             item = new Entity(x, y, "fine mana potion", '!', TCODColor::darkerBlue);
             item->item_behavior = new ItemBehavior(item, 0.2, 1, true);
-            item->item_behavior->targeting = new SelfTarget(item);
+            item->item_behavior->targeting = new SelfTarget;
             item->item_behavior->purpose = new PurposeMpRestore(45);
             item->item_behavior->setDesc("restore 45 mana");
             item->item_behavior->tradable = new Tradable(50);
@@ -102,7 +102,7 @@ Entity* getItem(const int x, const int y, const int index) {
         case item_dict::potion_mana_standard: {
             item = new Entity(x, y, "standard mana potion", '!', TCODColor::darkerBlue);
             item->item_behavior = new ItemBehavior(item, 0.2, 1, true);
-            item->item_behavior->targeting = new SelfTarget(item);
+            item->item_behavior->targeting = new SelfTarget;
             item->item_behavior->purpose = new PurposeMpRestore(30);
             item->item_behavior->setDesc("restore 20 mana");
             item->item_behavior->tradable = new Tradable(28);
@@ -112,7 +112,7 @@ Entity* getItem(const int x, const int y, const int index) {
         case item_dict::potion_mana_flawed: {
             item = new Entity(x, y, "flawed mana potion", '!', TCODColor::darkerBlue);
             item->item_behavior = new ItemBehavior(item, 0.2, 1, true);
-            item->item_behavior->targeting = new SelfTarget(item);
+            item->item_behavior->targeting = new SelfTarget;
             item->item_behavior->purpose = new PurposeMpRestore(10);
             item->item_behavior->setDesc("restore 10 mana");
             item->item_behavior->tradable = new Tradable(15);
@@ -122,7 +122,7 @@ Entity* getItem(const int x, const int y, const int index) {
         case item_dict::potion_rage_fine: {
             item = new Entity(x, y, "fine rage potion", '!', TCODColor::darkerBlue);
             item->item_behavior = new ItemBehavior(item, 0.2, 1, true);
-            item->item_behavior->targeting = new SelfTarget(item);
+            item->item_behavior->targeting = new SelfTarget;
             item->item_behavior->purpose = new PurposeEffectRage(0.5, 6);
             item->item_behavior->setDesc("increase attack boost by 0.5 for 6 round");
             item->item_behavior->tradable = new Tradable(120);
@@ -132,7 +132,7 @@ Entity* getItem(const int x, const int y, const int index) {
         case item_dict::potion_rage_standard: {
             item = new Entity(x, y, "standard rage potion", '!', TCODColor::darkerBlue);
             item->item_behavior = new ItemBehavior(item, 0.2, 1, true);
-            item->item_behavior->targeting = new SelfTarget(item);
+            item->item_behavior->targeting = new SelfTarget;
             item->item_behavior->purpose = new PurposeEffectRage(0.2, 5);
             item->item_behavior->setDesc("increase attack boost by 0.2 for 5 round");
             item->item_behavior->tradable = new Tradable(80);
@@ -142,7 +142,7 @@ Entity* getItem(const int x, const int y, const int index) {
         case item_dict::potion_rage_flawed: {
             item = new Entity(x, y, "flawed rage potion", '!', TCODColor::darkerBlue);
             item->item_behavior = new ItemBehavior(item, 0.2, 1, true);
-            item->item_behavior->targeting = new SelfTarget(item);
+            item->item_behavior->targeting = new SelfTarget;
             item->item_behavior->purpose = new PurposeEffectRage(0.2, 3);
             item->item_behavior->setDesc("increase attack boost by 0.2 for 3 round");
             item->item_behavior->tradable = new Tradable(50);
@@ -152,7 +152,7 @@ Entity* getItem(const int x, const int y, const int index) {
         case item_dict::potion_protection_fine: {
             item = new Entity(x, y, "fine protection potion", '!', TCODColor::darkerBlue);
             item->item_behavior = new ItemBehavior(item, 0.2, 1, true);
-            item->item_behavior->targeting = new SelfTarget(item);
+            item->item_behavior->targeting = new SelfTarget;
             item->item_behavior->purpose = new PurposeEffectProtection(0.5, 6);
             item->item_behavior->setDesc("increase defense boost 50% for 6 round");
             item->item_behavior->tradable = new Tradable(120);
@@ -162,7 +162,7 @@ Entity* getItem(const int x, const int y, const int index) {
         case item_dict::potion_protection_standard: {
             item = new Entity(x, y, "standard protection potion", '!', TCODColor::darkerBlue);
             item->item_behavior = new ItemBehavior(item, 0.2, 1, true);
-            item->item_behavior->targeting = new SelfTarget(item);
+            item->item_behavior->targeting = new SelfTarget;
             item->item_behavior->purpose = new PurposeEffectProtection(0.2, 5);
             item->item_behavior->setDesc("increase defense boost by 20% for 5 round");
             item->item_behavior->tradable = new Tradable(80);
@@ -172,7 +172,7 @@ Entity* getItem(const int x, const int y, const int index) {
         case item_dict::potion_protection_flawed: {
             item = new Entity(x, y, "flawed protection potion", '!', TCODColor::darkerBlue);
             item->item_behavior = new ItemBehavior(item, 0.2, 1, true);
-            item->item_behavior->targeting = new SelfTarget(item);
+            item->item_behavior->targeting = new SelfTarget;
             item->item_behavior->purpose = new PurposeEffectProtection(0.2, 3);
             item->item_behavior->setDesc("increase defense boost by 20% for 3 round");
             item->item_behavior->tradable = new Tradable(50);
@@ -182,7 +182,7 @@ Entity* getItem(const int x, const int y, const int index) {
         case item_dict::food: {
             item = new Entity(x, y, "food", 'Q', TCODColor::darkerCrimson);
             item->item_behavior = new ItemBehavior(item, 0.2, 1, true);
-            item->item_behavior->targeting = new SelfTarget(item);
+            item->item_behavior->targeting = new SelfTarget;
             item->item_behavior->purpose = new PurposeItemFood(100);
             item->item_behavior->setDesc("decrease stravation by 100");
             item->item_behavior->tradable = new Tradable(8);

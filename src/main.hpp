@@ -29,8 +29,10 @@
 #include "Items.hpp" //Item List
 #include "Effect.hpp" //Effect List
 #include "Trap.hpp" //Trap List
-#include "CorpseInteraction.hpp"
-#include "Shop.hpp"
+#include "CorpseInteraction.hpp" //Type of interaction with a corpse
+#include "Shop.hpp" //Shop Gui and method
+#include "Magic.hpp"
+#include "Casting.hpp"
 
 void doCloseWindow();
 bool checkFileExist(std::string file_name);

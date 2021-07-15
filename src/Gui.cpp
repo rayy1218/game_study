@@ -82,7 +82,9 @@ void Gui::doRenderPlayerInfo() {
     addBar(2, START_Y + 5, 26, 1, TCODColor::lighterRed, TCODColor::red, 
            game.player->combat_behavior->getMaxHp(), 
            game.player->combat_behavior->getCurrentHp(), "health", TCODColor::white);
-    addBar(2, START_Y + 6, 26, 1, TCODColor::lighterBlue, TCODColor::han, 50, 25, "Mana", TCODColor::white);
+    addBar(2, START_Y + 6, 26, 1, TCODColor::lighterBlue, TCODColor::han,
+           game.player_stats->magic->getMaxMp(),
+           game.player_stats->magic->getMp(), "Mana", TCODColor::white);
     addBar(2, START_Y + 7, 26, 1, TCODColor::lighterViolet, TCODColor::violet, 
            game.player_stats->tension->getMaxTension(), 
            game.player_stats->tension->getCurrentTension(), "tension", TCODColor::white);

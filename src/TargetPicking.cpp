@@ -1,21 +1,12 @@
 #include "main.hpp"
 
-TargetPicking::TargetPicking(Entity *self): self(self) {
-}
-
-TargetPicking::~TargetPicking() {
-}
-
-SelfTarget::SelfTarget(Entity *self): TargetPicking(self) {}
-
 bool SelfTarget::doTargeting() {
     all_target.push_back(game.player);
 
     return true;
 }
 
-NearestTarget::NearestTarget(Entity *self, int range): TargetPicking(self), 
-                                                             range(range) {}
+NearestTarget::NearestTarget(int range): range(range) {}
 
 bool NearestTarget::doTargeting() {
     Entity *closest_enemy = nullptr;
@@ -43,9 +34,7 @@ bool NearestTarget::doTargeting() {
     return true;
 }
 
-SelectAreaAllTarget::SelectAreaAllTarget(Entity *self, int radius, 
-                                         bool include_self): TargetPicking(self),
-                                         radius(radius), include_self(include_self) {}
+SelectAreaAllTarget::SelectAreaAllTarget(int radius, bool include_self): radius(radius), include_self(include_self) {}
 
 bool SelectAreaAllTarget::doTargeting() {
     int x, y, target_x = game.player->getX(), target_y = game.player->getY();
