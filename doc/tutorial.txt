@@ -1,0 +1,22 @@
+movement
+[NUMPAD8 / j] move or attack up
+[NUMPAD6 / l] move or attack right
+[NUMPAD2 / k] move or attack down
+[NUMPAD4 / h] move or attack left
+[NUMPAD9 / u] move or attack top right
+[NUMPAD3 / n] move or attack bottom left
+[NUMPAD1 / b] move or attack bottom left
+[NUMPAD7 / y] move or attack top left
+[NUMPAD5 / ,] idle
+
+utility
+[g] grab
+[t] toggle primary/secondary hand
+[i] inventory
+[d] observing mode
+[f] change focusing enemy
+[p] interact with corpse
+[m] cast magic
+
+game
+[F11] toggle fullscreen
