@@ -123,3 +123,8 @@ bool PurposeItemFood::doUse(Entity *target) {
     return true;
 }
 
+PurposeUnlockCasting::PurposeUnlockCasting(int casting): casting(casting) {}
+
+bool PurposeUnlockCasting::doUse(Entity *target) {
+    game.player_stats->magic->setCastingUnlock(casting, true);
+}

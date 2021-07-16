@@ -90,7 +90,7 @@ void Gui::doRenderPlayerInfo() {
            game.player_stats->tension->getCurrentTension(), "tension", TCODColor::white);
     addBar(2, START_Y + 8, 26, 1, TCODColor::lighterSepia, TCODColor::sepia, 
            game.player_stats->hunger->getMaxHungerPoint(), 
-           game.player_stats->hunger->getCurrentHungerPoint(), "hunger", TCODColor::white );
+           game.player_stats->hunger->getCurrentHungerPoint(), "hunger", TCODColor::white);
 }
 
 void Gui::doRenderEnemyInfo() {

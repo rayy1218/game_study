@@ -138,5 +138,13 @@ public:
     bool doUse(Entity *target);
 };
 
+class PurposeUnlockCasting: public Purpose {
+    int casting;
+public:
+    PurposeUnlockCasting(int casting);
+
+    bool doUse(Entity *target);
+};
+
 #endif /* ITEMPURPOSE_HPP */
 

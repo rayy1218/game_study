@@ -372,7 +372,31 @@ Entity* getItem(const int x, const int y, const int index) {
             item->item_behavior->setDesc("increase self attack by 6 and have speed of 80");
             break;
         }
-        
+
+        case item_dict::tome_firebolt: {
+            item = new Entity(x, y, "tome of firebolt", '?', TCODColor::lightRed);
+            item->item_behavior = new ItemBehavior(item, 1, 1, false);
+            item->item_behavior->setDesc("learn to cast firebolt");
+            item->item_behavior->purpose = new PurposeUnlockCasting(casting_dict::firebolt);
+            break;
+        }
+
+        case item_dict::tome_lighting_chain: {
+            item = new Entity(x, y, "tome of lighting chain", '?', TCODColor::cyan);
+            item->item_behavior = new ItemBehavior(item, 1, 1, false);
+            item->item_behavior->setDesc("learn to cast lighting chain");
+            item->item_behavior->purpose = new PurposeUnlockCasting(casting_dict::lighting_chain);
+            break;
+        }
+
+        case item_dict::tome_windblade: {
+            item = new Entity(x, y, "tome of windblade", '?', TCODColor::darkYellow);
+            item->item_behavior = new ItemBehavior(item, 1, 1, false);
+            item->item_behavior->setDesc("learn to cast windblade");
+            item->item_behavior->purpose = new PurposeUnlockCasting(casting_dict::windblade);
+            break;
+        }
+
         case item_dict::material_copper_chunk: {
             item = new Entity(x, y, "copper chunk", '$', TCODColor::gold);
             item->item_behavior = new ItemBehavior(item, 0.05, 1, true);

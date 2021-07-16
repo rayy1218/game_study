@@ -78,7 +78,12 @@ enum item_dict{
     
     //MATERIAL
     material_copper_chunk,
-            
+
+    //tome
+    tome_firebolt,
+    tome_lighting_chain,
+    tome_windblade,
+
     //loot
     loot_goblin,
     
