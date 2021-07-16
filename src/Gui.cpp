@@ -516,27 +516,11 @@ void Gui::doRenderTutorial() {
     tutorial_console.setDefaultForeground(TCODColor::darkestGrey);
     tutorial_console.clear();
     tutorial_console.printFrame(0, 0 , 100, 50, false, TCOD_BKGND_SET, "tutorial");
-    
-    tutorial_console.printRect(2, 2, 96, 56,
-                               "movement\n\n"
-                               "[NUMPAD8 / J] move or attack up\n"
-                               "[NUMPAD6 / L] move or attack right\n"
-                               "[NUMPAD2 / K] move or attack down\n"
-                               "[NUMPAD4 / H] move or attack left\n"
-                               "[NUMPAD9 / U] move or attack top right\n"
-                               "[NUMPAD3 / N] move or attack bottom left\n"
-                               "[NUMPAD1 / B] move or attack bottom left\n"
-                               "[NUMPAD7 / Y] move or attack top left\n"
-                               "[NUMPAD5 / ,] idle\n\n"
-                               "utility\n\n"
-                               "[G] grab\n"
-                               "[T] toggle primary/secondary hand"
-                               "[I] inventory\n"
-                               "[O] observing mode\n"
-                               "[F] change focusing enemy\n"
-                               "[P] interact with corpse\n\n"
-                               "game\n\n"
-                               "[F11] toggle fullscreen\n");
+
+    std::ifstream tutorial_doc("doc/tutorial.txt");
+    std::string tutorial((std::istreambuf_iterator<char>(tutorial_doc)),std::istreambuf_iterator<char>());
+
+    tutorial_console.printRect(2, 2, 96, 56, "%s", tutorial.c_str());
     
     addMessage(TCODColor::yellow, "[ESC] quit tutorial");
     game.doRender();
