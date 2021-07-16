@@ -120,7 +120,7 @@ Entity* getItem(const int x, const int y, const int index) {
         }
 
         case item_dict::potion_rage_fine: {
-            item = new Entity(x, y, "fine rage potion", '!', TCODColor::darkerBlue);
+            item = new Entity(x, y, "fine rage potion", '!', TCODColor::orange);
             item->item_behavior = new ItemBehavior(item, 0.2, 1, true);
             item->item_behavior->targeting = new SelfTarget;
             item->item_behavior->purpose = new PurposeEffectRage(0.5, 6);
@@ -130,7 +130,7 @@ Entity* getItem(const int x, const int y, const int index) {
         }
 
         case item_dict::potion_rage_standard: {
-            item = new Entity(x, y, "standard rage potion", '!', TCODColor::darkerBlue);
+            item = new Entity(x, y, "standard rage potion", '!', TCODColor::orange);
             item->item_behavior = new ItemBehavior(item, 0.2, 1, true);
             item->item_behavior->targeting = new SelfTarget;
             item->item_behavior->purpose = new PurposeEffectRage(0.2, 5);
@@ -140,7 +140,7 @@ Entity* getItem(const int x, const int y, const int index) {
         }
 
         case item_dict::potion_rage_flawed: {
-            item = new Entity(x, y, "flawed rage potion", '!', TCODColor::darkerBlue);
+            item = new Entity(x, y, "flawed rage potion", '!', TCODColor::orange);
             item->item_behavior = new ItemBehavior(item, 0.2, 1, true);
             item->item_behavior->targeting = new SelfTarget;
             item->item_behavior->purpose = new PurposeEffectRage(0.2, 3);
@@ -150,7 +150,7 @@ Entity* getItem(const int x, const int y, const int index) {
         }
 
         case item_dict::potion_protection_fine: {
-            item = new Entity(x, y, "fine protection potion", '!', TCODColor::darkerBlue);
+            item = new Entity(x, y, "fine protection potion", '!', TCODColor::sky);
             item->item_behavior = new ItemBehavior(item, 0.2, 1, true);
             item->item_behavior->targeting = new SelfTarget;
             item->item_behavior->purpose = new PurposeEffectProtection(0.5, 6);
@@ -160,7 +160,7 @@ Entity* getItem(const int x, const int y, const int index) {
         }
 
         case item_dict::potion_protection_standard: {
-            item = new Entity(x, y, "standard protection potion", '!', TCODColor::darkerBlue);
+            item = new Entity(x, y, "standard protection potion", '!', TCODColor::sky);
             item->item_behavior = new ItemBehavior(item, 0.2, 1, true);
             item->item_behavior->targeting = new SelfTarget;
             item->item_behavior->purpose = new PurposeEffectProtection(0.2, 5);
@@ -170,7 +170,7 @@ Entity* getItem(const int x, const int y, const int index) {
         }
 
         case item_dict::potion_protection_flawed: {
-            item = new Entity(x, y, "flawed protection potion", '!', TCODColor::darkerBlue);
+            item = new Entity(x, y, "flawed protection potion", '!', TCODColor::sky);
             item->item_behavior = new ItemBehavior(item, 0.2, 1, true);
             item->item_behavior->targeting = new SelfTarget;
             item->item_behavior->purpose = new PurposeEffectProtection(0.2, 3);
