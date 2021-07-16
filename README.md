@@ -6,7 +6,4 @@ Using article mostly from roguebasin tutorial and subreddit roguelikedev as refe
 http://www.roguebasin.com/index.php?title=Complete_roguelike_tutorial_using_C%2B%2B_and_libtcod_-_part_1:_setting_up
 
 Working On:
-- Refactor the code
-- Add more effect and potion
-- Effect for high tension
 - Magic System
