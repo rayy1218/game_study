@@ -380,7 +380,7 @@ void Map::addItem(int x, int y) {
         }
     };
 
-    ItemChance equipment_chance, potion_chance, weapon_chance, utility_chance;
+    ItemChance equipment_chance, potion_chance, weapon_chance, utility_chance, tome_chance;
 
     equipment_chance.item_weight_list = {{item_dict::headwear_heavy_metal, 1},
                                          {item_dict::headwear_light_metal, 6},
@@ -421,8 +421,13 @@ void Map::addItem(int x, int y) {
                                       {item_dict::weapon_battlehammer, 10},
                                       {item_dict::weapon_longsword, 10}};
 
-    int item_type_list[] = {40, 20, 20, 20};
-    int index = getIndexWeightedRandom(item_type_list, 4);
+    tome_chance.item_weight_list = {{item_dict::tome_windblade, 1},
+                                    {item_dict::tome_firebolt, 1},
+                                    {item_dict::tome_lighting_chain, 1}};
+
+
+    int item_type_list[] = {40, 20, 20, 10, 10};
+    int index = getIndexWeightedRandom(item_type_list, 5);
 
     int item_id;
     switch (index) {
@@ -445,14 +450,13 @@ void Map::addItem(int x, int y) {
             item_id = weapon_chance.getRandomItemID();
             break;
         }
+
+        case 5: {
+            item_id = tome_chance.getRandomItemID();
+        }
     }
 
     Entity *item = getItem(x, y, item_id);
-
-    std::fstream map_item;
-    map_item.open("map_item.txt", std::fstream::in | std::fstream::out | std::fstream::app);
-    map_item << item->getName() << '\n';
-    map_item.close();
 
     game.all_item.push(item);
 }
