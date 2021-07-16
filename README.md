@@ -7,3 +7,4 @@ http://www.roguebasin.com/index.php?title=Complete_roguelike_tutorial_using_C%2B
 
 Working On:
 - Magic System
+- Debug mode for testing
