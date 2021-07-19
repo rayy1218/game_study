@@ -19,6 +19,13 @@ enum status{
 
 struct GameConfig {
     std::string font_file_name;
+    bool is_debug_mode;
+};
+
+struct DebugMode {
+    bool show_fog;
+
+    DebugMode();
 };
 
 struct PlayerStats {
@@ -34,10 +41,10 @@ class GameManager {
 private:
     //Attribute
     int console_width, console_height, status, floor_num, turn_used;
-    GameConfig config;
 public:
     //Attribute
-    
+    GameConfig config;
+    DebugMode debug_mode;
     TCOD_key_t keyboard;
     Map *map;
     

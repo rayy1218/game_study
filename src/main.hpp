@@ -24,6 +24,7 @@
 #include "Hunger.hpp"
 #include "Tension.hpp"
 #include "Town.hpp"
+#include "DebugMode.hpp"
 
 #include "Monster.hpp" //Monster List
 #include "Items.hpp" //Item List
@@ -35,6 +36,7 @@
 #include "Casting.hpp"
 
 void doCloseWindow();
+void checkGlobalKey();
 bool checkFileExist(std::string file_name);
 
 #endif /* MAIN_HPP */

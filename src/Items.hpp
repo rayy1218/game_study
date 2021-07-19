@@ -3,94 +3,84 @@
 
 class Entity;
 
-static const int ITEM_TYPE = 19;
+static const int ITEM_TYPE = 47;
 
 enum item_dict{
     null_item = 0,
     //UTILITY
     molotov = 1,
-    throwing_knife,
-    incense,
-    food,
+    throwing_knife = 2,
+    incense = 3,
+    food = 4,
     
     //POTION
-    potion_healing_fine,
-    potion_healing_standard,
-    potion_healing_flawed,
-    potion_mana_fine,
-    potion_mana_standard,
-    potion_mana_flawed,
-    potion_rage_fine,
-    potion_rage_standard,
-    potion_rage_flawed,
-    potion_protection_fine,
-    potion_protection_standard,
-    potion_protection_flawed,
+    potion_healing_fine = 5,
+    potion_healing_standard = 6,
+    potion_healing_flawed = 7,
+    potion_mana_fine = 8,
+    potion_mana_standard = 9,
+    potion_mana_flawed = 10,
+    potion_rage_fine = 11,
+    potion_rage_standard = 12,
+    potion_rage_flawed = 13,
+    potion_protection_fine = 14,
+    potion_protection_standard = 15,
+    potion_protection_flawed = 16,
     
     //HEADWEAR
-    headwear_heavy_metal,
-    headwear_light_metal,
-    headwear_leather,
+    headwear_heavy_metal = 17,
+    headwear_light_metal = 18,
+    headwear_leather = 19,
     
     //BODYWEAR
-    bodywear_heavy_metal,
-    bodywear_light_metal,
-    bodywear_reinforced_leather,
-    bodywear_cloth,
+    bodywear_heavy_metal = 20,
+    bodywear_light_metal = 21,
+    bodywear_reinforced_leather = 22,
+    bodywear_cloth = 23,
     
     //LEGGING
-    legging_armored,
-    legging_reinforced_metal,
-    legging_reinforced_leather,
+    legging_armored = 24,
+    legging_reinforced_metal = 25,
+    legging_reinforced_leather = 26,
     
     //FOOTWEAR
-    footwear_metal,
-    footwear_leather,
+    footwear_metal = 27,
+    footwear_leather = 28,
     
     //ARMWEAR
-    armwear_metal_full,
-    armwear_reinforced_metal,
-    armwear_reinforced_leather,
-    
-    //RING
-    ring_focus,
-    ring_fire,
-    ring_rage,
-    ring_purification,
-    
-    //ACCESSORY
-    accessory_lantern,
-    accessory_belt_bag,
+    armwear_metal_full = 29,
+    armwear_reinforced_metal = 30,
+    armwear_reinforced_leather = 31,
     
     //SINGLE HANDED WEAPON
-    weapon_gladius,
-    weapon_axe,
-    weapon_mace,
+    weapon_gladius = 32,
+    weapon_axe = 33,
+    weapon_mace = 34,
     
     //TWO HANDED WEAPON
-    weapon_longsword,
-    weapon_battleaxe,
-    weapon_battlehammer,
+    weapon_longsword = 35,
+    weapon_battleaxe = 36,
+    weapon_battlehammer = 37,
     
     //SECONDARY WEAPON
-    weapon_knuckle,
-    weapon_dagger,
+    weapon_knuckle = 38,
+    weapon_dagger = 39,
     
     //MATERIAL
-    material_copper_chunk,
+    material_copper_chunk = 40,
 
     //tome
-    tome_firebolt,
-    tome_lighting_chain,
-    tome_windblade,
+    tome_firebolt = 41,
+    tome_lighting_chain = 42,
+    tome_windblade = 43,
 
     //loot
-    loot_goblin,
+    loot_goblin = 44,
     
     //harvest
-    harvest_meat,
-    harvest_hide,
-    harvest_bone
+    harvest_meat = 45,
+    harvest_hide = 46,
+    harvest_bone = 47
 };
 
 int getIndexWeightedRandom(int *weight_arr, int arr_size);

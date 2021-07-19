@@ -8,10 +8,13 @@ PlayerStats::~PlayerStats() {
     if (magic) {delete magic;}
 }
 
+DebugMode::DebugMode(): show_fog(true) {}
+
 GameManager::GameManager(int width, int height): console_width(width), 
                                                  console_height(height),
                                                  floor_num(1),
-                                                 turn_used(0) {
+                                                 turn_used(0),
+                                                 debug_mode() {
 
     TCODConsole::initRoot(console_width, console_height, "the living cave", true);
     doReadConfig();
@@ -147,20 +150,23 @@ void GameManager::doRender() {
     map->doRender();
     gui->doRender();
 
-    for ( Entity *entity : all_corpse ) {
-        if (!map->isExplored(entity->getX(), entity->getY())) {continue;}
+    for (Entity *entity : all_corpse) {
+        if (!game.debug_mode.show_fog) {}
+        else if (!map->isExplored(entity->getX(), entity->getY())) {continue;}
         entity->doRender();
     }
     
     for ( Entity *entity : all_item ) {
-        if (!map->isExplored(entity->getX(), entity->getY())) {continue;}
+        if (!game.debug_mode.show_fog) {}
+        else if (!map->isExplored(entity->getX(), entity->getY())) {continue;}
         entity->doRender();
         TCODConsole::root->setCharBackground(entity->getX(), entity->getY(), 
                                              TCODColor::desaturatedYellow);
     }
     
     for ( Entity *entity : all_prop ) {
-        if (!map->isExplored(entity->getX(), entity->getY())) {continue;}
+        if (!game.debug_mode.show_fog) {}
+        else if (!map->isExplored(entity->getX(), entity->getY())) {continue;}
         entity->doRender();
         if (entity->getAsciiChar() != '.') {
             TCODConsole::root->setCharBackground(entity->getX(), entity->getY(), 
@@ -168,8 +174,9 @@ void GameManager::doRender() {
         }
     }
     
-    for ( Entity *entity : all_character ) {
-        if (!map->isInFov(entity->getX(), entity->getY())) {continue;}
+    for (Entity *entity : all_character) {
+        if (!game.debug_mode.show_fog) {}
+        else if (!map->isInFov(entity->getX(), entity->getY())) {continue;}
         entity->doRender();
         if (entity == player) {continue;}
         TCODConsole::root->setCharBackground(entity->getX(), entity->getY(), 
@@ -333,6 +340,8 @@ void GameManager::doReadConfig() {
     
     config_file.ignore(256, ' ');
     config_file >> config.font_file_name;
+    config_file.ignore(256, ' ');
+    config_file >> config.is_debug_mode;
     
     config_file.close();
 }

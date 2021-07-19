@@ -73,11 +73,6 @@ void PlayerControl::doUpdate() {
             break;
         }
         
-        case TCODK_F11: {
-            TCODConsole::root->setFullscreen(!TCODConsole::root->isFullscreen());
-            break;
-        }
-        
         case TCODK_F1: {
             game.gui->doRenderTutorial();
             break;
@@ -87,6 +82,11 @@ void PlayerControl::doUpdate() {
             if (escape_pressed) {doCloseWindow();}
             game.gui->addMessage(TCODColor::yellow, "press [ESC] again to quit");
             escape_pressed = true;
+            break;
+        }
+
+        case TCODK_F10: {
+            if (game.config.is_debug_mode) {Debug::doRenderDebugMenu();}
             break;
         }
     }

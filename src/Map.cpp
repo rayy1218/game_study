@@ -238,7 +238,6 @@ bool Map::isInFov(int x, int y) {
 }
 
 void Map::doRender() {
-    int debug = 0;
     static TCODColor floor(TCODColor::darkGrey);
     static TCODColor wall(TCODColor::darkestGrey);
     
@@ -246,7 +245,7 @@ void Map::doRender() {
     
     for (int x = 0; x < width; x++) {
         for (int y = 0; y < height; y++) {
-            if (tiles[x + y * width].is_explored || debug) {
+            if (tiles[x + y * width].is_explored || !game.debug_mode.show_fog) {
                 TCODConsole::root->setCharBackground(x, y, isWall(x, y) ? wall : floor);
                 TCODConsole::root->putChar(x, y, (isWall(x, y)) ? '#' : '.');
             }

@@ -21,6 +21,13 @@ void doCloseWindow() {
     exit(0);
 }
 
+void checkGlobalKey() {
+    switch (game.keyboard.vk) {
+        case TCODK_NONE : doCloseWindow(); break;
+        case TCODK_F11: TCODConsole::root->setFullscreen(!TCODConsole::root->isFullscreen()); break;
+    }
+}
+
 bool checkFileExist(std::string file_name) {
     std::ifstream file;
     file.open(file_name.c_str());
