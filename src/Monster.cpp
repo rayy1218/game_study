@@ -366,10 +366,9 @@ Entity* getMonster(int x, int y, int index) {
             break;
         }
 
-        case monster_dict::null: {
+        default: {
             monster = new Entity(x, y, "null", 'N', TCODColor::darkPurple);
             monster->combat_behavior = new EnemyCombatBehavior(monster, 1, 0, 0, 0, 0);
-            break;
         }
     }
     

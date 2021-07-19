@@ -7,7 +7,7 @@ static const int MONSTER_TYPE = 15;
 const int BOSS_MONSTER_TYPE = 9;
 
 enum monster_dict{
-    null,
+    null_monster,
     goblin_skirmisher   = 1,
     goblin_armored      = 2,
     wolf                = 3,
