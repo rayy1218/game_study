@@ -4,8 +4,10 @@
 class Entity;
 
 static const int MONSTER_TYPE = 15;
+const int BOSS_MONSTER_TYPE = 9;
 
 enum monster_dict{
+    null,
     goblin_skirmisher   = 1,
     goblin_armored      = 2,
     wolf                = 3,
@@ -30,9 +32,6 @@ enum monster_dict{
     tyrant_blade,
     tyrant_lance,
     tyrant_boss,
-    elder_marble,
-    elder_tome,
-    elder_boss
 };
 
 Entity* getMonster(int x, int y, int index);
