@@ -112,7 +112,7 @@ bool PlayerControl::handleMoveOrAttack(int dx, int dy) {
                 miss_rate = BASE_MISS_RATE * float(character->combat_behavior->getTotalAg()) / 10,
                 hit_rate = BASE_HIT_RATE * float(self->combat_behavior->getAccuracy()) / 10,
                 critical_rate = BASE_CRITICAL_RATE * float(self->combat_behavior->getAccuracy()) / 10;
-            
+
             if (hitting_count == 0) {hitting_count = 1;}
 
             for (int i = 1; i <= hitting_count; i++) {
@@ -134,7 +134,12 @@ bool PlayerControl::handleMoveOrAttack(int dx, int dy) {
                                      "you attack %s and dealt %i - %i damage"
                                      , character->getName().c_str(), attack_damage, attack_damage - damage_taken);
 
-                if (character->combat_behavior->checkEntityDead()) {break;}
+                if (character->combat_behavior->checkEntityDead()) {
+                    game.gui->addMessage(TCODColor::green, "%s gain %i mana point", game.player->getName().c_str(),
+                                         character->combat_behavior->getMaxHp());
+                    game.player_stats->magic->doMpRegen(character->combat_behavior->getMaxHp());
+                    break;
+                }
             }
             return true;
         }

@@ -27,6 +27,7 @@ Magic::Magic(int mana_point): max_mana_point(mana_point), mana_point(mana_point)
     available_casting.push_back(casting);
 }
 
+
 bool Magic::doRenderCastingList() {
     TCODConsole casting_console(40, 10);
 
@@ -87,6 +88,16 @@ bool Magic::doCastMagic(int casting_magic) {
     mana_point -= to_cast->mana_cost;
 
     return true;
+}
+
+int Magic::doMpRegen(int amount) {
+    if (getMp() + amount > getMaxMp()) {
+        amount =  getMaxMp() - getMp();
+    }
+
+    setMp(getMp() + amount);
+
+    return amount;
 }
 
 int Magic::getMaxMp() {return max_mana_point;}

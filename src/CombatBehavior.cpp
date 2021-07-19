@@ -5,9 +5,9 @@ CombatBehavior::CombatBehavior(Entity *self, int max_hp, int attack_point,
                                self(self), max_hp(max_hp), current_hp(max_hp), 
                                attack_point(attack_point), defense_point(defense_point),
                                accuracy(accuracy), agility(agility),
-                               attack_boost(1), equipment_attack(0), 
-                               defense_boost(1), equipment_defense(0),
-                               agility_boost(1), equipment_agility(0) {}
+                               attack_boost(1), equipment_attack(0), effect_attack(0),
+                               defense_boost(1), equipment_defense(0), effect_defense(0),
+                               agility_boost(1), equipment_agility(0), effect_agility(0) {}
 
 void CombatBehavior::updateEquipmentAttribute(bool is_primary) {
     equipment_defense = 0;

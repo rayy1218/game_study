@@ -26,6 +26,15 @@ bool PurposeHpRestore::doUse(Entity* target) {
 PurposeMpRestore::PurposeMpRestore(int restore_amount): restore_amount(restore_amount) {}
 
 bool PurposeMpRestore::doUse(Entity* target) {
+    int restored = game.player_stats->magic->doMpRegen(restore_amount);
+
+    if (restored <= 0) {
+        game.gui->addMessage(TCODColor::white, "restore didn't apply due to %s having max mp",
+                             game.player->getName().c_str());
+        return false;
+    }
+    game.gui->addMessage(TCODColor::green, "%s was restored for %i mp",
+                         game.player->getName().c_str(), restored);
 
     return true;
 }

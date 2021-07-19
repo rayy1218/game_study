@@ -21,6 +21,7 @@ public:
     bool doRenderCastingList();
     bool doCastMagic(int casting_magic);
     void setCastingUnlock(int casting, bool is_unlock);
+    int doMpRegen(int amount);
 
     int getMaxMp();
     int getMp();
