@@ -26,6 +26,7 @@ public:
     int getMp();
     void setMaxMp(int input);
     void setMp(int input);
+    int isCastingUnlock(int casting);
 };
 
 #endif //MAGIC_HPP

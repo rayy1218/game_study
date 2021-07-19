@@ -93,3 +93,7 @@ int Magic::getMaxMp() {return max_mana_point;}
 int Magic::getMp() {return mana_point;}
 void Magic::setMaxMp(int input) {max_mana_point = input;}
 void Magic::setMp(int input) {mana_point = input;}
+
+int Magic::isCastingUnlock(int casting) {
+    return is_casting_unlock[casting];
+}
