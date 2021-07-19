@@ -275,7 +275,7 @@ void GameManager::doSave() {
         }
     }
     save_file << ' ' << item_count << inventory_save;
-    
+
     item_count = 0;
     std::string storage_save;
     for (int index = 0; index < game.town->storage_room->getItemNum(); index++) {
@@ -287,7 +287,12 @@ void GameManager::doSave() {
         }
     }
     save_file << ' ' << item_count << storage_save;
-    
+
+    for (int i = 0; i < CASTING_NUM; i++) {
+        save_file << ' ' << game.player_stats->magic->isCastingUnlock(i);
+    }
+
+
     save_file.close();
 }
 
@@ -326,7 +331,14 @@ void GameManager::doLoad() {
         Entity *item = getItem(0, 0, item_id);
         game.town->storage_room->addItem(item);
     }
-    
+
+    for (int i = 0; i < CASTING_NUM; i++) {
+        bool casting_unlock;
+        save_file >> casting_unlock;
+        game.player_stats->magic->setCastingUnlock(i, casting_unlock);
+    }
+
+
     game.setFloorNum(0);
     game.setStatus(status::IDLE);
     game.gui->addMessage(TCODColor::yellow, "save file loaded");
