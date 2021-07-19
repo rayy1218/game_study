@@ -2,7 +2,7 @@
 
 Magic::Magic(int mana_point): max_mana_point(mana_point), mana_point(mana_point) {
     for (int i = 0; i < CASTING_NUM; i++) {
-        is_casting_unlock[i] = true;
+        is_casting_unlock[i] = false;
     }
 
     Casting *casting = new Casting;
