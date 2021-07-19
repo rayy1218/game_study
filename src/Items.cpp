@@ -377,6 +377,7 @@ Entity* getItem(const int x, const int y, const int index) {
             item = new Entity(x, y, "tome of firebolt", '?', TCODColor::lightRed);
             item->item_behavior = new ItemBehavior(item, 1, 1, false);
             item->item_behavior->setDesc("learn to cast firebolt");
+            item->item_behavior->targeting = new SelfTarget;
             item->item_behavior->purpose = new PurposeUnlockCasting(casting_dict::firebolt);
             break;
         }
@@ -385,6 +386,7 @@ Entity* getItem(const int x, const int y, const int index) {
             item = new Entity(x, y, "tome of lighting chain", '?', TCODColor::cyan);
             item->item_behavior = new ItemBehavior(item, 1, 1, false);
             item->item_behavior->setDesc("learn to cast lighting chain");
+            item->item_behavior->targeting = new SelfTarget;
             item->item_behavior->purpose = new PurposeUnlockCasting(casting_dict::lighting_chain);
             break;
         }
@@ -393,6 +395,7 @@ Entity* getItem(const int x, const int y, const int index) {
             item = new Entity(x, y, "tome of windblade", '?', TCODColor::darkYellow);
             item->item_behavior = new ItemBehavior(item, 1, 1, false);
             item->item_behavior->setDesc("learn to cast windblade");
+            item->item_behavior->targeting = new SelfTarget;
             item->item_behavior->purpose = new PurposeUnlockCasting(casting_dict::windblade);
             break;
         }
